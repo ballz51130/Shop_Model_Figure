@@ -8,7 +8,7 @@
            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
       </head>  
       <body>  
-           <br />  
+           <br/>  
            <a href="./main/user.php"><button type="button" class="btn btn-outline-dark">เช็คตระกร้าสินค้า</button></a><br>
            <div class="container" style="width:700px;">  
            

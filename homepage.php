@@ -20,7 +20,18 @@
 <?php 
 include './conn/conn.php';
 session_start(); // คำสั่ง เปิดใช้งาน session 
-$sqlU= "SELECT `U_ID`,`U_Img` FROM `user` WHERE U_ID = '".$_SESSION['User']."' ";  
+if($_SESSION['login'] == ""){
+  
+  $_SESSION['login'] = 0;
+}
+// แสดงจำนวนที่ค้าอยู่ในสต้อกของลูกค้า แสดงใน button ตระกร้าสินค้า
+$sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_FName,user.U_LName,orders.O_Status FROM orders
+   INNER JOIN product ON product.P_Number = orders.P_Number
+   INNER JOIN user ON user.U_ID = orders.U_ID
+   WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ' ";
+   $queryN = mysqli_query($conn,$sqlN);
+  $rowN = mysqli_num_rows($queryN);
+$sqlU= "SELECT `U_ID`,`U_Img`,'' FROM `user` WHERE U_ID = '".$_SESSION['User']."' ";  
 $queryU = mysqli_query($conn, $sqlU);   // ใช้ในการติดต่อฐานข้อมูลแล้วทำการ QUERY
 $resultU = mysqli_fetch_array($queryU);
 
@@ -35,7 +46,12 @@ $resultU = mysqli_fetch_array($queryU);
     <h4><b>PORTFOLIO</b></h4>
     <p>Template by W3.CSS</p>
   <a href="#food" onclick="w3_close()" class="w3-bar-item w3-button">Food</a>
+  <?php if($_SESSION['login'] == ""){?>
   <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">About</a>
+  <?php } if($_SESSION['login'] == 1 ){ ?>
+    <a href="#about" onclick="w3_close()" class="w3-bar-item w3-button">Logout</a>
+  <?php } ?>
+
 </nav>
 
 
@@ -43,8 +59,8 @@ $resultU = mysqli_fetch_array($queryU);
 <div class="w3-top">
   <div class="w3-white w3-xlarge" style="max-width:100%;margin:auto">
     <div class="w3-button w3-padding-16 w3-left" onclick="w3_open()">☰</div>
-    <div class="w3-right w3-padding-16">Mail</div>
-    <div class="w3-center w3-padding-16"><a href="./main/user.php"><button type="button" class="btn btn-outline-dark">เช็คตระกร้าสินค้า</button></a><br></div>
+    <div class="w3-right w3-padding-16"style="padding:10px"><a href="./login/login.php"><button type="button" class="btn btn-success">Login</button></a></div>
+    <div class="w3-center w3-padding-16"><a href="./main/user.php"><button type="button" class="btn btn-outline-dark">ตระกร้าสินค้า &nbsp;<span class="badge badge-primary badge-pill"><?php echo $rowN;?></span></button></a></div>
   </div>
 </div>
   
@@ -70,14 +86,13 @@ $resultU = mysqli_fetch_array($queryU);
                                 <h4 class="text-info"><?php echo $row["P_Name"]; ?></h4>  
                                 <input type="hidden" name="hidden_name" value="<?php echo $row["P_Name"]; ?>" />
                                 <input type="hidden" name="P_Photo" value="<?php echo $row["P_Photo"]; ?>" />
-                                <input type="text" name="quantity" id="quantity" class="form-control" value="1" style="width: 100px ; "/>  
+                                <input type="text" name="quantity" id="quantity" class="form-control" value="1" style=" width: 10% ; "/>
                                 <p class="card-text">1/6</p>
                                 <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>" />  
                                 <?php if($_SESSION['login'] == ""){ ?>
-                                   <a href="./login/login.php"> <input name="add_to_cart" class="btn btn-success" value="Save" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')"> </a>
+                                   <a href="./login/login.php"> <input name="add_to_cart" class="btn btn-success" value="เพื่มเข้าตระกร้า" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')"> </a>
                                 <?php } ?>         <!-- End if session login-->
-                                <?php if($_SESSION['login']== 1){ ?> 
-                                   
+                                <?php if($_SESSION['login']== 1){ ?>   
                                 <input name="Save"  type="submit" class="btn btn-success" value="เพื่มเข้าตระกร้า" onclick="return confirm('คุณต้องการซื้อรายการนี้หรือไม่')">
                                 <?php }?> <!-- end if session login = 1 -->
                             </div>

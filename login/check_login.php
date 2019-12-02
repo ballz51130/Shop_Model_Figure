@@ -21,9 +21,9 @@ else{
     }
     if($result["U_Status"]=="User")
     {
-        $_SESSION['login'] = 1;
+        $_SESSION['login'] = 1 ;
         $_SESSION['User']= $result['U_ID'];
-        header("location: ../index.php");
+        header("location: ../homepage.php");
     }
 }
 ?>
