@@ -23,8 +23,11 @@ session_start(); // คำสั่ง เปิดใช้งาน session
 if($_SESSION['login'] == ""){
   
   $_SESSION['login'] = 0;
+  $_SESSION['User'] = 0 ;
+  $rowN = 0;
 }
 // แสดงจำนวนที่ค้าอยู่ในสต้อกของลูกค้า แสดงใน button ตระกร้าสินค้า
+if($_SESSION["User"] !=0){
 $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_FName,user.U_LName,orders.O_Status FROM orders
    INNER JOIN product ON product.P_Number = orders.P_Number
    INNER JOIN user ON user.U_ID = orders.U_ID
@@ -34,7 +37,7 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
 $sqlU= "SELECT `U_ID`,`U_Img`,'' FROM `user` WHERE U_ID = '".$_SESSION['User']."' ";  
 $queryU = mysqli_query($conn, $sqlU);   // ใช้ในการติดต่อฐานข้อมูลแล้วทำการ QUERY
 $resultU = mysqli_fetch_array($queryU);
-
+}
 
 ?>
 
