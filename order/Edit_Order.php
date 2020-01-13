@@ -15,6 +15,7 @@ echo "<BR >",$_GET['Sum'];
 </head>
 <body>
       <lable> O_ID</lable>
-      <input name="txtName"type="hidden" id="txtName" value="<?php echo $_GET['ID'];?>">
+      <input name="txtName"type="text" id="txtName" value="<?php echo $_GET['ID'];?>">
+      <lable>  </lable>
 </body>
 </html>

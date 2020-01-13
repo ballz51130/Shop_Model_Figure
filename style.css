@@ -1,62 +1,103 @@
 body{
-    font-family: 'Kanit', sans-serif;
+  width: 100%;
+  height: 100%; 
+ 
+    
 }
-.container{
-    padding-right: 200px;
-padding-left: 200px;
-margin: auto;
-width: 100%;
-  }
-.wrapper {
-    display: flex;
+.menubar {
+    
+ width: 100%;
+ height: 50px;
+padding-top: 5px;
+ box-shadow:  0 0 10px #f666;
+}
+.menubar .logo {
+    float: left;
+    margin-left: 0;
+}
+.contriner{
     width: 100%;
-    align-items: stretch;
+    margin: 0 auto;
+}
+.contriner h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: normal;
+    padding: 10px;
+}
+.menubar ul.menu{
+    list-style: none;
+    float: right;
+    margin-top: 10px;
+}
+.menubar ul.menu li {
+float: left;
+margin-right: 20px;
+margin-top: -50px;
 }
 
-#sidebar {
-    min-width: 250px;
-    max-width: 250px;
-    background: #7386D5;
-    color: #fff;
-    transition: all 0.3s;
-}
-#sidebar.active {
-    margin-left: -250px;
-}
 
-#sidebar .sidebar-header {
+.menubar ul.menu li a { 
+    text-decoration: none;
+    color: #333;
+    border-bottom: 2px solid transparent;
+    padding-bottom: 20px;
+    transition: all 0.3s ease;
+}
+.menubar ul.menu li a:hover { 
+   border-bottom: 2px solid #333;
+   padding-bottom: 0px;
+}
+.contriner1{
+    width: 900px;
+    margin: 0 auto;
+}
+section{
+    margin-top: 20px;
+}
+footer{
+    background: #333;
+    margin-top:1080px;
     padding: 20px;
-    background: #6d7fcc;
-}
-
-#sidebar ul.components {
-    padding: 20px 0;
-    border-bottom: 1px solid #47748b;
-}
-
-#sidebar ul p {
+    text-align: center;
     color: #fff;
-    padding: 10px;
 }
 
-#sidebar ul li a {
-    padding: 10px;
-    font-size: 1.1em;
+  .sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #f666;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+  }
+  
+  .sidenav a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
     display: block;
-}
-
-#sidebar ul li a:hover {
-    color: #7386D5;
-    background: #fff;
-}
-
-#sidebar ul li.active>a,
-a[aria-expanded="true"] {
-    color: #fff;
-    background: #6d7fcc;
-}
-
-a[data-toggle="collapse"] {
-    position: relative;
-}
-
+    transition: 0.3s;
+  }
+  
+  .sidenav a:hover {
+    color: #f1f1f1;
+  }
+  
+  .sidenav .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 36px;
+    margin-left: 50px;
+  }
+  
+  @media screen and (max-height: 450px) {
+    .sidenav {padding-top: 15px;}
+    .sidenav a {font-size: 18px;}
+  }

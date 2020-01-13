@@ -1,6 +1,27 @@
 <?php  
-                include './conn/conn.php';
-                $sql = "SELECT * FROM Product ORDER BY P_ID ASC";  
+                include '../conn/conn.php';
+                
+                if(isset($_GET['login'])){
+                    $_SESSION['login'] = $_GET['login'];
+                }
+                else{
+                    $_SESSION['login'] = 1;
+                }
+                if(isset($_GET['page'])){
+                    $page = $_GET['page'];
+                }
+                else{
+                    $page = 1;
+                }
+                $num_per_page = 3;
+                $start_from = ($page-1)*$num_per_page;
+
+
+
+
+
+
+                $sql = "SELECT * FROM Product limit $start_from,$num_per_page";  
                 $result = mysqli_query($conn, $sql);   
                 if(mysqli_num_rows($result) > 0)  // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
                 {  
@@ -35,4 +56,16 @@
                 }        // if $result
                 
                 ?> 
+                <?php 
+                    $pr_query = "select * from Product ";
+                    $pr_reqult = mysqli_query($conn,$pr_query);
+                    $total = mysqli_num_rows($pr_reqult);
+                    $total_page = ceil($total/$num_per_page);
+
+                for($i=1;$i<$total_page;$i++){
+                        echo "<center><a href='header.php?page=".$i."' class='btn btn-primary'>$i</a></center>";
+                }
+                
+                ?>
+               
  

@@ -14,7 +14,10 @@ include '../conn/conn.php';
     <title>Document</title>
 </head>
 <body>
-
+<div class="conriuner">
+<div class="header">
+        <a href="../product/MainProduct.php" class="btn btn-primary">จัดการรายการสินค้า</a>
+</div>
     <div class="table" align ="center">
      สินค้ารอตรวจสอบการชำระเงิน
     <table class="table table-bordered "style="width: 900px;">
@@ -60,7 +63,7 @@ include '../conn/conn.php';
 
          
  </div>
-
+</div>
      <!-- jQuery CDN - Slim version (=without AJAX) -->
      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

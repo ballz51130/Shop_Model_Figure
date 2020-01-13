@@ -61,7 +61,7 @@
 <td align ="center"> <?php echo $SUM ;?> </td>
 <td bgcolor="<?=$bg;?>" align ="center"> <?php echo $result['O_Status'];?> </td>
 <td align ="center"> <a href="../order/Confrime.php?ID=<?php echo $result['O_ID'];?>&P_Name=<?php echo $result["P_Name"];?>&Sum=<?php echo $SUM; ?>&O_Unit=<?php echo $result['O_Unit']; ?>&P_Price=<?php echo $result['P_Price']; ?>"><?php echo "Edit";?></a> </td>
-<td align ="center"> <a href=""><?php echo "ลบ";?></a> </td>
+<td align ="center"> <a href="../order/Delete_Order.php?ID=<?php echo $result['O_ID'];?>"><?php echo "ลบ";?></a> </td>
    </tr>
   <?php } ?> 
   </tbodt>
