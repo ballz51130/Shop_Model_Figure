@@ -14,6 +14,8 @@ if(!$result)
 }
 
 else{
+    if(isset($_GET['pages'])){
+        $pages = $_GET['pages'];
     
     if($result["U_Status"]=="Admin")
     {
@@ -23,7 +25,20 @@ else{
     {
         $_SESSION['login'] = 1 ;
         $_SESSION['User']= $result['U_ID'];
-        header("location: ../homepage.php");
+        header("location: ../product/MainProduct.php?pages=$pages");
     }
+}
+else{
+    if($result["U_Status"]=="Admin")
+    {
+        header("location: ../main/admin.php");
+    }
+    if($result["U_Status"]=="User")
+    {
+        $_SESSION['login'] = 1 ;
+        $_SESSION['User']= $result['U_ID'];
+        header("location: ../homepage.php");
+}
+}
 }
 ?>

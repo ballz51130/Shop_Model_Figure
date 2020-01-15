@@ -1,5 +1,13 @@
 
-<form name="login" method="POST" action="check_login.php" >
+<?php 
+if(isset($_GET['pages'])){
+    $pages = $_GET['pages'];
+}
+else{
+    $pages = "";
+}
+?>
+<form name="login" method="POST" action="check_login.php?pages=<?php echo $pages ?>" >
 <div class="login_grup">
 <label>ชื่อผู้ใช้งาน</label>
 <input name="UserName" id="UserName" type="text" class="form-control" placeholder="Username" required autofocus>
