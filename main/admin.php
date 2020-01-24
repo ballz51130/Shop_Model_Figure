@@ -7,16 +7,16 @@ include '../conn/conn.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <!-- link bootstrap -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css"
-        integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
+     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <title>Document</title>
 </head>
 <body>
 <div class="conriuner">
 <div class="header">
-        <a href="../product/MainProduct.php" class="btn btn-primary">จัดการรายการสินค้า</a>
+        <a href="../admin/MainProduct.php" class="btn btn-primary">จัดการข้อมูลสินค้า</a>
 </div>
     <div class="table" align ="center">
      สินค้ารอตรวจสอบการชำระเงิน

@@ -1,5 +1,5 @@
 <?php 
-include './conn/conn.php';
+include '../conn/conn.php';
 session_start(); // คำสั่ง เปิดใช้งาน session 
 if(isset($_SESSION['login'])){
     $_SESSION['login'] = $_SESSION['login'];
@@ -7,6 +7,7 @@ if(isset($_SESSION['login'])){
 else{
   $_SESSION['login'] = 0;
   $_SESSION['User'] = 0 ;
+  $rowN = 0;
 }
 if(isset($_SESSION['User'])){
     $_SESSION['User'] = $_SESSION['User'];
@@ -46,22 +47,22 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>  
      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />  
      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
-     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-     <link rel="stylesheet" href="./style.css">
+     <link rel="stylesheet" href="./Detail_style.css">
      <title>Shop</title>
 </head>
 <body>
    <div class="head_bar">
         <div class="manu_login">
             <ul>
+                <li><a href="http://"> name </a></li>
+                <li> <a href="">MY ACCOUNT </a></li>
                <li> <?php if($_SESSION['login'] == ""){ ?>
-                        <a href="./login/login.php">Login</a>
+                        <a href="../login/login.php">Login</a>
                             <?php }  if($_SESSION['login'] == 1){?>
-                                <li><a href="http://"> name </a></li>
-                                <li> <a href="">MY ACCOUNT </a></li>
-                                <li><a href="./login/login.php">Logout</a></li>
-                            <?php } ?>
-                </li>
+                       <a href="../login/login.php">Logout</a>
+                            <?php } ?>        
+
+                 </li>
             </ul>
         </div>
     </div>
@@ -70,7 +71,7 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
                     <div class="row">
                         <!-- โลโก้ -->
                         <div class="col-md-3" id="homeicon" style="margin-left:px5;">
-                            <a href="http://"><img src="./photo/home.png" alt="" width="40px" hight="40px"></a>
+                            <a href="http://"><img src="../photo/home.png" alt="" width="40px" hight="40px"></a>
                         </div>
                         <!-- ส่วนของ ค้นหา  -->
                             <div class="col-md-5" id="serch">
@@ -80,10 +81,10 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
                         <!-- ตระกร้าสินค้า -->
                             <div class="col-md-4">
                                <ul class="social">
-                               <li class="so"><a href="http://"><img src="./photo/facebook_1_.png" alt=""></a></li>
-                               <li class="so"><a href="http://"><img src="./photo/instagram.png" alt=""></a></li>
-                               <li class="so"><a href="http://"><img src="./photo/line.png" alt=""></a></li>
-                               <li class="market_u"><a href="./main/user.php">|<img src="./photo/supermarket.png" width="30px" hight="30px">|<span class="badge badge-primary badge-pill"><?php echo $rowN;?></span></a></li>
+                               <li class="so"><a href="http://"><img src="../photo/facebook_1_.png" alt=""></a></li>
+                               <li class="so"><a href="http://"><img src="../photo/instagram.png" alt=""></a></li>
+                               <li class="so"><a href="http://"><img src="../photo/line.png" alt=""></a></li>
+                               <li class="market_u"><a href="http://">|<img src="../photo/supermarket.png" width="30px" hight="30px">|<span class="badge badge-primary badge-pill" style="color:blue;"><?php echo $rowN;?></span></a></li>
                                </ul>  
                             </div>
                     </div>
@@ -118,19 +119,18 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
                     ?>
             
                     <div class="col-md-4">  
-                             <form method="post"  action="./order/InsertOrder.php">  
+                             <form method="post" action="./order/InsertOrder.php">  
                               <div class="card" style=" width: 100% ;background-color:#D8FFFB; padding:20px;" align="center">
-                                    <a href=""><img src="<?php echo './photo/Order/'.$row['P_Photo'] ;?>" width="300px" height="350px"></a>
+                                    <a href=""><img src="<?php echo '../photo/Order/'.$row['P_Photo'] ;?>" width="300px" height="400px"></a>
                                     <div class="card-body">
                                     <input name="P_Number" type="hidden" id="P_Number" value="<?php echo $row['P_Number']?>">
                                     <h4 class="text-info"><?php echo $row["P_Name"]; ?></h4>  
-                                    <input type="hidden" name="hidden_name" value="<?php echo $row["P_Name"]; ?>" >
-                                    <input type='button' value='-' class='qtyminus' field='quantity'style="width:50px; position: relative; margin-top:4px; background-color: #4CAF50; margin-left:90px; margin-right:-150px ;float:left;">
-                                    <input type="text" name="quantity" id="quantity" class="form-control" value="1" style="width:40px; position: relative; ">
-                                    <input type='button' value='+' class='qtyplus' field='quantity' style=" width:50px;  margin-top:-30px; margin-right: 90px; background-color: #4CAF50; position: relative; float:right;">
-                                    <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>" > <br> 
+                                    <input type="hidden" name="hidden_name" value="<?php echo $row["P_Name"]; ?>" />
+
+                                    <input type="text" name="quantity" id="quantity" class="form-control" value="1" style=" width: 10% ; "/>
+                                    <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>" /> <br> 
                                     <?php if($_SESSION['login'] == ""){ ?>
-                                       <a href="./login/login.php"><input name="add_to_cart" class="btn btn-success" value="เพื่มเข้าตระกร้า" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')"> </a>
+                                       <a href="../login/login.php"> <input name="add_to_cart" class="btn btn-success" value="เพื่มเข้าตระกร้า" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')"> </a>
                                     <?php } ?>         <!-- End if session login-->
                                     <?php if($_SESSION['login']== 1){ ?>   
                                     <input name="Save"  type="submit" class="btn btn-success" value="เพื่มเข้าตระกร้า" onclick="return confirm('คุณต้องการซื้อรายการนี้หรือไม่')"> <br>
@@ -160,13 +160,10 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
                             }
                 
                             ?>
-                </div>     
-                
-    
+                </div>           
         <footer>
           <p> Power By Harumyx </p>
      </footer>
-  
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
             integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
             crossorigin="anonymous"></script>
@@ -178,46 +175,6 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
             integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
             crossorigin="anonymous"></script>
-            <script type="text/javascript">
-// บวกลบ จำนวนสินค้า
-$(document).ready(function(){
-    // This button will increment the value
-    $('.qtyplus').click(function(e){
-        // Stop acting like a button
-        e.preventDefault();
-        // Get the field name
-        var fieldName = $(this).prev();
-        // Get its current value
-        var currentVal = parseInt(fieldName.val());
-        // If is not undefined
-        if (!isNaN(currentVal )) {
-            // Increment
-            fieldName.val(currentVal + 1);
-        } else {
-            // Otherwise put a 0 there
-            fieldName.val(5);
-        }
-    });
-    // This button will decrement the value till 0
-    $(".qtyminus").click(function(e) {
-        // Stop acting like a button
-        e.preventDefault();
-        // Get the field name
-        var fieldName = $(this).next();
-        // Get its current value
-        var currentVal = parseInt(fieldName.val());
-        // If it isn't undefined or its greater than 0
-        if (!isNaN(currentVal) && currentVal > 0) {
-            // Decrement one
-            fieldName.val(currentVal - 1);
-        } else {
-            // Otherwise put a 0 there
-            fieldName.val(0);
-        }
-    });
-});
-</script>
-   
             
 </body>
 </html>
