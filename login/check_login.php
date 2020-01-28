@@ -25,7 +25,7 @@ else{
     {
         $_SESSION['login'] = 1 ;
         $_SESSION['User']= $result['U_ID'];
-        header("location: ../product/MainProduct.php?pages=$pages");
+        header("location: ../index.php");
     }
 }
 else{
