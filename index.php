@@ -88,7 +88,7 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
                         <li class="so"><a href="http://"><img src="./photo/facebook_1_.png" alt=""></a></li>
                         <li class="so"><a href="http://"><img src="./photo/instagram.png" alt=""></a></li>
                         <li class="so"><a href="http://"><img src="./photo/line.png" alt=""></a></li>
-                        <li class="market_u"><a href="./main/user.php">|<img src="./photo/supermarket.png" width="30px"
+                        <li class="market_u"><a href="./user/user.php">|<img src="./photo/supermarket.png" width="30px"
                                     hight="30px">|<span
                                     class="badge badge-primary badge-pill"><?php echo $rowN;?></span></a></li>
                     </ul>
@@ -114,8 +114,6 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
                 <a href="#" class="btn btn-primary">Link 1</a> <br>
                 <a href="#" class="btn btn-primary">Link 2</a> <br>
                 <a href="#" class="btn btn-primary">Link 3</a> <br>
-
-
             </div>
             <?php $sql = "SELECT * FROM Product ORDER BY P_ID ASC limit $start_from,$num_per_page ";  
                     $result = mysqli_query($conn, $sql);   
@@ -124,12 +122,10 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
                          while($row = mysqli_fetch_array($result))  // ใช้คืนค่า ค่าข้อมูล ของ result ในแถวที่ชี้อยู่ และเก็บไว้ที่ array และเลื่อนไปตัวชี้ชี้ไปยังตำแหน่งถ้ดไป     
                          {  
                     ?>
-
             <div class="col-md-4">
                 <form method="post" action="./order/InsertOrder.php">
                     <div class="card" style=" width: 100% ;background-color:#D8FFFB; padding:20px;" align="center">
-                        <a href=""><img src="<?php echo './photo/Order/'.$row['P_Photo'] ;?>" width="300px"
-                                height="350px"></a>
+                        <a href=""><img src="<?php echo './photo/Order/'.$row['P_Photo'] ;?>" width="300px" height="350px"></a>
                         <div class="card-body">
                             <input name="P_Number" type="hidden" id="P_Number" value="<?php echo $row['P_Number']?>">
                             <h4 class="text-info"><?php echo $row["P_Name"]; ?></h4>

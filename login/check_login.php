@@ -14,9 +14,7 @@ if(!$result)
 }
 
 else{
-    if(isset($_GET['pages'])){
-        $pages = $_GET['pages'];
-    
+
     if($result["U_Status"]=="Admin")
     {
         header("location: ../main/admin.php");
@@ -27,8 +25,8 @@ else{
         $_SESSION['User']= $result['U_ID'];
         header("location: ../index.php");
     }
-}
 else{
+
     if($result["U_Status"]=="Admin")
     {
         header("location: ../main/admin.php");
@@ -37,7 +35,7 @@ else{
     {
         $_SESSION['login'] = 1 ;
         $_SESSION['User']= $result['U_ID'];
-        header("location: ../homepage.php");
+        header("location: ../index.php");
 }
 }
 }

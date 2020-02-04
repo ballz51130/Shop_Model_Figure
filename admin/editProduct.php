@@ -26,7 +26,7 @@ $result = mysqli_fetch_array($query);
     <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>" width="300px" height="400px">
   </div>
   <div class="contriner" style="width:900px;">
-    <form action="./CheckEdit.php" method="POST">
+    <form action="./CheckEdit.php" method="POST" enctype="multipart/form-data">
       <input type="hidden" name="P_ID" value="<?php echo $result['P_ID'];?>">
 
       <div class="form-group row">
@@ -46,8 +46,12 @@ $result = mysqli_fetch_array($query);
       <div class="form-group row">
         <label for="inputEmail3" class="col-sm-2 col-form-label">รายระเอียดสินค้า</label>
         <div class="col-sm-3">
-          <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" name="P_Detel"
-            placeholder="<?php echo $result['P_Detel'];?>" value="<?php echo $result['P_Detel'];?>"></textarea>
+        <div>
+            <textarea id="text" class="form-control" name="P_Detel" placeholder="<?php echo $result['P_Detel'];?>"></textarea>
+          </div>
+          <div> <br>
+            <input type="file" name="image">
+          </div>
         </div>
       </div>
       <div class="form-group row">

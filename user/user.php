@@ -18,10 +18,10 @@
 ?>
   <center> <h1> สินค้าที่ต้องชำระ </h1> </center>
 <div class="table" align ="center">
-<table class="table table-bordered "style="width: 900px;">
+
+<table class="table table-bordered "style="width: 900px; margin-top:10px;">
     <thead>
     <tr>
-        <th scope="col"> ID</th>
         <th scope="col"> ชื่อสินค้า </th>
         <th scope="col"> จำนวน </th>
         <th scope="col"> ราคา </th>
@@ -29,6 +29,7 @@
         <th scope="col"> สถานะ </th>
         <th scope="col"> จัดการ </th>
         <th scope="col"> ลบรายการ </th>
+        <th></th>
         </tr>
         </thead>
         <tbody>
@@ -53,7 +54,6 @@
         $bg="#8cff66"; 
        }
     ?>  
-<td align ="center"> <?php echo $result['O_ID'];?></td>
 <td align ="center"> <?php echo $result['P_Name'];?></td>
 <td align ="center"> <?php echo $result['O_Unit']; ?> </td>
 <td align ="center"> <?php echo $result['P_Price']; ?> </td>
@@ -62,12 +62,13 @@
 <td bgcolor="<?=$bg;?>" align ="center"> <?php echo $result['O_Status'];?> </td>
 <td align ="center"> <a href="../order/Confrime.php?ID=<?php echo $result['O_ID'];?>&P_Name=<?php echo $result["P_Name"];?>&Sum=<?php echo $SUM; ?>&O_Unit=<?php echo $result['O_Unit']; ?>&P_Price=<?php echo $result['P_Price']; ?>"><?php echo "Edit";?></a> </td>
 <td align ="center"> <a href="../order/Delete_Order.php?ID=<?php echo $result['O_ID'];?>"><?php echo "ลบ";?></a> </td>
+<td align ="center"> <a href="./FormPayment.php?O_ID=<?php echo $result['O_ID'];?>"><button type="button" class="btn btn-outline-dark">แจ้งชำระเงิน</button></a> </td>
    </tr>
   <?php } ?> 
   </tbodt>
    </table>
     <h4 align = 'right'style="width: 900px;"> <?php  echo "<br>ราคารวมทั้งหมด" ,"&nbsp",$AllSum; ?> </h4>
-    <a href="./main/user.php"><button type="button" class="btn btn-outline-dark">จ่ายแยก</button></a> <a href="./main/user.php"><button type="button" class="btn btn-outline-dark">จ่ายรวม</button></a><br>
+    <br>
    </div>
 <br>
 

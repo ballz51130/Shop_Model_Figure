@@ -14,7 +14,7 @@ if($result > 0){
 else{
 
 
-$sql2 = "INSERT INTO `orders`(`P_Number`, `U_ID`, `O_Unit`, `O_Status`, `O_Img`) VALUES ('".$_POST['P_Number']."','".$_SESSION['User']."','".$_POST['quantity']."','รอการชำระ','".$_POST['P_Photo']."')";
+$sql2 = "INSERT INTO `orders`(`P_Number`, `U_ID`, `O_Unit`, `O_Status`) VALUES ('".$_POST['P_Number']."','".$_SESSION['User']."','".$_POST['quantity']."','รอการชำระ')";
 $query2 = mysqli_query($conn, $sql2);
 if($query2==TRUE)
 {
@@ -24,7 +24,7 @@ if($query2==TRUE)
 else
 {
     echo "เกิดข้อผิดพลาด ";
-      echo "<META HTTP-EQUIV='Refresh'CONTENT = '2;URL=admin.php'>";
+      echo "<META HTTP-EQUIV='Refresh'CONTENT = '2;URL=../index.php'>";
 }
 }
 mysqli_close($conn);

@@ -58,7 +58,7 @@
     </div>
     <div class="form-group col-md-3">
       <label for="inputZip">อำเภอ</label>
-      <input type="text" name="A_District" class="form-control" id="inputZip">
+    <input type="text" name="A_District" class="form-control" id="inputZip">
     </div>
     <div class="form-group col-md-3">
       <label for="inputZip">จังหวัด</label>
