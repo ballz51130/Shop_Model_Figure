@@ -1,6 +1,5 @@
 <?php 
 include '../conn/conn.php';
-
 $image = $_FILES['image']['name'];
 // Get text
 $image_text = mysqli_real_escape_string($conn, $_POST['image_text']);

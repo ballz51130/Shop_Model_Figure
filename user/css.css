@@ -1,21 +1,25 @@
-.contriner{
+.contriner {
     position: relative;
     margin-left: 40%;
-    margin-top:20px;
+    margin-top: 20px;
     font-size: 1.2em;
-    
+
 }
-.photo{
+
+.photo {
     margin-top: 50px;
     margin-left: 40%;
 }
-.contriner button{
+
+.contriner button {
     margin-left: 150px;
 }
-body{
- background-color: bisque;    
+
+body {
+    background-color: bisque;
 }
-.inputphoto{
+
+.inputphoto {
     margin-left: 100px;
     padding: 20px;
 }

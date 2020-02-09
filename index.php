@@ -115,7 +115,8 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
                 <a href="#" class="btn btn-primary">Link 2</a> <br>
                 <a href="#" class="btn btn-primary">Link 3</a> <br>
             </div>
-            <?php $sql = "SELECT * FROM Product ORDER BY P_ID ASC limit $start_from,$num_per_page ";  
+            <?php 
+                    $sql = "SELECT * FROM Product ORDER BY P_ID ASC limit $start_from,$num_per_page ";  
                     $result = mysqli_query($conn, $sql);   
                     if(mysqli_num_rows($result) > 0)  // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
                     {  
@@ -125,7 +126,8 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
             <div class="col-md-4">
                 <form method="post" action="./order/InsertOrder.php">
                     <div class="card" style=" width: 100% ;background-color:#D8FFFB; padding:20px;" align="center">
-                        <a href=""><img src="<?php echo './photo/Order/'.$row['P_Photo'] ;?>" width="300px" height="350px"></a>
+                        <a href=""><img src="<?php echo './photo/Order/'.$row['P_Photo'] ;?>" width="300px"
+                                height="350px"></a>
                         <div class="card-body">
                             <input name="P_Number" type="hidden" id="P_Number" value="<?php echo $row['P_Number']?>">
                             <h4 class="text-info"><?php echo $row["P_Name"]; ?></h4>
