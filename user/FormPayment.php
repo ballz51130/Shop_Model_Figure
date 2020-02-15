@@ -109,8 +109,6 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                                     </div>
                                 </div>
                                 <div class="form-row col-md-12">
-
-
                                 </div>
                                 <div class="form-group col-md-12" style="padding-top:50px; margin-right:200px;">
                                     <button type="submit" class="btn btn-primary"
@@ -126,15 +124,15 @@ session_start(); // คำสั่ง เปิดใช้งาน session
 
                 </div>
             </div>
-            <div class="col-md-4" style="width:500px;margin-left:100px;border: 2px solid navy;">
+            <div class="col-md-4" style="width:500px;margin-left:100px;border: 1px solid black;">
                 <?php 
-                                    $sqlproduct="SELECT  orders.O_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
-                                         INNER JOIN product ON product.P_Number = orders.P_Number
-                                         WHERE O_ID='".$_GET['O_ID']."'";
-                                    $queryproduct = mysqli_query($conn,$sqlproduct);
-                                    $resultproduct = mysqli_fetch_array($queryproduct);
-                                ?>
-                <form action="./FormBank.php?O_ID=<?php echo $_GET['O_ID'];?>" method="post"
+                    $sqlproduct="SELECT  orders.O_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
+                    INNER JOIN product ON product.P_Number = orders.P_Number
+                    WHERE O_ID='".$_GET['O_ID']."'";
+                    $queryproduct = mysqli_query($conn,$sqlproduct);
+                    $resultproduct = mysqli_fetch_array($queryproduct);
+                ?>
+                <form id="SendForm" action="./FormBank.php?O_ID=<?php echo $_GET['O_ID'];?>" method="post"
                     enctype="multipart/form-data">
                     <input type="hidden" name="form" value="send">
                     <div class="form-group">
@@ -160,12 +158,13 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                             <input type="hidden" name="sump" class="form-control" value="<?php echo $price ;?>">
                             <!-- วิธีการจัดสุ่ง -->
                             <label for="titlesend">วิธีการจัดส่ง</label> <br>
+                            <p id="demo" style="color: red;"></p>
                             <div class="sends">
                                 <?php 
-                                             $sqlSend = "SELECT * FROM `send_tb` WHERE Sn_Status = 1";
-                                             $querySend = mysqli_query($conn,$sqlSend);
-                                              while ($resultSend = mysqli_fetch_array($querySend)){
-                                             ?>
+                                    $sqlSend = "SELECT * FROM `send_tb` WHERE Sn_Status = 1";
+                                    $querySend = mysqli_query($conn,$sqlSend);
+                                    while ($resultSend = mysqli_fetch_array($querySend)){
+                                ?>
                                 <label><input type="radio" name="gender"
                                         value="<?php echo $resultSend['Sn_id'];?>"><?php  echo $resultSend['Sn_Name'];?></label>
                                 <p1 style="float:right; margin-right:50px;"> <?php echo $resultSend['Sn_Price']; ?> THB
@@ -177,12 +176,12 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                                 <?php  $price=$resultproduct['P_Price']*$resultproduct['O_Unit']; echo $price ;?></h4>
                         </div>
                         <div class="form-group col-md-12" style="padding-top:50px; margin-right:150px;">
-                            <button type="submit" class="btn btn-primary"
-                                style="float:right; margin-right:50px">[ถัดไป]</button>
+
                         </div>
                     </div>
 
                 </form>
+                <button class="btn btn-primary" style="float:right; margin-right:50px" type="button">[ถัดไป]</button>
             </div>
 
 
@@ -213,13 +212,27 @@ session_start(); // คำสั่ง เปิดใช้งาน session
         </div>
     </div>
     </div> <!-- contrinner-->
-
-
-
     <footer>
         <p> Power By Harumyx </p>
     </footer>
-
+    <script>
+        $(document).ready(function () {
+            $("button[type='button']").click(function () {
+                var r = confirm('คุณต้องการจัดส่งที่สินค้าตามนี้หรือไม่');
+                var radioValue = $("input[name='gender']:checked").val();
+                var txt;
+                if(r == true){
+                if (!radioValue) {
+                    txt = "กรุณาเลีอกวิธีการจัดส่ง";
+                    document.getElementById("demo").innerHTML = txt;
+                }
+                if (radioValue) {
+                    document.getElementById("SendForm").submit();
+                }
+            }
+            });
+        });
+    </script>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
     </script>

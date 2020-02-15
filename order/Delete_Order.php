@@ -4,11 +4,11 @@ $ID = $_GET['ID'];
 $sql = "DELETE FROM `orders` WHERE O_ID=".$ID;
 $query = mysqli_query($conn,$sql);
 if($query=TRUE){
-    echo "สำเร็จ";
-   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL=../main/user.php'>";
+    echo "<h1>สำเร็จ</h1>";
+   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../user/user.php'>";
 }
 else{
-    echo "ไม้สำเร็จ";
+    echo "<h1>Error</h1>";
  echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL=../index.php'>";
 }
 

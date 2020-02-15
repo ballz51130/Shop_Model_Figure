@@ -16,7 +16,7 @@ include '../conn/conn.php';
 <body>
 <div class="conriuner">
 <div class="header">
-        <a href="../admin/MainProduct.php" class="btn btn-primary">จัดการข้อมูลสินค้า</a>
+        <a href="./MainProduct.php" class="btn btn-primary">จัดการข้อมูลสินค้า</a>
 </div>
     <div class="table" align ="center">
      สินค้ารอตรวจสอบการชำระเงิน

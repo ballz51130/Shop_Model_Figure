@@ -52,8 +52,8 @@ session_start(); // คำสั่ง เปิดใช้งาน session
         <div class="maimMenu">
             <div class="rowmenu">
                 <div class="col-md-8">
-                    <form action="" method="post" enctype="multipart/form-data">
-
+                    <form action="../order/UserConfSends.php" method="post" enctype="multipart/form-data">
+                            
                         <H4>วิธีการชำระเงิน</H4>
                         <?php 
                             $sql = "SELECT * FROM bank_tb WHERE BK_Type ='show' ";  
@@ -61,13 +61,13 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                          while($row = mysqli_fetch_array($result))  
                          { ?>
                         <div class="bank">
-                            <label><input type="radio" name="gender" value="<?php echo $row['BK_ID']; ?>">
+                            <label><input type="radio" name="bank" value="<?php echo $row['Bk_id']; ?>">
                                 โอนผ่านบัญชีธนคาร</label><br>
                             <div class="col-md-1">
-                                <img src="<?php echo '../photo/Order/'.$resultproduct['P_Photo'] ;?>" width="50px"
+                                <img src="<?php echo '../photo/'.$row['Bk_img'] ;?>" width="50px"
                                     height="50px">
                             </div>
-                            <div class="col-md-10">
+                             <div class="col-md-10">
                                 <h4><?php echo $row['Bk_Name'].'<br>เลขบัญชี &nbsp;'; echo $row['Bk_Number']?> <p1
                                         style="margin-left:50px"><?php echo $row['U_Name']; ?></p1>
                                 </h4>
@@ -87,7 +87,6 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                                              $querySend = mysqli_query($conn,$sqlSend);
                                              $resultSend = mysqli_fetch_array($querySend);
                                 ?>
-                    <input type="hidden" name="form" value="send">
                     <div class="form-group">
                         <div class="rowp">
                             <h3>สรุปรายการสั่งซื้อ</h3>
@@ -108,11 +107,10 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                             <h4>ยอดรวมสินค้า (<?php echo $resultproduct['O_Unit'] ;?>) ชิ้น <label
                                     style="float:right;margin-right:50px;"><?php  $price=$resultproduct['P_Price']*$resultproduct['O_Unit']; echo $price ;?></label>
                             </h4>
-                            <input type="hidden" name="sump" class="form-control" value="<?php echo $price ;?>">
+                            <input type="hidden" name="O_ID" class="form-control" value="<?php echo $resultproduct['O_ID'] ;?>">
                             <!-- วิธีการจัดสุ่ง -->
                             <div class="sends" style="margin-top:20px;">
-                                <label><input type="hidden" name="gender<?php echo['Sn_id'];?>"
-                                        value="<?php echo $_POST['gender'] ;?>">
+                                <label><input type="hidden" name="gender"value="<?php echo $_POST['gender'] ;?>">
                                     <h4>ค่าจัดส่งสินค้า</h4>
                                 </label>
                                 <p1 style="float:right; margin-right:50px;">
@@ -134,9 +132,6 @@ session_start(); // คำสั่ง เปิดใช้งาน session
             </div>
         </div>
     </div> <!-- contrinner-->
-
-
-
     <footer>
         <p> Power By Harumyx </p>
     </footer>
