@@ -240,10 +240,7 @@ $resultU = mysqli_fetch_array($queryU);
             for ($i = 1; $i < $total_page; $i++) {
                 echo "<a href='index.php?page=" . $i . "&list=" . $list . "' class='btn btn-primary'>$i</a>";
             }
-        }
-
-
-        ?>
+        }   ?>
     </div>
 
 
