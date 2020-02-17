@@ -1,49 +1,6 @@
 <?php 
 include './conn/conn.php';
 session_start(); // คำสั่ง เปิดใช้งาน session 
-if(isset($_SESSION['login'])){
-    $_SESSION['login'] = $_SESSION['login'];
-}
-else{
-  $_SESSION['login'] = 0;
-  $_SESSION['User'] = 0 ;
-}
-if(isset($_SESSION['User'])){
-    $_SESSION['User'] = $_SESSION['User'];
-}
-else{
-    $_SESSION['User']= 0;
-}
-if(isset($_GET['page'])){
-    $page = $_GET['page'];
-}
-if(isset($_GET['page'])){
-    $page = $_GET['page'];
-}
-else{
-    $rowN = 0;
-    $page = 1;
-}
-if(isset($_GET['list'])){
-    $list =  $_GET['list'];
-}
-else{
-    $list =  "";
-}
-$numrow = 1;
-$num_per_page = 6;
-$start_from = ($page-1)*$num_per_page;
-// แสดงจำนวนที่ค้าอยู่ในสต้อกของลูกค้า แสดงใน button ตระกร้าสินค้า
-$sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_FName,user.U_LName,orders.O_Status FROM orders
-   INNER JOIN product ON product.P_Number = orders.P_Number
-   INNER JOIN user ON user.U_ID = orders.U_ID
-   WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ' ";
-    $queryN = mysqli_query($conn,$sqlN);
-    $rowN = mysqli_num_rows($queryN);
-    $sqlU= "SELECT `U_ID`,U_FName,`U_Photo`,'' FROM `user` WHERE U_ID = '".$_SESSION['User']."' ";  
-    $queryU = mysqli_query($conn, $sqlU);  
-    $resultU = mysqli_fetch_array($queryU);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">

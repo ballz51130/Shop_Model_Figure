@@ -2,10 +2,15 @@
 session_start();
 include '../conn/conn.php';
 
-$sql= " SELECT * FROM user WHERE U_UserName = '".$_POST['UserName']."' AND U_Password = '".$_POST['password']."'";
+$sql= " SELECT * FROM user WHERE U_UserName = '".$_POST['username']."' AND U_Password = '".$_POST['pass']."'";
 $query = mysqli_query($conn,$sql);
-$result = mysqli_fetch_array($query,MYSQLI_ASSOC);
 
+$result = mysqli_fetch_array($query,MYSQLI_ASSOC);
+if( $_POST['username'] == "" || $_POST['pass'] == ""){
+    echo "<center><h1>กรุณากรอก UserName และ Password ให้ครบถ้วน";
+    echo "<META HTTP-EQUIV='Refresh' CONTENT ='2;URL=login.php'>";
+}
+else{
 if(!$result)
 {
     echo "<center><h1>Username OR Password ผิดพลาดโปรดใส่ใหม่อีกครั้ง</h1>";
@@ -36,6 +41,7 @@ else{
         $_SESSION['login'] = 1 ;
         $_SESSION['User']= $result['U_ID'];
         header("location: ../index.php");
+}
 }
 }
 }

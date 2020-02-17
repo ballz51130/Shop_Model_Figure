@@ -1,0 +1,111 @@
+.login{
+    width: 100%;
+    margin: 0 auto;
+}
+.container{
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+    background-color: #ECFFFC;
+}
+.login-form{
+    width: 560px;
+    background: #fff;
+    border-radius: 10px;
+    height: auto;
+    padding-left: 130px;
+    padding-top: 100px;
+    padding-right: 100px;
+    padding-bottom: 50px;
+    position: relative;
+    box-shadow: 4px 4px 4px 4px gainsboro;
+}
+.login-form1{
+    font-family: Raleway-Medium;
+    font-size: 30px;
+    color:black;
+    line-height: 1.2;
+    text-transform: uppercase;
+    text-align: left;
+    margin-left: 100px;
+    width: 100%;
+    margin-top: -50px;
+    display: block;
+}
+.txtuser{
+    margin-top: 20px;
+    font-size: 18px;
+    margin-left: 30px;
+    color:black;
+    line-height: 1.4;
+    text-transform: uppercase;
+
+}
+.wrap-inputuser{
+    font-family: Raleway-SemiBold;
+    font-size: 18px;
+    color:black;
+    line-height: 1.4;
+    text-transform: uppercase;
+    margin-left: 30px;
+    margin-top: 5px;
+}
+.txtpass{
+    font-size: 18px;
+    color:black;
+    line-height: 1.4;
+    text-transform: uppercase;
+    margin-left: 30px;
+    margin-top: 5px;
+}
+.wrap-inputpass{
+    font-family: Raleway-SemiBold;
+    font-size: 18px;
+    color:black;
+    line-height: 1.4;
+    text-transform: uppercase;
+    margin-left: 30px;
+    margin-top: 5px;
+}
+.flex-forgot{
+    font-family: Raleway-Regular;
+    font-size: 18px;
+    color:black;
+    line-height: 1.4;
+    margin-left: 30px;
+    margin-top: 10px;
+}
+.flex-register{
+    font-family: Raleway-Regular;
+    font-size: 18px;
+    color:black;
+    line-height: 1.4;
+    margin-left: 30px;
+    margin-top: 10px;
+}
+.container-login{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: 30px;
+}
+.login-form-btn{
+    font-family: Raleway-Bold;
+    font-size: 16px;
+    color: #fff;
+    line-height: 1.2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 20px;
+    min-width: 150px;
+    height: 55px;
+    background-color: #333;
+    border-radius: 27px;
+    margin-top: 20px;
+    margin-left: 40px;
+}

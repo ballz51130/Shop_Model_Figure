@@ -1,42 +1,55 @@
 <?php
 include './conn/conn.php';
-session_start(); // คำสั่ง เปิดใช้งาน session 
-if (isset($_SESSION['login'])) {
+session_start(); // คำสั่ง เปิดใช้งาน session
+if (isset($_SESSION['login']))
+{
     $_SESSION['login'] = $_SESSION['login'];
-} else {
+}
+else
+{
     $_SESSION['login'] = 0;
     $_SESSION['User'] = 0;
 }
-if (isset($_SESSION['User'])) {
+if (isset($_SESSION['User']))
+{
     $_SESSION['User'] = $_SESSION['User'];
-} else {
+}
+else
+{
     $_SESSION['User'] = 0;
 }
-if (isset($_GET['page'])) {
+if (isset($_GET['page']))
+{
     $page = $_GET['page'];
 }
-if (isset($_GET['page'])) {
+if (isset($_GET['page']))
+{
     $page = $_GET['page'];
-} else {
+}
+else
+{
     $rowN = 0;
     $page = 1;
 }
-if (isset($_GET['list'])) {
-    $list =  $_GET['list'];
-} else {
-    $list =  "";
+if (isset($_GET['list']))
+{
+    $list = $_GET['list'];
+}
+else
+{
+    $list = "";
 }
 $numrow = 1;
-$num_per_page = 6;
+$num_per_page = 8;
 $start_from = ($page - 1) * $num_per_page;
 // แสดงจำนวนที่ค้าอยู่ในสต้อกของลูกค้า แสดงใน button ตระกร้าสินค้า
-$sqlN = "SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_FName,user.U_LName,orders.O_Status FROM orders
+$sqlN = "SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
    INNER JOIN product ON product.P_Number = orders.P_Number
    INNER JOIN user ON user.U_ID = orders.U_ID
    WHERE user.U_ID = '" . $_SESSION['User'] . "' AND orders.O_Status ='รอการชำระ' ";
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
-$sqlU = "SELECT `U_ID`,U_FName,`U_Photo`,'' FROM `user` WHERE U_ID = '" . $_SESSION['User'] . "' ";
+$sqlU = "SELECT `U_ID`,U_Name,`U_Photo`,'' FROM `user` WHERE U_ID = '" . $_SESSION['User'] . "' ";
 $queryU = mysqli_query($conn, $sqlU);
 $resultU = mysqli_fetch_array($queryU);
 
@@ -60,14 +73,18 @@ $resultU = mysqli_fetch_array($queryU);
     <div class="head_bar">
         <div class="manu_login">
             <ul>
-                <li> <?php if ($_SESSION['login'] == "") { ?>
+                <li> <?php if ($_SESSION['login'] == "")
+{ ?>
                     <a href="./login/login.php">Login</a>
-                    <?php }
-                        if ($_SESSION['login'] == 1) { ?>
-                <li><?php echo $resultU['U_FName']; ?></li>
+                    <?php
+}
+if ($_SESSION['login'] == 1)
+{ ?>
+                <li><?php echo $resultU['U_Name']; ?></li>
                 <li> <a href="">MY ACCOUNT </a></li>
                 <li><a href="./login/logout.php">Logout</a></li>
-                <?php } ?>
+                <?php
+} ?>
                 </li>
             </ul>
         </div>
@@ -118,17 +135,20 @@ $resultU = mysqli_fetch_array($queryU);
                 <a href="./index.php?list=Gundum"> <img src="./photo/model/rt.jpg"></a> <br>
             </div>
             <?php
-            if ($list == "") {
-                $sql = "SELECT * FROM product ORDER BY P_ID ASC limit $start_from,$num_per_page ";
-                $result = mysqli_query($conn, $sql);
-                if (mysqli_num_rows($result) > 0)  // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
-                {
-                    while ($row = mysqli_fetch_array($result))  // ใช้คืนค่า ค่าข้อมูล ของ result ในแถวที่ชี้อยู่ และเก็บไว้ที่ array และเลื่อนไปตัวชี้ชี้ไปยังตำแหน่งถ้ดไป     
-                    {
-            ?>
-            <div class="col-md-4">
+if ($list == "")
+{
+    $sql = "SELECT * FROM product ORDER BY P_ID ASC limit $start_from,$num_per_page ";
+    $result = mysqli_query($conn, $sql);
+    if (mysqli_num_rows($result) > 0) // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
+    
+    {
+        while ($row = mysqli_fetch_array($result)) // ใช้คืนค่า ค่าข้อมูล ของ result ในแถวที่ชี้อยู่ และเก็บไว้ที่ array และเลื่อนไปตัวชี้ชี้ไปยังตำแหน่งถ้ดไป
+        
+        {
+?>
+            <div class="col-md-3">
                 <form method="post" action="./order/InsertOrder.php">
-                    <div class="card" style=" width: 100% ;background-color:#D8FFFB; padding:20px;" align="center">
+                    <div class="card" align="center">
                         <a href=""><img src="<?php echo './photo/Order/' . $row['P_Photo']; ?>" width="300px"
                                 height="350px"></a>
                         <div class="card-body">
@@ -138,20 +158,24 @@ $resultU = mysqli_fetch_array($queryU);
                             <input type='button' value='-' class='qtyminus' field='quantity'
                                 style="width:50px; position: relative; margin-top:4px; margin-left:90px; margin-right:-150px ;float:left;">
                             <input type="text" name="quantity" id="quantity" class="form-control" value="1"
-                                style="width:40px; position: relative; ">
+                                style="width:40px; position: relative; ttext-align: center; ">
                             <input type='button' value='+' class='qtyplus' field='quantity'
                                 style=" width:50px;  margin-top:-30px; margin-right: 90px; position: relative; float:right;">
                             <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>"> <br>
-                            <?php if ($_SESSION['login'] == "") { ?>
+                            <?php if ($_SESSION['login'] == "")
+            { ?>
                             <a href="./login/login.php"><input name="add_to_cart" class="btn btn-success"
                                     value="เพื่มเข้าตระกร้า" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')">
                             </a>
-                            <?php } ?>
+                            <?php
+            } ?>
                             <!-- End if session login-->
-                            <?php if ($_SESSION['login'] == 1) { ?>
+                            <?php if ($_SESSION['login'] == 1)
+            { ?>
                             <input name="Save" type="submit" class="btn btn-success" value="เพื่มเข้าตระกร้า"
                                 onclick="return confirm('คุณต้องการซื้อรายการนี้หรือไม่')"> <br>
-                            <?php } ?>
+                            <?php
+            } ?>
                             <!-- end if session log   in = 1 -->
                         </div>
                     </div>
@@ -159,20 +183,26 @@ $resultU = mysqli_fetch_array($queryU);
                 <br>
             </div>
             <?php
-                    }   // while $row
-                }  // if mysqli_num_rows
-            } // if $list        
-            ?>
-            <?php
-            if ($list <> "") {
-                $sql = "SELECT * FROM product WHERE P_Group ='$list' ORDER BY P_ID ASC limit $start_from,$num_per_page ";
-                $result = mysqli_query($conn, $sql);
+        } // while $row
+        
+    } // if mysqli_num_rows
+    
+} // if $list
 
-                if ($numrow = mysqli_num_rows($result) > 0)  // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
-                {
-                    while ($row = mysqli_fetch_array($result))  // ใช้คืนค่า ค่าข้อมูล ของ result ในแถวที่ชี้อยู่ และเก็บไว้ที่ array และเลื่อนไปตัวชี้ชี้ไปยังตำแหน่งถ้ดไป     
-                    {
-            ?>
+?>
+            <?php
+if ($list <> "")
+{
+    $sql = "SELECT * FROM product WHERE P_Group ='$list' ORDER BY P_ID ASC limit $start_from,$num_per_page ";
+    $result = mysqli_query($conn, $sql);
+
+    if ($numrow = mysqli_num_rows($result) > 0) // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
+    
+    {
+        while ($row = mysqli_fetch_array($result)) // ใช้คืนค่า ค่าข้อมูล ของ result ในแถวที่ชี้อยู่ และเก็บไว้ที่ array และเลื่อนไปตัวชี้ชี้ไปยังตำแหน่งถ้ดไป
+        
+        {
+?>
             <div class="col-md-4">
                 <form method="post" action="./order/InsertOrder.php">
                     <div class="card" style=" width: 100% ;background-color:#D8FFFB; padding:20px;" align="center">
@@ -182,23 +212,28 @@ $resultU = mysqli_fetch_array($queryU);
                             <input name="P_Number" type="hidden" id="P_Number" value="<?php echo $row['P_Number'] ?>">
                             <h4 class="text-info"><?php echo $row["P_Name"]; ?></h4>
                             <input type="hidden" name="hidden_name" value="<?php echo $row["P_Name"]; ?>">
+                            <input type="hidden" name="hidden_unit" value="<?php echo $row["P_Unit"]; ?>">
                             <input type='button' value='-' class='qtyminus' field='quantity'
                                 style="width:30px; position: relative; margin-top:4px; margin-left:90px; margin-right:-150px ;float:left;">
                             <input type="text" name="quantity" id="quantity" class="form-control" value="1"
                                 style="width:40px; position: relative; ">
                             <input type='button' value='+' class='qtyplus' field='quantity'
-                                style=" width:30px;  margin-top:-30px; margin-right: 90px; background-color: ; position: relative; float:right;">
+                                style=" width:30px;  margin-top:-30px; margin-right: 90px;  position: relative; float:right;">
                             <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>"> <br>
-                            <?php if ($_SESSION['login'] == "") { ?>
+                            <?php if ($_SESSION['login'] == "")
+            { ?>
                             <a href="./login/login.php"><input name="add_to_cart" class="btn btn-success"
                                     value="เพื่มเข้าตระกร้า" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')">
                             </a>
-                            <?php } ?>
+                            <?php
+            } ?>
                             <!-- End if session login-->
-                            <?php if ($_SESSION['login'] == 1) { ?>
+                            <?php if ($_SESSION['login'] == 1)
+            { ?>
                             <input name="Save" type="submit" class="btn btn-success" value="เพื่มเข้าตระกร้า"
                                 onclick="return confirm('คุณต้องการซื้อรายการนี้หรือไม่')"> <br>
-                            <?php } ?>
+                            <?php
+            } ?>
                             <!-- end if session log   in = 1 -->
                         </div>
                     </div>
@@ -206,41 +241,47 @@ $resultU = mysqli_fetch_array($queryU);
                 <br>
             </div>
             <?php
-                    }   // while $row
-                }  // if mysqli_num_rows
-            } // if $list   
+        } // while $row
+        
+    } // if mysqli_num_rows
+    
+} // if $list
+if ($numrow == "")
+{
+    echo " <br><center><h1>ไม่พบข้อมูล</h1></center>";
+}
 
-            if ($numrow == "") {
-                echo " <br><center><h1>ไม่พบข้อมูล</h1></center>";
-            }
-
-            ?>
+?>
 
         </div>
 
     </div> <!-- contrinner-->
     <div class="numpage">
         <?php
-        if ($list == "") {
-            $pr_query = "select * from Product ";
-            $pr_reqult = mysqli_query($conn, $pr_query);
-            $total = mysqli_num_rows($pr_reqult);
-            $total_page = ceil($total / $num_per_page) + 1;
+if ($list == "")
+{
+    $pr_query = "select * from Product ";
+    $pr_reqult = mysqli_query($conn, $pr_query);
+    $total = mysqli_num_rows($pr_reqult);
+    $total_page = ceil($total / $num_per_page) + 1;
 
-            for ($i = 1; $i < $total_page; $i++) {
-                echo "<a href='index.php?page=" . $i . "' class='btn btn-primary'>$i</a>";
-            }
-        }
-        if ($list <> "") {
-            $pr_query = "select * from Product where P_Group = '$list' ";
-            $pr_reqult = mysqli_query($conn, $pr_query);
-            $total = mysqli_num_rows($pr_reqult);
-            $total_page = ceil($total / $num_per_page) + 1;
+    for ($i = 1;$i < $total_page;$i++)
+    {
+        echo "<a href='index.php?page=" . $i . "' class='btn btn-primary'>$i</a>";
+    }
+}
+if ($list <> "")
+{
+    $pr_query = "select * from Product where P_Group = '$list' ";
+    $pr_reqult = mysqli_query($conn, $pr_query);
+    $total = mysqli_num_rows($pr_reqult);
+    $total_page = ceil($total / $num_per_page) + 1;
 
-            for ($i = 1; $i < $total_page; $i++) {
-                echo "<a href='index.php?page=" . $i . "&list=" . $list . "' class='btn btn-primary'>$i</a>";
-            }
-        }   ?>
+    for ($i = 1;$i < $total_page;$i++)
+    {
+        echo "<a href='index.php?page=" . $i . "&list=" . $list . "' class='btn btn-primary'>$i</a>";
+    }
+} ?>
     </div>
 
 
@@ -248,17 +289,17 @@ $resultU = mysqli_fetch_array($queryU);
         <p> Power By Harumyx </p>
     </footer>
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-</script>
+    </script>
     <!-- Popper.JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
         integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous">
-</script>
+    </script>
     <!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
         integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
-</script>
+    </script>
     <script type="text/javascript">
         // บวกลบ จำนวนสินค้า
         $(document).ready(function () {
@@ -274,6 +315,9 @@ $resultU = mysqli_fetch_array($queryU);
                 if (!isNaN(currentVal)) {
                     // Increment
                     fieldName.val(currentVal + 1);
+                if(currentVal >= 10){
+                    fieldName.val(currentVal + 0);
+                }
                 } else {
                     // Otherwise put a 0 there
                     fieldName.val(5);
@@ -297,6 +341,7 @@ $resultU = mysqli_fetch_array($queryU);
                 }
             });
         });
-</script>
+    </script>
 </body>
+
 </html>

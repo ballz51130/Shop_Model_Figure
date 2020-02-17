@@ -32,7 +32,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 <li> <?php if($_SESSION['login'] == ""){ ?>
                     <a href="../login/login.php">Login</a>
                     <?php }  if($_SESSION['login'] == 1){?>
-                <li><?php echo$resultU['U_FName'];?></li>
+                <li><?php echo$resultU['U_Name'];?></li>
                 <li> <a href="">MY ACCOUNT </a></li>
                 <li><a href="../login/logout.php">Logout</a></li>
                 <?php } ?>
@@ -72,8 +72,8 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                                     <div class="form-row col-md-4">
                                         <label for="inputEmail4">ชื่อ</label>
                                         <input type="hidden" name="form" class="form-control" value="address">
-                                        <input type="text" name="U_FName" class="form-control"
-                                            value="<?php echo $resultadd['U_FName'] ?>">
+                                        <input type="text" name="U_Name" class="form-control"
+                                            value="<?php echo $resultadd['U_Name'] ?>">
                                     </div>
                                     <div class="form-row col-md-4">
                                         <label for="inputPassword4">หมายเลขโทรศัพย์</label>
