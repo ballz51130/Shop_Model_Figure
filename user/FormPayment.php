@@ -158,7 +158,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                             <input type="hidden" name="sump" class="form-control" value="<?php echo $price ;?>">
                             <!-- วิธีการจัดสุ่ง -->
                             <label for="titlesend">วิธีการจัดส่ง</label> <br>
-                            <p id="demo" style="color: red;"></p>
+                            <p id="alert" style="color: red;"></p>
                             <div class="sends">
                                 <?php 
                                     $sqlSend = "SELECT * FROM `send_tb` WHERE Sn_Status = 1";
@@ -224,9 +224,11 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 if(r == true){
                 if (!radioValue) {
                     txt = "กรุณาเลีอกวิธีการจัดส่ง";
-                    document.getElementById("demo").innerHTML = txt;
+                    //ta
+                    document.getElementById("alert").innerHTML = txt;
                 }
                 if (radioValue) {
+                    //form id 
                     document.getElementById("SendForm").submit();
                 }
             }
@@ -244,9 +246,6 @@ session_start(); // คำสั่ง เปิดใช้งาน session
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
         integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
     </script>
-
-
-
 </body>
 
 </html>

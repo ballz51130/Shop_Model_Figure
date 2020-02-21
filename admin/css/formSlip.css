@@ -1,0 +1,99 @@
+.maimMenu {
+    position: relative;
+    margin-left: 200px;
+    margin-top: 100px;
+    font-size: 2rem;
+    height: auto;
+    padding: 50px;
+}
+.maimMenu p{
+    font-size: 30px;
+}
+html{
+    max-width: 100%;
+    max-width: 100%;
+}
+body{
+    max-width: 100%;
+    max-width: 100%;
+    font-family: Raleway-SemiBold;
+    font-size: 2rem;
+}
+.input {
+    padding: 50px;
+    border: 0.5px solid black;
+    width: 700px;
+    height: 800px;
+    
+}
+input {
+    width: 50px;
+}
+.head_bar {
+    position: relative;
+    height: 40px;
+    padding-top: 5px;
+    background-color: black;
+}
+
+.row-home {
+    height: 50px;
+    background-color: turquoise;
+}
+.photo {
+    padding: 50px;
+    border: 0.5px solid black;
+    width: 100px;
+    height: 100px;
+
+}
+footer {
+    position: relative;
+    background: #333;
+    margin-top: 50px;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+}
+
+.col-sm-10 {
+    margin-top: -50px;
+    margin-left: 400px;
+}
+.col-sm-10  a{
+    margin-left: 30px;
+}
+.photo-img{
+    margin-left: 100px;
+    padding: 50px;
+    border: 0.5px solid black;
+    width: 600px;
+    height: 800px;
+    transition: transform .5s ease;
+}
+.photo-img img{
+    width: 500px;
+    height: 500px;
+    
+}
+  .photo-img :hover {
+    transform: scale(1.4);
+    box-shadow: 2px 2px 2px gray;
+}
+
+.form-group {
+    padding-left: 50px;
+    margin-top: 20px;
+}
+.lable{
+    margin-top: -150px;
+    position: relative;
+    margin-left: 150px;
+}
+.Note{
+    margin-left: 150px;
+}
+select{
+    text-align: center;
+    height: 30px;
+}

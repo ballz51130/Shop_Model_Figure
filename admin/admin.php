@@ -4,7 +4,6 @@ session_start(); // คำสั่ง เปิดใช้งาน session
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -89,7 +88,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 <?php $SumOrder = $resultOrder['O_Unit'] * $resultOrder['P_Price']; ?>
                 <td> <?php echo $SumOrder ; ?> </td>
                 <td> <?php echo $resultOrder['O_Status']; ?> </td>
-                <td> </td>
+                <td> <a href="./FormConfSlip.php?O_ID=<?php echo $resultOrder['O_ID'];?>">edit</a></td>
                  </tr>
                  <?php } ?>
         </tbody>

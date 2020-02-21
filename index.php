@@ -315,9 +315,9 @@ if ($list <> "")
                 if (!isNaN(currentVal)) {
                     // Increment
                     fieldName.val(currentVal + 1);
-                if(currentVal >= 10){
-                    fieldName.val(currentVal + 0);
-                }
+                    if (currentVal >= 10) {
+                        fieldName.val(currentVal + 0);
+                    }
                 } else {
                     // Otherwise put a 0 there
                     fieldName.val(5);
