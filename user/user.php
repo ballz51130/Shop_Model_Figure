@@ -65,45 +65,39 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                     <th scope="col"> สถานะ </th>
                     <th scope="col"> จัดการ </th>
                     <th scope="col"> ลบรายการ </th>
-                    <th></th>
+                    <th scope="col"> 
+                    </th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <?php
-   $sql ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
+   $sql ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
    INNER JOIN product ON product.P_Number = orders.P_Number
    INNER JOIN user ON user.U_ID = orders.U_ID
-   WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ' ";
+   INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+   WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='ยืนยันการสั่งซื้อ' ";
    $query = mysqli_query($conn,$sql);
    $SUM =0;
    $AllSum = 0;
-   while($result = mysqli_fetch_array($query,MYSQLI_ASSOC)) {
-       
-       if ($result['O_Status']=='รอตรวจสอบ'){
-        $bg="#3366ff";
-       }
-       if($result['O_Status']=='รอการชำระ'){
-        $bg="#FF6600";
-       }
-       if($result['O_Status']=='จ่ายแล้ว'){
+   while($result = mysqli_fetch_array($query,MYSQLI_ASSOC)){
+       if($result['O_Status']=='ยืนยันการสั่งซื้อ'){
         $bg="#8cff66"; 
        }
     ?>
                     <td align="center"> <?php echo $result['P_Name'];?></td>
-                    <td align="center"> <?php echo $result['O_Unit']; ?> </td>
+                    <td align="center"> <?php echo $result['OD_Unit']; ?> </td>
                     <td align="center"> <?php echo $result['P_Price']; ?> </td>
-                    <?php $SUM = $result['P_Price'] * $result['O_Unit']; $AllSum = $AllSum + $SUM ;?>
+                    <?php $SUM = $result['P_Price'] * $result['OD_Unit']; $AllSum = $AllSum + $SUM ;?>
                     <td align="center"> <?php echo $SUM ;?> </td>
                     <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?> </td>
-                    <td align="center"> <a
-                            href="../order/Confrime.php?ID=<?php echo $result['O_ID'];?>&P_Name=<?php echo $result["P_Name"];?>&Sum=<?php echo $SUM; ?>&O_Unit=<?php echo $result['O_Unit']; ?>&P_Price=<?php echo $result['P_Price']; ?>"><img src="../photo/edit.png" width="15px" hight="15px"></a>
+                    <td align="center"> <a href="../order/Edit_Order.php"><img src="../photo/edit.png" width="15px" hight="15px"></a>
                     </td>
                     <td align="center"> <a
                             href="../order/Delete_Order.php?ID=<?php echo $result['O_ID'];?>"><img src="../photo/trash.png" width="15px" hight="15px"></a>
                     </td>
                     <td align="center"> <a href="./FormPayment.php?O_ID=<?php echo $result['O_ID'];?>"><button
-                                type="button" class="btn btn-outline-dark">ยืนยันการสั่งซื้อ </button></a> </td>
+                                type="button" class="btn btn-outline-dark">ยืนยันการสั่งซื้อ </button></a></td>
                 </tr>
                 <?php } ?>
                 </tbodt>
@@ -114,7 +108,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
     <br>
 
     <center>
-        <H2> สินค้ารอตรวจสอบ/จ่ายแล้ว</H2>
+        <H2> แจ้งชำระเงิน</H2>
     </center>
 
     <div class="table" align="center">
@@ -128,41 +122,34 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                     <th scope="col"> ยอดชำระ </th>
                     <th scope="col"> สถานะ </th>
                     <th scope="col">รายระเอียด</th>
-
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <?php
-   $sql ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
+   $sql ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
    INNER JOIN product ON product.P_Number = orders.P_Number
    INNER JOIN user ON user.U_ID = orders.U_ID
-   WHERE user.U_ID = '".$_SESSION['User']."'  AND orders.O_Status NOT LIKE 'รอการชำระ' ";
+   INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+   WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ' ";
    $query = mysqli_query($conn,$sql);
    $SUM =0;
    $AllSum = 0;
-   
    while($result = mysqli_fetch_array($query,MYSQLI_ASSOC)) {
-       if ($result['O_Status']=='รอตรวจสอบ'){
-        $bg="#3366ff";
-       }
+   
        if($result['O_Status']=='รอการชำระ'){
         $bg="#FF6600";
-       }
-       if($result['O_Status']=='จ่ายแล้ว'){
-        $bg="#8cff66"; 
        }
     ?>
                     <td align="center"> <?php echo $result['O_ID'];?></td>
                     <td align="center"> <?php echo $result['P_Name'];?></td>
-                    <td align="center"> <?php echo $result['O_Unit']; ?> </td>
+                    <td align="center"> <?php echo $result['OD_Unit']; ?> </td>
                     <td align="center"> <?php echo $result['P_Price']; ?> </td>
-                    <?php $SUM = $result['P_Price'] * $result['O_Unit']; $AllSum = $AllSum + $SUM ;?>
+                    <?php $SUM = $result['P_Price'] * $result['OD_Unit']; $AllSum = $AllSum + $SUM ;?>
                     <td align="center"> <?php echo $SUM ;?> </td>
                     <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?> </td>
-                    <td align="center"> <a href="http://">
-                            <botton> </botton>
-                        </a> </td>
+                    <td align="center"> <a href=""><button
+                                type="button" class="btn btn-outline-dark">แจ้งชำระเงิน</button></a> </td>
 
                 </tr>
                 <?php } ?>

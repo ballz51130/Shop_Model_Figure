@@ -78,9 +78,10 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 </div>
                 <div class="col-md-4" style="width:500px;margin-left:100px;border: 2px solid navy;">
                     <?php 
-                                    $sqlproduct="SELECT  orders.O_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
+                                    $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
                                          INNER JOIN product ON product.P_Number = orders.P_Number
-                                         WHERE O_ID='".$_GET['O_ID']."'";
+                                         INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                         WHERE orders.O_ID='".$_GET['O_ID']."'";
                                     $queryproduct = mysqli_query($conn,$sqlproduct);
                                     $resultproduct = mysqli_fetch_array($queryproduct);
                                     $sqlSend = "SELECT * FROM `send_tb` WHERE Sn_id = '".$_POST['gender']."'";
@@ -98,14 +99,14 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                         <div class="col-md-6" style="margin-left:30px;">
                             <label for="" style="margin-top:20px;">ชื้อสินค้า :
                                 <?php echo $resultproduct['P_Name'] ;?></label> <br>
-                            <label for="" style="margin-top:20px;"> X <?php echo $resultproduct['O_Unit'] ;?></label>
+                            <label for="" style="margin-top:20px;"> X <?php echo $resultproduct['OD_Unit'] ;?></label>
                             <br>
                             <label for="" style="margin-top:20px;">THB <?php echo $resultproduct['P_Price'] ;?> </label>
                             <br>
                         </div>
                         <div class="form-group col-md-12" style="padding-top:50px;">
-                            <h4>ยอดรวมสินค้า (<?php echo $resultproduct['O_Unit'] ;?>) ชิ้น <label
-                                    style="float:right;margin-right:50px;"><?php  $price=$resultproduct['P_Price']*$resultproduct['O_Unit']; echo $price ;?></label>
+                            <h4>ยอดรวมสินค้า (<?php echo $resultproduct['OD_Unit'] ;?>) ชิ้น <label
+                                    style="float:right;margin-right:50px;"><?php  $price=$resultproduct['P_Price']*$resultproduct['OD_Unit']; echo $price ;?></label>
                             </h4>
                             <input type="hidden" name="O_ID" class="form-control" value="<?php echo $resultproduct['O_ID'] ;?>">
                             <!-- วิธีการจัดสุ่ง -->
@@ -118,7 +119,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                                 </p1> <br>
                             </div>
                             <h4 style="margin-top:30px; margin-left:300px ">รวม :
-                                <?php  $price=($resultproduct['P_Price']*$resultproduct['O_Unit'])+$resultSend['Sn_Price']; echo $price ;?>
+                                <?php  $price=($resultproduct['P_Price']*$resultproduct['OD_Unit'])+$resultSend['Sn_Price']; echo $price ;?>
                             </h4>
                         </div>
                         <div class="form-group col-md-12" style="padding-top:50px; margin-right:150px;">

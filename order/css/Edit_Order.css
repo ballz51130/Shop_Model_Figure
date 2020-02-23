@@ -1,0 +1,38 @@
+
+html{
+    max-width: 100%;
+    max-width: 100%;
+}
+body{
+    max-width: 100%;
+    max-width: 100%;
+    font-family: Raleway-SemiBold;
+    font-size: 2rem;
+}
+.head_bar {
+    position: relative;
+    height: 40px;
+    padding-top: 5px;
+    background-color: black;
+}
+
+.row-home {
+    height: 50px;
+    background-color: turquoise;
+}
+.maimMenu {
+    position: relative;
+    margin-left: 200px;
+    margin-top: 100px;
+    font-size: 2rem;
+    height: auto;
+    padding: 50px;
+}
+footer {
+    position: relative;
+    background: #333;
+    margin-top: 100%;
+    padding: 20px;
+    text-align: center;
+    color: #fff;
+}

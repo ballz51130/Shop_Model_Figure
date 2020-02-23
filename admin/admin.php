@@ -73,9 +73,11 @@ session_start(); // คำสั่ง เปิดใช้งาน session
         <tbody>
         <tr>
             <?php 
-                 $sqlOrder = "SELECT orders.O_ID, orders.P_Number,product.P_Name,user.U_ID,user.U_Name,orders.O_Unit,product.P_Price,orders.O_Status FROM orders
+                 $sqlOrder = "SELECT orders.O_ID, orders.P_Number,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status FROM orders
                  INNER JOIN product ON orders.P_Number = product.P_Number
-                 INNER JOIN user ON orders.U_ID = user.U_ID WHERE O_Status='รอตรวจสอบ'";
+                 INNER JOIN user ON orders.U_ID = user.U_ID
+                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                  WHERE O_Status='ยืนยันการสั่งซื้อ'";
                  $queryOrder = mysqli_query($conn,$sqlOrder);
                  while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
                  {?>
@@ -85,7 +87,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 <td> <?php echo $resultOrder['U_Name']; ?> </td>
                 <td> <?php echo $resultOrder['O_Unit']; ?> </td>
                 <td> <?php echo $resultOrder['P_Price']; ?> </td>
-                <?php $SumOrder = $resultOrder['O_Unit'] * $resultOrder['P_Price']; ?>
+                <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
                 <td> <?php echo $SumOrder ; ?> </td>
                 <td> <?php echo $resultOrder['O_Status']; ?> </td>
                 <td> <a href="./FormConfSlip.php?O_ID=<?php echo $resultOrder['O_ID'];?>">edit</a></td>

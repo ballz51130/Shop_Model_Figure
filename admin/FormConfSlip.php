@@ -1,7 +1,7 @@
 <?php
 include '../conn/conn.php';
 session_start(); // คำสั่ง เปิดใช้งาน session
- $sqlre = "SELECT user.U_UserName,product.P_Name,orderdetail.OD_Unit,product.P_Price,send_tb.Sn_Price,bank_tb.Bk_Name,Bk_Number,
+ $sqlre = "SELECT user.U_UserName,product.P_Name,P_ID,orderdetail.OD_Unit,product.P_Price,send_tb.Sn_Price,bank_tb.Bk_Name,Bk_Number,
  slip_tb.Sp_Price,slip_tb.Sp_Frombank,Sp_LastNum,slip_tb.Sp_Tobank,slip_tb.Sp_Time,slip_tb.Sp_Date,slip_tb.Sp_Img
  FROM orders
  INNER JOIN user ON user.U_ID = orders.U_ID
@@ -47,7 +47,6 @@ session_start(); // คำสั่ง เปิดใช้งาน session
       <div class="row">
         <div class="col-md-5">
           <div class="input">
-            <form action="" method="POST" enctype="multipart/form-data">
               <input type="hidden" id="P_ID" name="P_ID" value="">
               <div class="form-group row">
                 <label for="inputEmail3" class="col-sm-4 col-form-label">รหัสรายการสินค้า</label>
@@ -117,19 +116,23 @@ session_start(); // คำสั่ง เปิดใช้งาน session
               </div>
           </div>
         </div>
+        <form action="./checkSlip.php" method="POST" enctype="multipart/form-data">
+          <input type="hidden" name="O_ID" value=" <?php echo $_GET['O_ID'];?>">
+          <input type="hidden" name="P_Unit" value="<?php echo $result['OD_Unit']; ?>">
+          <input type="hidden" name="P_ID" value="<?php echo $result['P_ID']; ?>">
         <div class="col-md-5">
           <div class="photo-img">
             <img src="<?php echo '../photo/Slip/'.$result['Sp_Img'];?>">
           </div>
           <div class="lable">
             <select id="cars" name="cars">
-              <option value="ยืนยันการชำระเงิน">ยืนยันการชำระเงิน</option>
-              <option value="ปฏิเสธการชำระเงิน">หมายเลขโอนไม่ถูกต้อง</option>
+              <option  value="เตรียมจัดส่ง">ยืนยันการชำระเงิน</option>
+              <option  value="ปฏิเสธการชำระเงิน">ปฏิเสธการชำระเงิน</option>
             </select>
           </div>
           <div class="Note">
-            <label for="Note">หมายเหตุ</label><br>
-            <textarea name="Note" id="Note" cols="20" rows="2"></textarea>
+            <label for="Note">หมายเหตุ <p id="not"></p></label> <br>
+            <textarea name="Note" id="Note" cols="20" rows="2" value=""></textarea>
           </div>
           <div class="col-sm-10">
             <button type="submit" name="submit" class="btn btn-primary">[ยืนยันการชำระเงิน]</button> <a

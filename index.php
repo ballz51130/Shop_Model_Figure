@@ -43,10 +43,11 @@ $numrow = 1;
 $num_per_page = 8;
 $start_from = ($page - 1) * $num_per_page;
 // แสดงจำนวนที่ค้าอยู่ในสต้อกของลูกค้า แสดงใน button ตระกร้าสินค้า
-$sqlN = "SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
+$sqlN = "SELECT orders.O_ID,orders.P_Number,orders.U_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
    INNER JOIN product ON product.P_Number = orders.P_Number
    INNER JOIN user ON user.U_ID = orders.U_ID
-   WHERE user.U_ID = '" . $_SESSION['User'] . "' AND orders.O_Status ='รอการชำระ' ";
+   INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+   WHERE user.U_ID = '" . $_SESSION['User'] . "' AND orders.O_Status ='ยืนยันการสั่งซื้อ' ";
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
 $sqlU = "SELECT `U_ID`,U_Name,`U_Photo`,'' FROM `user` WHERE U_ID = '" . $_SESSION['User'] . "' ";
@@ -137,7 +138,9 @@ if ($_SESSION['login'] == 1)
             <?php
 if ($list == "")
 {
-    $sql = "SELECT * FROM product ORDER BY P_ID ASC limit $start_from,$num_per_page ";
+    $sql = "SELECT * FROM product
+        INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
+        ORDER BY P_ID ASC limit $start_from,$num_per_page ";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
     
@@ -149,34 +152,36 @@ if ($list == "")
             <div class="col-md-3">
                 <form method="post" action="./order/InsertOrder.php">
                     <div class="card" align="center">
-                        <a href=""><img src="<?php echo './photo/Order/' . $row['P_Photo']; ?>" width="300px"
-                                height="350px"></a>
+                        <a href=""><img src="<?php echo './photo/Order/' . $row['P_Photo']; ?>"width="300px" height="350px"></a>
+                        <?php if($row['P_Unit'] > 0){ ?>
+                        <div id="ribbon"><?php echo $row['St_Name'];?></div>
+                        <?php }?>
+                        <?php if($row['P_Unit'] == 0){ ?>
+                            <div id="ribbon2"><?php echo 'สินค้าหมด';?></div>
+                        <?php } ?>
                         <div class="card-body">
                             <input name="P_Number" type="hidden" id="P_Number" value="<?php echo $row['P_Number'] ?>">
                             <h4 class="text-info"><?php echo $row["P_Name"]; ?></h4>
+                            <h4 class="text-info"><?php echo 'ราคา '.$row["P_Price"].' บาท'; ?></h4>
+                            <h4 class="text-info"><?php echo 'มีสินค้า '.$row["P_Unit"].' ชิ้น'; ?></h4>
                             <input type="hidden" name="hidden_name" value="<?php echo $row["P_Name"]; ?>">
-                            <input type='button' value='-' class='qtyminus' field='quantity'
-                                style="width:50px; position: relative; margin-top:4px; margin-left:90px; margin-right:-150px ;float:left;">
-                            <input type="text" name="quantity" id="quantity" class="form-control" value="1"
+                            <input type="hidden" name="quantity" id="quantity" class="form-control" value="1"
                                 style="width:40px; position: relative; ttext-align: center; ">
-                            <input type='button' value='+' class='qtyplus' field='quantity'
-                                style=" width:50px;  margin-top:-30px; margin-right: 90px; position: relative; float:right;">
                             <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>"> <br>
-                            <?php if ($_SESSION['login'] == "")
-            { ?>
+                            <?php if($row['P_Unit'] > 0){ ?>
+                            <?php if ($_SESSION['login'] == ""){ ?>
                             <a href="./login/login.php"><input name="add_to_cart" class="btn btn-success"
                                     value="เพื่มเข้าตระกร้า" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')">
                             </a>
-                            <?php
-            } ?>
-                            <!-- End if session login-->
-                            <?php if ($_SESSION['login'] == 1)
-            { ?>
+                            <?php } ?><!-- End if session login-->
+                            <?php if ($_SESSION['login'] == 1){ ?>
                             <input name="Save" type="submit" class="btn btn-success" value="เพื่มเข้าตระกร้า"
                                 onclick="return confirm('คุณต้องการซื้อรายการนี้หรือไม่')"> <br>
-                            <?php
-            } ?>
-                            <!-- end if session log   in = 1 -->
+                            <?php } ?><!-- end if session log   in = 1 -->
+                            <?php }?>
+                            <?php if($row['P_Unit'] == 0){ ?>
+                             <p>สินค้าหมด</p>
+                        <?php } ?>
                         </div>
                     </div>
                 </form>
@@ -188,53 +193,54 @@ if ($list == "")
     } // if mysqli_num_rows
     
 } // if $list
-
 ?>
-            <?php
+
+<?php
 if ($list <> "")
 {
-    $sql = "SELECT * FROM product WHERE P_Group ='$list' ORDER BY P_ID ASC limit $start_from,$num_per_page ";
+    $sql = "SELECT * FROM product INNER JOIN status_tb ON status_tb.St_Number = product.P_Status WHERE P_Group ='$list' ORDER BY P_ID ASC limit $start_from,$num_per_page ";
     $result = mysqli_query($conn, $sql);
 
-    if ($numrow = mysqli_num_rows($result) > 0) // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
+    if (mysqli_num_rows($result) > 0) // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
     
     {
         while ($row = mysqli_fetch_array($result)) // ใช้คืนค่า ค่าข้อมูล ของ result ในแถวที่ชี้อยู่ และเก็บไว้ที่ array และเลื่อนไปตัวชี้ชี้ไปยังตำแหน่งถ้ดไป
         
         {
 ?>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <form method="post" action="./order/InsertOrder.php">
-                    <div class="card" style=" width: 100% ;background-color:#D8FFFB; padding:20px;" align="center">
-                        <a href=""><img src="<?php echo './photo/Order/' . $row['P_Photo']; ?>" width="300px"
-                                height="350px"></a>
+                    <div class="card" align="center">
+                        <a href=""><img src="<?php echo './photo/Order/' . $row['P_Photo']; ?>"width="300px" height="350px"></a>
+                        <?php if($row['P_Unit'] > 0){ ?>
+                        <div id="ribbon"><?php echo $row['St_Name'];?></div>
+                        <?php }?>
+                        <?php if($row['P_Unit'] == 0){ ?>
+                            <div id="ribbon2"><?php echo 'สินค้าหมด';?></div>
+                        <?php } ?>
                         <div class="card-body">
                             <input name="P_Number" type="hidden" id="P_Number" value="<?php echo $row['P_Number'] ?>">
                             <h4 class="text-info"><?php echo $row["P_Name"]; ?></h4>
+                            <h4 class="text-info"><?php echo 'ราคา '.$row["P_Price"].' บาท'; ?></h4>
+                            <h4 class="text-info"><?php echo 'มีสินค้า '.$row["P_Unit"].' ชิ้น'; ?></h4>
                             <input type="hidden" name="hidden_name" value="<?php echo $row["P_Name"]; ?>">
-                            <input type="hidden" name="hidden_unit" value="<?php echo $row["P_Unit"]; ?>">
-                            <input type='button' value='-' class='qtyminus' field='quantity'
-                                style="width:30px; position: relative; margin-top:4px; margin-left:90px; margin-right:-150px ;float:left;">
-                            <input type="text" name="quantity" id="quantity" class="form-control" value="1"
-                                style="width:40px; position: relative; ">
-                            <input type='button' value='+' class='qtyplus' field='quantity'
-                                style=" width:30px;  margin-top:-30px; margin-right: 90px;  position: relative; float:right;">
+                            <input type="hidden" name="quantity" id="quantity" class="form-control" value="1"
+                                style="width:40px; position: relative; ttext-align: center; ">
                             <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>"> <br>
-                            <?php if ($_SESSION['login'] == "")
-            { ?>
+                            <?php if($row['P_Unit'] > 0){ ?>
+                            <?php if ($_SESSION['login'] == ""){ ?>
                             <a href="./login/login.php"><input name="add_to_cart" class="btn btn-success"
                                     value="เพื่มเข้าตระกร้า" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')">
                             </a>
-                            <?php
-            } ?>
-                            <!-- End if session login-->
-                            <?php if ($_SESSION['login'] == 1)
-            { ?>
+                            <?php } ?><!-- End if session login-->
+                            <?php if ($_SESSION['login'] == 1){ ?>
                             <input name="Save" type="submit" class="btn btn-success" value="เพื่มเข้าตระกร้า"
                                 onclick="return confirm('คุณต้องการซื้อรายการนี้หรือไม่')"> <br>
-                            <?php
-            } ?>
-                            <!-- end if session log   in = 1 -->
+                            <?php } ?><!-- end if session log   in = 1 -->
+                            <?php }?>
+                            <?php if($row['P_Unit'] == 0){ ?>
+                             <p>สินค้าหมด</p>
+                        <?php } ?>
                         </div>
                     </div>
                 </form>
@@ -267,7 +273,7 @@ if ($list == "")
 
     for ($i = 1;$i < $total_page;$i++)
     {
-        echo "<a href='index.php?page=" . $i . "' class='btn btn-primary'>$i</a>";
+        echo "<a href='index.php?page=" . $i . "'class='btn btn-primary'>$i</a>";
     }
 }
 if ($list <> "")
@@ -283,65 +289,20 @@ if ($list <> "")
     }
 } ?>
     </div>
-
-
     <footer>
         <p> Power By Harumyx </p>
     </footer>
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
-    </script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+</script>
     <!-- Popper.JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
-        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous">
-    </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+     integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous">
+</script>
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
-        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
-    </script>
-    <script type="text/javascript">
-        // บวกลบ จำนวนสินค้า
-        $(document).ready(function () {
-            // This button will increment the value
-            $('.qtyplus').click(function (e) {
-                // Stop acting like a button
-                e.preventDefault();
-                // Get the field name
-                var fieldName = $(this).prev();
-                // Get its current value
-                var currentVal = parseInt(fieldName.val());
-                // If is not undefined
-                if (!isNaN(currentVal)) {
-                    // Increment
-                    fieldName.val(currentVal + 1);
-                    if (currentVal >= 10) {
-                        fieldName.val(currentVal + 0);
-                    }
-                } else {
-                    // Otherwise put a 0 there
-                    fieldName.val(5);
-                }
-            });
-            // This button will decrement the value till 0
-            $(".qtyminus").click(function (e) {
-                // Stop acting like a button
-                e.preventDefault();
-                // Get the field name
-                var fieldName = $(this).next();
-                // Get its current value
-                var currentVal = parseInt(fieldName.val());
-                // If it isn't undefined or its greater than 0
-                if (!isNaN(currentVal) && currentVal > 0) {
-                    // Decrement one
-                    fieldName.val(currentVal - 1);
-                } else {
-                    // Otherwise put a 0 there
-                    fieldName.val(0);
-                }
-            });
-        });
-    </script>
+     integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
+</script>
 </body>
 
 </html>
