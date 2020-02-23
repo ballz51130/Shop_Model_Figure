@@ -148,8 +148,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                     <?php $SUM = $result['P_Price'] * $result['OD_Unit']; $AllSum = $AllSum + $SUM ;?>
                     <td align="center"> <?php echo $SUM ;?> </td>
                     <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?> </td>
-                    <td align="center"> <a href=""><button
-                                type="button" class="btn btn-outline-dark">แจ้งชำระเงิน</button></a> </td>
+                    <td align="center"> <a href="./FormSlip.php?O_ID=<?php echo $result['O_ID']; ?>"><button type="button" class="btn btn-outline-dark">แจ้งชำระเงิน</button></a> </td>
 
                 </tr>
                 <?php } ?>

@@ -1,0 +1,71 @@
+
+html{
+  max-width: 100%;
+  max-width: 100%;
+}
+body{
+  max-width: 100%;
+  max-width: 100%;
+}
+.head_bar {
+  position: relative;
+  height: 40px;
+  padding-top: 5px;
+  background-color: black;
+}
+
+.row-home {
+  height: 50px;
+  background-color: turquoise;
+}
+.maimMenu {
+  position: relative;
+  margin-left: 200px;
+  font-size: 1.7rem;
+  height: auto;
+  padding: 50px;
+}
+footer {
+  position: relative;
+  background: #333;
+  margin-top: 0px;
+  padding: 20px;
+  text-align: center;
+  color: #fff;
+}
+.maimMenu .menu{
+  width: 700px;
+  margin-left: 20%;
+  margin-right: auto;
+
+}
+.maimMenu .menu.form-group{
+width: 400px;
+}
+.menu{
+  height: 1000px;
+  border: 1px solid black;
+  padding: 50px;
+  box-shadow: 2px 2px 2px gray;   
+}
+.form-group .col-md-12 .sum{
+  float: right;
+  margin-right: 50px;
+}
+.form-group .col-md-12 .inputphoto{
+  margin-left: 30px;
+}
+.form-group .col-md-12{
+  margin-top: 5px;
+}
+.form-row{
+  margin-left: 15px;
+}
+label{
+  font-size: 1.5rem;
+}
+.col-sm-10 a{
+  float: right;
+  margin: 10px;
+}
+

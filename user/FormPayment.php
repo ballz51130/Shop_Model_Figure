@@ -21,7 +21,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <link rel="stylesheet" href="./stylePayment.css">
+    <link rel="stylesheet" href="./css/stylePayment.css">
     <title>Shop</title>
 </head>
 
