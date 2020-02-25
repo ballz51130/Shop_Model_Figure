@@ -68,8 +68,8 @@ body {
 .contriner .col-md-5#serch button {
   position: relative;
   float: right;
-  margin-top: -30px;
-  margin-right: 3px;
+  margin-top: -34px;
+  margin-right: 1px;
 }
 
 .col-md-4 .social li.so {
@@ -147,17 +147,14 @@ section {
   transform: scale(1.1);
   box-shadow: 2px 2px 2px gray;
 }
-
 .col-md-3 .card {
-  border: solid 0.5px bisque;
+  border: solid 0.5px black;
   width: 100%;
-  margin: 20px;
-  padding: 10px;
-  background-color: lightcyan;
+  margin: 2px;
+  padding: 5px;
+  margin-top: 30px;
   overflow: hidden;
 }
-
-
 
 .col-md-3 :hover .card {
   transform: scale(1.05);
@@ -166,33 +163,37 @@ section {
 #ribbon{
   width: auto;
   height: auto;
-  font-size: 20px;
+  font-size: 15px;
   text-align: center;
   position:absolute;
-  top: 50px ;
+  top: 10px ;
+  margin-top: 30px;
   left: auto;
   background-color: greenyellow;
-  right:20px;
+  right: 60px;
   overflow: hidden;
 }
 #ribbon2{
   width: auto;
   height: auto;
-  font-size: 20px;
+  font-size: 15px;
+  margin-top: 30px;
   text-align: center;
   position:absolute;
-  top: 50px ;
+  top: 10px ;
   left: auto;
   background-color: rgb(255, 47, 47);
-  right:20px;
+  right:60px;
   overflow: hidden;
 }
 
 .col-md-3 :hover #ribbon{
-  top: 30px;
+  margin-top: 2px;
+  right:50px;
 }
 .col-md-3 :hover #ribbon2{
-  top: 30px;
+  margin-top: 2px;
+  right:50px;
 }
 .product {
   position: relative;

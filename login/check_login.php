@@ -1,10 +1,10 @@
 <?php
 session_start();
 include '../conn/conn.php';
-
-$sql= " SELECT * FROM user WHERE U_UserName = '".$_POST['username']."' AND U_Password = '".$_POST['pass']."'";
+$str_passMd5 = mysqli_real_escape_string($conn,$_POST['pass']);
+$str_passMd5 =md5($str_passMd5.'harumyx');
+$sql= " SELECT * FROM user WHERE U_UserName = '".$_POST['username']."' AND U_Password = '$str_passMd5'";
 $query = mysqli_query($conn,$sql);
-
 $result = mysqli_fetch_array($query,MYSQLI_ASSOC);
 if( $_POST['username'] == "" || $_POST['pass'] == ""){
     echo "<center><h1>กรุณากรอก UserName และ Password ให้ครบถ้วน";
@@ -24,7 +24,7 @@ else{
     {
         header("location: ../main/admin.php");
     }
-    if($result["U_Status"]=="User")
+    if($result["U_Status"]=="user")
     {
         $_SESSION['login'] = 1 ;
         $_SESSION['User']= $result['U_ID'];

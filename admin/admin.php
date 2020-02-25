@@ -77,7 +77,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                  INNER JOIN product ON orders.P_Number = product.P_Number
                  INNER JOIN user ON orders.U_ID = user.U_ID
                  INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                  WHERE O_Status='ยืนยันการสั่งซื้อ'";
+                  WHERE O_Status='รอตรวจสอบ'";
                  $queryOrder = mysqli_query($conn,$sqlOrder);
                  while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
                  {?>

@@ -76,10 +76,39 @@ if ($_SESSION['login'] == 1)
             <div>
               <textarea id="text" cols="40" rows="4" name="image_text" placeholder="รายระเอียดสินค้า"></textarea>
             </div>
-            <div>
-              <input type="file" name="image">
+           
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-3 col-form-label">รูปหลักสินค้า</label>
+            <div class="col-sm-2">
+            <input type="file" name="image"> 
             </div>
           </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-3 col-form-label">รูปรายระเอียด1</label>
+            <div class="col-sm-2">
+            <input type="file" name="image1"> 
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-3 col-form-label">รูปรายระเอียด2</label>
+            <div class="col-sm-2">
+            <input type="file" name="image2"> 
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-3 col-form-label">รูปรายระเอียด3</label>
+            <div class="col-sm-2">
+            <input type="file" name="image3"> 
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">น้ำหนัก</label>
+            <div class="col-sm-4">
+              <input type="text" class="form-control" id="inputEmail3" name="P_weight" value="">
+            </div>
+          </div>
+        
           <div class="form-group row">
             <label for="inputEmail3" class="col-sm-2 col-form-label">จำนวน</label>
             <div class="col-sm-4">

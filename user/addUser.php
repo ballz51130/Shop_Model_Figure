@@ -24,12 +24,8 @@
       <input type="password" name="U_Password" class="form-control" id="inputPassword4">
     </div>
     <div class="form-group">
-      <label for="inputEmail4">ชื่อ</label>
-      <input type="text" name="U_FName" class="form-control" id="inputEmail4">
-    </div>
-    <div class="form-group">
-      <label for="inputPassword4">นามสกุล</label>
-      <input type="text" name="U_LName" class="form-control" id="inputPassword4">
+      <label for="inputEmail4">ชื่อ-นามสกุล</label>
+      <input type="text" name="U_Name" class="form-control" id="inputEmail4">
     </div>
     <div class="form-group">
       <label for="inputEmail4">Email</label>

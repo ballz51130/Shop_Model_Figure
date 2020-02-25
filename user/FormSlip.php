@@ -6,15 +6,13 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
                 INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
                     WHERE orders.O_ID='".$_GET['O_ID']."'";
                     $queryproduct = mysqli_query($conn,$sqlproduct);
-                    $resultproduct = mysqli_fetch_array($queryproduct);
+                    $resultproduct = mysqli_fetch_array($queryproduct); //  เอาไว้แสดง ข้อมูลOrder จาก GET O_ID
  $sqlbk= "SELECT * FROM bank_tb";
- $querybk = mysqli_query($conn,$sqlbk);
- $sqlbk2= "SELECT * FROM bank_tb";
- $querybk2 = mysqli_query($conn,$sqlbk2);
+ $querybk = mysqli_query($conn,$sqlbk);//  เอาไว้แสดง option ช่องที่1
+ $querybk2 = mysqli_query($conn,$sqlbk); //  เอาไว้แสดง option ช่องที่1
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -39,9 +37,9 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
         </div> <!-- topmenu -->
         <div class="maimMenu">
             <div class="menu">
-                <form id="SendForm" action="./FormBank.php?O_ID=<?php echo $_GET['O_ID'];?>" method="post"
+                <form id="SendForm" action="./CheckSlip.php?O_ID=<?php echo $_GET['O_ID'];?>" method="post"
                     enctype="multipart/form-data">
-                    <input type="hidden" name="form" value="send">
+                    <input type="hidden" name="ID" value="<?php echo $_GET['O_ID']?>">
                     <div class="form-group">
                         <div class="rowp">
                             <h3>รายการสั่งซื้อ</h3>
@@ -60,7 +58,7 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
                         </div>
                         <div class="form-group col-md-12" style="padding-top:50px;">
                             <h4>ยอดรวมสินค้า (<?php echo $resultproduct['OD_Unit'] ;?>) ชิ้น <label
-                                    style="float:right;margin-right:50px;"><?php  $price=$resultproduct['P_Price']*$resultproduct['OD_Unit']; echo $price ;?></label>
+                                    style="float:right;margin-right:50px;"><?php $price=$resultproduct['P_Price']*$resultproduct['OD_Unit']; echo $price ;?></label>
                             </h4>
                             <input type="hidden" name="sump" class="form-control" value="<?php echo $price ;?>">
                             <div class="sends">
@@ -88,8 +86,9 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
                                 <div class="form-group col-md-4">
                                     <label for="inputCity">จากธนคาร</label>
                                     <select id="FormBank" name="FormBank" class="form-control">
-                                        <?php while($rowbk= mysqli_fetch_array($querybk)) {?>
-                                        <option class="form-control" value="<?php echo $rowbk['Bk_id'];?>">
+                                        <option class="form-control" value="">
+                                            <?php while($rowbk= mysqli_fetch_array($querybk)) {?>
+                                        <option class="form-control" value="<?php echo $rowbk['Bk_Name'];?>">
                                             <?php echo $rowbk['Bk_Name'];?>
                                         </option>
                                         <?php } ?>
@@ -97,9 +96,10 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="inputZip">ถึงธนคาร</label>
-                                    <select id="TomBank" name="TomBank" class="form-control">
-                                        <?php while($rowbk2= mysqli_fetch_array($querybk2)) {?>
-                                        <option class="form-control" value="<?php echo $rowbk2['Bk_id'];?>">
+                                    <select id="ToBank" name="ToBank" class="form-control">
+                                        <option class="form-control" value="">
+                                            <?php while($rowbk2= mysqli_fetch_array($querybk2)) {?>
+                                        <option class="form-control" value="<?php echo $rowbk2['Bk_Name'];?>">
                                             <?php echo $rowbk2['Bk_Name'];?>
                                         </option>
                                         <?php } ?>
@@ -132,16 +132,18 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
                         <div class="form-group col-md-12">
                             <div class="form-row col-md-4">
                                 <label for="inputEmail4">วันที่โอน</label>
-                                <input type="date" name="date" value="" />
+                                <input type="date" name="date" class="form-control" value="" />
                             </div>
                         </div>
                     </div>
-                </form>
-                <div class="col-sm-10">
-                   <a href="./user.php" class="btn btn-primary">ย้อนหลับ</a>
-                    <a type="submit" name="submit" class="btn btn-primary">[ยืนยันการชำระเงิน]</a>
-
+                    <div class="col-sm-10">
+                    <button type="submit" name="submit" class="btn btn-primary">[ยืนยันการชำระเงิน]</button>
+                    <a href="./user.php" class="btn btn-primary">ย้อนหลับ</a>
+                    
+                    
                 </div>
+                </form>
+                
             </div>
         </div> <!-- contrinner-->
         <footer>

@@ -76,7 +76,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                         <?php } ?>
 
                 </div>
-                <div class="col-md-4" style="width:500px;margin-left:100px;border: 2px solid navy;">
+                <div class="col-md-4" style="width:500px;margin-left:100px;border: 1px solid black;">
                     <?php 
                                     $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
                                          INNER JOIN product ON product.P_Number = orders.P_Number
