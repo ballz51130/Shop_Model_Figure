@@ -10,7 +10,7 @@
 include '../conn/conn.php';
 if ($_POST['cars'] == 'เตรียมจัดส่ง'){
     $sql ="UPDATE orders SET O_Status = '".$_POST['cars']."',O_Detail ='".$_POST['Note']."' WHERE O_ID ='".$_POST['O_ID']."'";
-    //$result = $conn->query($sql);
+    $result = $conn->query($sql);
     $sql2 = "SELECT P_Unit FROM product where P_ID = '".$_POST['P_ID']."'";
     $query = $conn->query($sql2);
     $result2 = $query->fetch_assoc();
@@ -33,8 +33,6 @@ if ($_POST['cars'] == 'เตรียมจัดส่ง'){
 }
 if($_POST['cars'] == 'ปฏิเสธการชำระเงิน'){
     $sql ="UPDATE orders SET O_Status = '".$_POST['cars']."',O_Detail ='".$_POST['Note']."' WHERE O_ID ='".$_POST['O_ID']."'";
-    //$result = $conn->query($sql);
-    echo $sql;
 }
  ?>
 </body>

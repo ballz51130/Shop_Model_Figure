@@ -51,7 +51,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
         </div> <!-- topmenu -->
         <div class="main">
             <?php 
-               $sql ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
+               $sql ="SELECT * FROM orders
                INNER JOIN product ON product.P_Number = orders.P_Number
                INNER JOIN user ON user.U_ID = orders.U_ID
                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
@@ -61,7 +61,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                $SUM =0;
                $AllSum = 0;
                $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
-               if($resultcheck>=0){
+               if($resultcheck>0){
             ?>
             <center>
                 <h1> ยืนยันการสั่งซื้อ </h1>
@@ -208,6 +208,65 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                                     if($result['O_Status']=='รอการชำระ'){
                                     $bg="#FF6600";
                                     }
+                                ?>
+                            <td align="center"> <?php echo $result['O_ID'];?></td>
+                            <td align="center"> <?php echo $result['P_Name'];?></td>
+                            <td align="center"> <?php echo $result['OD_Unit']; ?> </td>
+                            <td align="center"> <?php echo $result['P_Price']; ?> </td>
+                            <?php $SUM = $result['P_Price'] * $result['OD_Unit']; $AllSum = $AllSum + $SUM ;?>
+                            <td align="center"> <?php echo $SUM ;?> </td>
+                            <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?> </td>
+                            <td align="center">  </td>
+
+                        </tr>
+                        <?php } ?>
+                        </tbodt>
+                </table>
+
+            </div>
+                <?php } else{
+                echo "<center><h3 style='margin-top:50px'>ไม่พบข้อมูล</h3></center>" ;   //ให้แสดงค่าว่างเมื่อไม่พบการQuery ข้อมูล                                                                                                                                                        
+            } ?>
+                        <?php
+       $sql ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
+       INNER JOIN product ON product.P_Number = orders.P_Number
+       INNER JOIN user ON user.U_ID = orders.U_ID
+       INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+       WHERE user.U_ID = '".$_SESSION['User']."' AND NOT  orders.O_Status = 'เตรียมจัดส่งs' ";
+       $query = mysqli_query($conn,$sql);
+       $query2 = mysqli_query($conn,$sql);
+       $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
+       $SUM =0;
+       $AllSum = 0;
+       if($resultcheck>0){
+    ?>
+            <center>
+                <H2> สถานะสินค้า</H2>
+            </center>
+            <div class="table" align="center">
+                <table class="table table-bordered " style="width: 900px;">
+                    <thead>
+                        <tr>
+                            <th scope="col"> ID</th>
+                            <th scope="col"> ชื่อสินค้า </th>
+                            <th scope="col"> จำนวน </th>
+                            <th scope="col"> ราคา </th>
+                            <th scope="col"> ยอดชำระ </th>
+                            <th scope="col"> สถานะ </th>
+                            <th scope="col">รายระเอียด</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                                <?php
+                                    while($result = mysqli_fetch_array($query2,MYSQLI_ASSOC)) {
+   
+                                    if($result['O_Status']=='เตรียมจัดส่ง'){
+                                    $bg="#80ccff";
+                                    }
+                                    if($result['O_Status']=='จัดส่งแล้ว'){
+                                        $bg="#c2f0c2";
+                                        }
                                 ?>
                             <td align="center"> <?php echo $result['O_ID'];?></td>
                             <td align="center"> <?php echo $result['P_Name'];?></td>

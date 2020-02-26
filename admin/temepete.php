@@ -13,7 +13,6 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
     <title>Admin</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -23,6 +22,7 @@ session_start();
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+
 
 </head>
 
@@ -89,7 +89,6 @@ session_start();
             <div class="sidebar-heading">
                 รายงาน
             </div>
-
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
@@ -201,28 +200,6 @@ session_start();
                                         <span class="font-weight-bold">A new monthly report is ready to download!</span>
                                     </div>
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                             </div>
                         </li>
@@ -233,13 +210,13 @@ session_start();
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
+                                <span class="badge badge-danger badge-counter">7</span> <!-- แสดงเจ้งเตือน -->
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
-                                    Message Center
+                                    สินค้าค้างส่ง
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
@@ -253,43 +230,7 @@ session_start();
                                         <div class="small text-gray-500">Emily Fowler · 58m</div>
                                     </div>
                                 </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/AU4VPcFN4LE/60x60"
-                                            alt="">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
-                                            would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/CS2uCrpNzJY/60x60"
-                                            alt="">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy with
-                                            the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
-                                            alt="">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">ดูทั้งหมด</a>
                             </div>
                         </li>
 
@@ -299,9 +240,9 @@ session_start();
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">ชื่อ-นามสกุล</span>
                                 <img class="img-profile rounded-circle"
-                                    src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                                    src="../photo/User/zz.jpg">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -336,55 +277,8 @@ session_start();
 
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="product">
-                            <div class="table">
-                                <H3>สินค้ารอตรวจสอบการชำระเงิน</H3>
-                                <table  class="table table-hover">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th scope="col"> ID</th>
-                                            <th scope="col"> รหัสสินค้า </th>
-                                            <th scope="col"> ชื่อสินค้า </th>
-                                            <th scope="col"> ชื่อ </th>
-                                            <th scope="col"> จำนวน </th>
-                                            <th scope="col"> ราคา </th>
-                                            <th scope="col"> ยอดชำระ </td>
-                                            <th scope="col"> สถานะ </th>
-                                            <th scope="col"> จัดการ </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <?php 
-                                            $sqlOrder = "SELECT orders.O_ID, orders.P_Number,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
-                                            FROM orders
-                                            INNER JOIN product ON orders.P_Number = product.P_Number
-                                            INNER JOIN user ON orders.U_ID = user.U_ID
-                                            INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                            ";
-                                            $queryOrder = mysqli_query($conn,$sqlOrder);
-                                            while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
-                                            {?>
-                                            <td> <?php echo $resultOrder['O_ID']; ?> </td>
-                                            <td> <?php echo $resultOrder['P_Number']; ?> </td>
-                                            <td> <?php echo $resultOrder['P_Name']; ?> </td>
-                                            <td> <?php echo $resultOrder['U_Name']; ?> </td>
-                                            <td> <?php echo $resultOrder['OD_Unit']; ?> </td>
-                                            <td> <?php echo $resultOrder['P_Price']; ?> </td>
-                                            <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
-                                            <td> <?php echo $SumOrder ; ?> </td>
-                                            <td> <?php echo $resultOrder['O_Status']; ?> </td>
-                                            <td> <a
-                                                    href="./FormConfSlip.php?O_ID=<?php echo $resultOrder['O_ID'];?>">edit</a>
-                                            </td>
-                                        </tr>
-                                        <?php } ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        <!-- เนื้อหา -->
                     </div>
-
                     <!-- Content Row -->
 
                 </div>

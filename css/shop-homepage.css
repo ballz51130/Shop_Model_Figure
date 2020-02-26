@@ -19,6 +19,7 @@ body {
 .carousel-inner img{
   width: 900px;
   height: 300px;
+  background-color: #feffff;
 }
 .card-img-top {
   overflow: hidden;
@@ -32,6 +33,7 @@ body {
 .list-group :hover img {
   transform: scale(1.1);
   box-shadow: 2px 2px 2px gray;
+   
 }
 
 .row .col-lg-4 img {
@@ -63,6 +65,7 @@ body {
   background-color: greenyellow;
   right: 1px;
   overflow: hidden;
+  
 }
 #ribbon2{
   width: auto;

@@ -40,14 +40,10 @@ else
     $list = "";
 }
 $numrow = 1;
-$num_per_page = 8;
+$num_per_page = 6;
 $start_from = ($page - 1) * $num_per_page;
 // แสดงจำนวนที่ค้าอยู่ในสต้อกของลูกค้า แสดงใน button ตระกร้าสินค้า
-$sqlN = "SELECT orders.O_ID,orders.P_Number,orders.U_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
-   INNER JOIN product ON product.P_Number = orders.P_Number
-   INNER JOIN user ON user.U_ID = orders.U_ID
-   INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-   WHERE user.U_ID = '" . $_SESSION['User'] . "' AND orders.O_Status ='ยืนยันการสั่งซื้อ' ";
+$sqlN = "SELECT * FROM `orders` WHERE U_ID= '".$_SESSION['User']."' AND O_Status='ยืนยันการสั่งซื้อ' ";
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
 $sqlU = "SELECT `U_ID`,U_Name,`U_Photo`,'' FROM `user` WHERE U_ID = '" . $_SESSION['User'] . "' ";
@@ -70,10 +66,8 @@ $resultU = mysqli_fetch_array($queryU);
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <!-- Custom styles for this template -->
   <link href="css/shop-homepage.css" rel="stylesheet">
-
 </head>
-
-<body>
+<body style="background-color: #d2dfdfa8;">
 
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
@@ -86,8 +80,9 @@ $resultU = mysqli_fetch_array($queryU);
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#">Home
-              <span class="sr-only">(current)</span>
+            <a class="nav-link" href="./user/user.php"><img src="./photo/supermarket.png" width="30px"
+                                    hight="30px"><span
+                                    class="badge badge-light badge-pill"><?php echo $rowN; ?></span></a>
             </a>
           </li>
           <li class="nav-item">
@@ -106,18 +101,17 @@ $resultU = mysqli_fetch_array($queryU);
 
   <!-- Page Content -->
   <div class="container">
-
     <div class="row">
 
       <div class="col-lg-3">
       
         <h1 class="my-4">Shop Name</h1>
         <div class="list-group">
-        <a href="./header.php?list=Vocaloid"> <img src="./photo/model/Miku.jpg"></a> <br>
-                <a href="./header.php?list=Gundum"> <img src="./photo/model/kh.jpg"></a> <br>
-                <a href="./header.php?list=asd"> <img src="./photo/model/ms.jpg"></a> <br>
-                <a href="./header.php?list=Gundum"> <img src="./photo/model/p7.jpg"></a> <br>
-                <a href="./header.php?list=Gundum"> <img src="./photo/model/rt.jpg"></a> <br>
+        <a href="./index.php?list=Vocaloid"> <img src="./photo/model/Miku.jpg"></a> <br>
+                <a href="./index.php?list=Gundum"> <img src="./photo/model/kh.jpg"></a> <br>
+                <a href="./index.php?list=asd"> <img src="./photo/model/ms.jpg"></a> <br>
+                <a href="./index.php?list=Gundum"> <img src="./photo/model/p7.jpg"></a> <br>
+                <a href="./index.php?list=Gundum"> <img src="./photo/model/rt.jpg"></a> <br>
         </div>
 
       </div>
@@ -195,7 +189,7 @@ if ($list == "")
                         <div class="card-body">
                             <input name="P_Number" type="hidden" id="P_Number" value="<?php echo $row['P_Number'] ?>">
                             <div class="product_code">รหัสสินค้า <span class="code"><?php echo $row['P_Number'] ?></span></div>
-                            <h4 class="text-info"><?php echo $row["P_Name"]; ?></h4>
+                            <p class="text-info"><?php echo $row["P_Name"]; ?></p>
                             <h5 class="text"><?php echo '฿ '.$row["P_Price"]; ?></h5>
                             <!-- <h5 class="text"><?php// echo 'มีสินค้า '.$row["P_Unit"].' ชิ้น'; ?></h5> -->
                             <input type="hidden" name="hidden_name" value="<?php echo $row["P_Name"]; ?>">
@@ -254,7 +248,7 @@ if ($list <> "")
                         <div class="card-body">
                             <input name="P_Number" type="hidden" id="P_Number" value="<?php echo $row['P_Number'] ?>">
                             <div class="product_code">รหัสสินค้า <span class="code"><?php echo $row['P_Number'] ?></span></div>
-                            <h4 class="text-info"><?php echo $row["P_Name"]; ?></h4>
+                            <p class="text-info"><?php echo $row["P_Name"]; ?></p>
                             <h5 class="text"><?php echo '฿ '.$row["P_Price"]; ?></h5>
                             <!-- <h5 class="text"><?php// echo 'มีสินค้า '.$row["P_Unit"].' ชิ้น'; ?></h5> -->
                             <input type="hidden" name="hidden_name" value="<?php echo $row["P_Name"]; ?>">

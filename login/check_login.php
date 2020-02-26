@@ -27,7 +27,7 @@ else{
     if($result["U_Status"]=="user")
     {
         $_SESSION['login'] = 1 ;
-        $_SESSION['User']= $result['U_ID'];
+        $_SESSION['User'] = $result['U_ID'];
         header("location: ../index.php");
     }
 else{
@@ -36,7 +36,7 @@ else{
     {
         header("location: ../main/admin.php");
     }
-    if($result["U_Status"]=="User")
+    if($result["U_Status"]=="user")
     {
         $_SESSION['login'] = 1 ;
         $_SESSION['User']= $result['U_ID'];
