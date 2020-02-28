@@ -410,14 +410,18 @@ session_start();
       padding: 50px;
       background-color: #d2dfdfa8;
     }
+    .data form{
+      margin-left:120px;
+    }
 
     .inputphoto {
-      margin-left: 120px;
+      margin-left: 100px;
       padding: 20px;
     }
 
     .col-sm-12 button {
-      margin-left: 250px;
+      margin-top:20px;
+      margin-left: 200px;
     }
   </style>
   <!-- Bootstrap core JavaScript-->

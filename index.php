@@ -79,21 +79,31 @@ $resultU = mysqli_fetch_array($queryU);
       </button>
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="./user/user.php"><img src="./photo/supermarket.png" width="30px"
+          <?php if ($_SESSION['login'] == ""){?>
+            <li class="nav-item">
+            <a class="nav-link" href="#">ติดต่อเรา</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="./login/login.php">เข้าสู่ระบบ</a>
+          </li>
+          <?php } ?>
+          <?php if ($_SESSION['login'] == 1){ ?>
+            <li class="nav-item active">
+            <a class="nav-link" href="./user/Market.php"><img src="./photo/supermarket.png" width="30px"
                                     hight="30px"><span
                                     class="badge badge-light badge-pill"><?php echo $rowN; ?></span></a>
             </a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <li class="nav-item">
+            <a class="nav-link" href="#">ข้อมูลส่วนตัว</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Services</a>
+            <a class="nav-link" href="#">ติดต่อเรา</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Contact</a>
+            <a class="nav-link" href="./login/logout.php">ออกจากระบบ</a>
           </li>
+          <?php } ?>
         </ul>
       </div>
     </div>
@@ -105,13 +115,14 @@ $resultU = mysqli_fetch_array($queryU);
 
       <div class="col-lg-3">
       
-        <h1 class="my-4">Shop Name</h1>
+        <h1 class="my-4">Shop</h1>
         <div class="list-group">
-        <a href="./index.php?list=Vocaloid"> <img src="./photo/model/Miku.jpg"></a> <br>
-                <a href="./index.php?list=Gundum"> <img src="./photo/model/kh.jpg"></a> <br>
-                <a href="./index.php?list=asd"> <img src="./photo/model/ms.jpg"></a> <br>
-                <a href="./index.php?list=Gundum"> <img src="./photo/model/p7.jpg"></a> <br>
-                <a href="./index.php?list=Gundum"> <img src="./photo/model/rt.jpg"></a> <br>
+               <a href="./index.php?list=Vocaloid"><img src="./photo/model/Miku.jpg"><p>Hatsune Miku</p></a> 
+                <a href="./index.php?list=Gundum"><img src="./photo/model/ms.jpg"><p>Hatsune Miku</p></a> 
+                <a href="./index.php?list=sakura-wars"><img src="./photo/model/kh.jpg"><p>Hatsune Miku</p></a> 
+                <a href="./index.php?list=Gundum"><img src="./photo/model/p7.jpg"><p>Hatsune Miku</p></a> 
+                <a href="./index.php?list=Gundum"><img src="./photo/model/rt.jpg"><p>Hatsune Miku</p></a> 
+                <a href="./index.php?list=Gundum"><img src="./photo/model/preorder.jpg"><p>Hatsune Miku</p></a> 
         </div>
 
       </div>
@@ -167,7 +178,7 @@ if ($list == "")
 {
     $sql = "SELECT * FROM product
         INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
-        ORDER BY P_ID ASC limit $start_from,$num_per_page ";
+        ORDER BY P_ID DESC limit $start_from,$num_per_page ";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
     
@@ -180,12 +191,18 @@ if ($list == "")
                 <form method="post" action="./order/InsertOrder.php">
                     <div class="card">
                         <a href=""><img class="card-img-top" src="<?php echo './photo/Order/' . $row['P_Photo']; ?>" alt="" ></a>
+                        <?php if($row['P_Status'] == 1){ ?>
                         <?php if($row['P_Unit'] > 0){ ?>
-                        <div id="ribbon"><?php echo $row['St_Name'];?></div>
+                        <div id="ribbon" style="background-color: greenyellow;"><?php echo $row['St_Name'];?></div>
                         <?php }?>
                         <?php if($row['P_Unit'] == 0){ ?>
                             <div id="ribbon2"><?php echo 'สินค้าหมด';?></div>
                         <?php } ?>
+                        <?php } ?>
+                        <?php if($row['P_Status'] == 2){ ?>
+                        <div id="ribbon" style="background-color: rgb(164, 71, 240);"><?php echo $row['St_Name'];?></div>
+                        <?php } ?>
+                        
                         <div class="card-body">
                             <input name="P_Number" type="hidden" id="P_Number" value="<?php echo $row['P_Number'] ?>">
                             <div class="product_code">รหัสสินค้า <span class="code"><?php echo $row['P_Number'] ?></span></div>
@@ -197,6 +214,7 @@ if ($list == "")
                                 style="width:40px; position: relative; ttext-align: center; ">
                             <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>"> <br>
                             <div class="buttons">
+                            <?php if($row['P_Status'] == 1){ ?> 
                             <?php if($row['P_Unit'] > 0){ ?>
                             <?php if ($_SESSION['login'] == ""){ ?>
                             <a class="btn btn-success" href="./login/login.php" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')"> เพื่มเข้าตระกร้า
@@ -209,6 +227,19 @@ if ($list == "")
                             <?php }?>
                             <?php if($row['P_Unit'] == 0){ ?>
                               <p class="card-text text-danger">สินค้าหมด</p>
+                        <?php } ?>
+                        <?php } ?>
+                        <?php if($row['P_Status'] == 2){ ?> 
+                        
+                            <?php if ($_SESSION['login'] == ""){ ?>
+                            <a class="btn btn-success" href="./login/login.php" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')"> เพิ่มเข้าตระกร้า
+                            </a>
+                            <?php } ?><!-- End if session login-->
+                            <?php if ($_SESSION['login'] == 1){ ?>
+                            <input name="Save" type="submit" class="btn btn-success" value="เพิ่มเข้าตระกร้า"
+                                onclick="return confirm('คุณต้องการซื้อรายการนี้หรือไม่')">
+                            <?php } ?><!-- end if session log   in = 1 -->
+                            
                         <?php } ?>
                         </div>
                         </div>
@@ -238,13 +269,19 @@ if ($list <> "")
             <div class="col-lg-4 col-md-6 mb-4">
                 <form method="post" action="./order/InsertOrder.php">
                     <div class="card">
-                        <a href=""><img class="card-img-top" src="<?php  echo './photo/Order/' . $row['P_Photo']; ?>" alt="" ></a>
+                        <a href=""><img class="card-img-top" src="<?php echo './photo/Order/' . $row['P_Photo']; ?>" alt="" ></a>
+                        <?php if($row['P_Status'] == 1){ ?>
                         <?php if($row['P_Unit'] > 0){ ?>
-                        <div id="ribbon"><?php echo $row['St_Name'];?></div>
+                        <div id="ribbon" style="background-color: greenyellow;"><?php echo $row['St_Name'];?></div>
                         <?php }?>
                         <?php if($row['P_Unit'] == 0){ ?>
                             <div id="ribbon2"><?php echo 'สินค้าหมด';?></div>
                         <?php } ?>
+                        <?php } ?>
+                        <?php if($row['P_Status'] == 2){ ?>
+                        <div id="ribbon" style="background-color: rgb(164, 71, 240);"><?php echo $row['St_Name'];?></div>
+                        <?php } ?>
+                        
                         <div class="card-body">
                             <input name="P_Number" type="hidden" id="P_Number" value="<?php echo $row['P_Number'] ?>">
                             <div class="product_code">รหัสสินค้า <span class="code"><?php echo $row['P_Number'] ?></span></div>
@@ -256,6 +293,7 @@ if ($list <> "")
                                 style="width:40px; position: relative; ttext-align: center; ">
                             <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>"> <br>
                             <div class="buttons">
+                            <?php if($row['P_Status'] == 1){ ?> 
                             <?php if($row['P_Unit'] > 0){ ?>
                             <?php if ($_SESSION['login'] == ""){ ?>
                             <a class="btn btn-success" href="./login/login.php" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')"> เพื่มเข้าตระกร้า
@@ -268,6 +306,19 @@ if ($list <> "")
                             <?php }?>
                             <?php if($row['P_Unit'] == 0){ ?>
                               <p class="card-text text-danger">สินค้าหมด</p>
+                        <?php } ?>
+                        <?php } ?>
+                        <?php if($row['P_Status'] == 2){ ?> 
+                        
+                            <?php if ($_SESSION['login'] == ""){ ?>
+                            <a class="btn btn-success" href="./login/login.php" onclick="return confirm('กรุณา Login ก่อนทำหารสั่งซื้อ')"> เพิ่มเข้าตระกร้า
+                            </a>
+                            <?php } ?><!-- End if session login-->
+                            <?php if ($_SESSION['login'] == 1){ ?>
+                            <input name="Save" type="submit" class="btn btn-success" value="เพิ่มเข้าตระกร้า"
+                                onclick="return confirm('คุณต้องการซื้อรายการนี้หรือไม่')">
+                            <?php } ?><!-- end if session log   in = 1 -->
+                            
                         <?php } ?>
                         </div>
                         </div>
@@ -283,7 +334,7 @@ if ($list <> "")
 } // if $list
 if ($numrow == "")
 {
-    echo "<p>ไม่พบข้อมูล</p>";
+    echo '<p class="textp">ขออภัยสินค้ายังไม่เข้า</p>';
 }
 
 ?>
@@ -338,7 +389,6 @@ if ($list <> "")
     </div>
     <!-- /.container -->
   </footer>
-
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/jquery/jquery.min.js"></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

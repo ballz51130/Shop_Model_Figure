@@ -45,7 +45,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
             <div class="row">
                 <!-- โลโก้ -->
                 <div class="col-md-3" id="homeicon" style="margin-left:px5;">
-                    <a href=""><img src="../photo/home.png" alt="" width="40px" hight="40px"></a>
+                    <a href="./user.php"><img src="../photo/home.png" alt="" width="40px" hight="40px"></a>
                 </div>
 
             </div>

@@ -7,7 +7,8 @@ body {
   padding-top: 56px;
 }
 .list-group a img {
-  margin: 20px;
+  margin: 10px;
+  padding: 1px;
   border: solid 0.5px rgb(250, 250, 250);
   width: 200px;
   height: 130px;
@@ -36,6 +37,19 @@ body {
    
 }
 
+.list-group a{
+  list-style: none;
+  text-decoration:none;
+  color: #999;
+}
+.list-group p {
+  margin-left: 15px;
+  margin-top: -139px;
+  font-family: "Times New Roman", Times, serif;
+  position: absolute;
+  transition: transform .2s ease;
+  list-style: none;
+}
 .row .col-lg-4 img {
   transition: transform .5s ease;
 
@@ -58,11 +72,11 @@ body {
 #ribbon{
   width: auto;
   height: auto;
-  font-size: 15px;
+  font-size: 20px;
   text-align: center;
   position:absolute;
   left: auto;
-  background-color: greenyellow;
+  font-family: "Times New Roman", Times, serif;
   right: 1px;
   overflow: hidden;
   
@@ -70,26 +84,32 @@ body {
 #ribbon2{
   width: auto;
   height: auto;
-  font-size: 15px;
+  font-size: 20px;
   text-align: center;
   position:absolute;
   left: auto;
   background-color: rgb(255, 47, 47);
-    right:0px;
+  right:0px;
+  font-family: "Times New Roman", Times, serif;
   overflow: hidden;
 }
 .buttons{
   margin-left: 50px;
 }
-
 .numpage {
   position: relative;
   display: block;
-  margin-left: 55%;
+  margin-left: 50%;
   padding: 50px;
   margin-right: auto;
 
 }
 .numpage a {
   margin-left: 2px;
+}
+.textp{
+  font-size: 1.5rem;
+  margin-top: 50px;
+  margin-left: 350px;
+  position: absolute;
 }

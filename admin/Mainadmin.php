@@ -59,7 +59,7 @@ session_start();
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">รายการ</h6>
                         <a class="collapse-item" href="../admin/MainProduct.php">รายการสินค้าทั้งหมด</a>
-                        <a class="collapse-item" href="cards.html">เพื่มรายการสินค้า</a>
+                        <a class="collapse-item" href="./addProduct.php">เพื่มรายการสินค้า</a>
                         <a class="collapse-item" href="cards.html">จัดการสินค้าPreOrder</a>
                     </div>
                 </div>
@@ -113,7 +113,7 @@ session_start();
             <li class="nav-item">
                 <a class="nav-link" href="tables.html">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ข้อมูลลูกค้า</span></a>
+                    <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
 
             <!-- Divider -->
@@ -329,7 +329,7 @@ session_start();
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+                        <h1 class="h3 mb-0 text-gray-800"><a href="./addProduct.php" class="btn btn-primary">เพื่มรายการสินค้า</a></h1>
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
@@ -338,11 +338,24 @@ session_start();
                     <div class="row">
                         <div class="product">
                             <div class="table">
+                                <?php 
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
+                                FROM orders
+                                INNER JOIN product ON orders.P_Number = product.P_Number
+                                INNER JOIN user ON orders.U_ID = user.U_ID
+                                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                 WHERE  orders.O_Status ='รอตรวจสอบ' ";
+                                $queryOrder = mysqli_query($conn,$sqlOrder);
+                                $check = mysqli_query($conn,$sqlOrder);
+                                $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);
+                                $num = 1;
+                                if($resultcheck>0){
+                                ?>
                                 <H3>สินค้ารอตรวจสอบการชำระเงิน</H3>
                                 <table  class="table table-hover">
                                     <thead class="thead-dark">
                                         <tr>
-                                            <th scope="col"> ID</th>
+                                            <th scope="col"> No</th>
                                             <th scope="col"> รหัสสินค้า </th>
                                             <th scope="col"> ชื่อสินค้า </th>
                                             <th scope="col"> ชื่อ </th>
@@ -356,16 +369,10 @@ session_start();
                                     <tbody>
                                         <tr>
                                             <?php 
-                                            $sqlOrder = "SELECT orders.O_ID, orders.P_Number,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
-                                            FROM orders
-                                            INNER JOIN product ON orders.P_Number = product.P_Number
-                                            INNER JOIN user ON orders.U_ID = user.U_ID
-                                            INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                            ";
-                                            $queryOrder = mysqli_query($conn,$sqlOrder);
+                                            
                                             while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
                                             {?>
-                                            <td> <?php echo $resultOrder['O_ID']; ?> </td>
+                                            <td> <?php echo $num ?> </td>
                                             <td> <?php echo $resultOrder['P_Number']; ?> </td>
                                             <td> <?php echo $resultOrder['P_Name']; ?> </td>
                                             <td> <?php echo $resultOrder['U_Name']; ?> </td>
@@ -374,13 +381,67 @@ session_start();
                                             <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
                                             <td> <?php echo $SumOrder ; ?> </td>
                                             <td> <?php echo $resultOrder['O_Status']; ?> </td>
-                                            <td> <a
-                                                    href="./FormConfSlip.php?O_ID=<?php echo $resultOrder['O_ID'];?>">edit</a>
-                                            </td>
+                                            <td> <a href="./FormConfSlip.php?O_ID=<?php echo $resultOrder['O_ID'];?>">edit</a></td>
                                         </tr>
-                                        <?php } ?>
+                                        <?php $num++; }?>
                                     </tbody>
                                 </table>
+                                <?php } ?>  <!-- if $resultcheck -->
+                                <?php if($resultcheck="") { echo "";}?>
+
+                            </div>
+                            <div class="table">
+                                <?php 
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
+                                FROM orders
+                                INNER JOIN product ON orders.P_Number = product.P_Number
+                                INNER JOIN user ON orders.U_ID = user.U_ID
+                                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                 WHERE  orders.O_Status ='เตรียมจัดส่ง' ";
+                                $queryOrder = mysqli_query($conn,$sqlOrder);
+                                $check = mysqli_query($conn,$sqlOrder);
+                                $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);
+                                $num = 1;
+                                if($resultcheck>0){
+                                ?>
+                                <H3>สินค้าค้างส่ง</H3>
+                                <table  class="table table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col"> No</th>
+                                            <th scope="col"> รหัสสินค้า </th>
+                                            <th scope="col"> ชื่อสินค้า </th>
+                                            <th scope="col"> ชื่อ </th>
+                                            <th scope="col"> จำนวน </th>
+                                            <th scope="col"> ราคา </th>
+                                            <th scope="col"> ยอดชำระ </td>
+                                            <th scope="col"> สถานะ </th>
+                                            <th scope="col"> จัดการ </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <?php 
+                                            
+                                            while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
+                                            {?>
+                                            <td> <?php echo $num ?> </td>
+                                            <td> <?php echo $resultOrder['P_Number']; ?> </td>
+                                            <td> <?php echo $resultOrder['P_Name']; ?> </td>
+                                            <td> <?php echo $resultOrder['U_Name']; ?> </td>
+                                            <td> <?php echo $resultOrder['OD_Unit']; ?> </td>
+                                            <td> <?php echo $resultOrder['P_Price']; ?> </td>
+                                            <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
+                                            <td> <?php echo $SumOrder ; ?> </td>
+                                            <td> <?php echo $resultOrder['O_Status']; ?> </td>
+                                            <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>">edit</a></td>
+                                        </tr>
+                                        <?php $num++; }?>
+                                    </tbody>
+                                </table>
+                                <?php } ?>  <!-- if $resultcheck -->
+                                <?php if($resultcheck="") { echo "";}?>
+                                
                             </div>
                         </div>
                     </div>
@@ -433,7 +494,15 @@ session_start();
             </div>
         </div>
     </div>
+<style>
+    .product {
+            margin-left: 300px;
+            width: auto;
+            padding: 50px;
+            background-color: white;
 
+        }
+</style>
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

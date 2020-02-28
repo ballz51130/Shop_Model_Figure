@@ -35,7 +35,7 @@ session_start();
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./Mainadmin.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                 </div>
                 <div class="sidebar-brand-text mx-3">Admin</div>
@@ -59,7 +59,7 @@ session_start();
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">รายการ</h6>
                         <a class="collapse-item" href="../admin/MainProduct.php">รายการสินค้าทั้งหมด</a>
-                        <a class="collapse-item" href="cards.html">เพื่มรายการสินค้า</a>
+                        <a class="collapse-item" href="./addProduct.php">เพื่มรายการสินค้า</a>
                         <a class="collapse-item" href="cards.html">จัดการสินค้าPreOrder</a>
                     </div>
                 </div>
@@ -74,7 +74,7 @@ session_start();
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">รายการ</h6>
-                        <a class="collapse-item" href="utilities-color.html">ตรวจการชำระเงิน</a>
+                        <a class="collapse-item" href="./Mainadmin.php">ตรวจการชำระเงิน</a>
                         <a class="collapse-item" href="utilities-border.html">สินค้าค้างส่ง</a>
                         <a class="collapse-item" href="utilities-animation.html">รายการPreOrder</a>
                         <a class="collapse-item" href="utilities-other.html">รายงานคืนสินค้า</a>
@@ -100,7 +100,7 @@ session_start();
                 <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">รายงาน</h6>
-                        <a class="collapse-item" href="register.html">รายงานการชำระเงิน</a>
+                        <a class="collapse-item" href="./Mainadmin.php">รายงานการชำระเงิน</a>
                         <a class="collapse-item" href="login.html">รายงานสินค้าค้างส่ง</a>
                         <a class="collapse-item" href="forgot-password.html">รายงานการคืนสินค้า</a>
                     </div>

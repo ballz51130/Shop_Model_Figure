@@ -20,7 +20,8 @@ if ($_POST['cars'] == 'เตรียมจัดส่ง'){
     if($query){
        if($result3){
         echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./admin.php'>";
+        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./Mainadmin.php'>";
+        
        } 
        else{
            echo "เกิดข้อผิดพลาดขึ้น";
