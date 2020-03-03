@@ -338,7 +338,7 @@ session_start();
                     <div class="row">
                         <div class="maimMenu">
                             <a class="btn btn-primary" style="float:left; margin-left:50px;margin:10px"
-                                href="./addProduct.php">เพิ่ม</a>
+                                href="./insert/addProduct.php">เพิ่ม</a>
                             <table class="table table-bordered-md">
                                 <thead>
                                     <tr>
@@ -367,7 +367,7 @@ session_start();
                                         <td scope="col"><?php echo $result['P_Unit'];?></td>
                                         <td scope="col"><?php echo $result['P_Price'];?> </td>
                                         <td scope="col"> <a
-                                                href="./editProduct.php?ID=<?php echo $result['P_ID'];?>">Edit</a></td>
+                                                href="./edit/editProduct.php?ID=<?php echo $result['P_ID'];?>">Edit</a></td>
                                         <td scope="col"><a
                                                 href="./delProduct.php?ID=<?php echo $result['P_ID'] ;?>">Del</a></td>
                                     </tr>

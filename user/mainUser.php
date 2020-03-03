@@ -1,8 +1,9 @@
-
 <?php 
 include '../conn/conn.php';
 session_start(); 
-
+$sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
+$queryuser = mysqli_query($conn,$sqluser);
+$resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +16,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin</title>
+    <title>User</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -24,6 +25,7 @@ session_start();
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./css/add.css">
 
 </head>
 
@@ -36,10 +38,10 @@ session_start();
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                 </div>
-                <div class="sidebar-brand-text mx-3">Admin</div>
+                <div class="sidebar-brand-text mx-3">Main</div>
             </a>
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
@@ -177,21 +179,22 @@ session_start();
                                 </form>
                             </div>
                         </li>
-                   
+
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultuser['U_Name']; ?></span>
                                 <img class="img-profile rounded-circle"
-                                    src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                                    src="<?php echo '../photo/User/'.$resultuser['U_Photo']; ?>">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -215,15 +218,78 @@ session_start();
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
-
                     <!-- Content Row -->
                     <div class="row">
                         <div class="main">
-                        <!-- เนื้อหา -->
-                        </div>
+                            <form action="./checkeditUser.php" method="POST" enctype="multipart/form-data">
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="inputEmail4">UserName</label>
+                                        <input type="text" name="U_UserName" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_UserName'] ;?>">
+                                    </div>
+                                    <div class="form-group" style="margin-left:50px">
+                                        <label for="inputPassword4">Password</label>
+                                        <input type="password" name="U_Password" class="form-control" id="inputPassword4" value="">
+                                    </div>
+                                    <div class="photo">
+                                     <img src="<?php echo '../photo/User/'.$resultuser['U_Photo'] ;?>" alt="" style="margin-left:200px; margin-top:-30px; position: absolute;width: 120px;height: 120px;-moz-border-radius: 70px; -webkit-border-radius: 70px; ">
+                                    </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">ชื่อ-นามสกุล</label>
+                                        <input type="text" name="U_Name" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Name'] ;?>">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputEmail4">Email</label>
+                                        <input type="email" name="Email" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Email'] ;?>">
+                                    </div>
+                                    <div class="inputphoto">
+                                        <label for="Name">รูป</label>
+                                        <div class="">
+                                            <input type="hidden" id="text" cols="40" rows="4" name="image_text"></input>
+                                        </div>
+                                        <div>
+                                            <input type="file" name="image">
+                                        </div>
+                                    </div>
+                                
+                                <br>
+                                <div class="form-group">
+                                    <label for="inputEmail4">ที่อยู่</label>
+                                    <input type="text" name="Home" class="form-control" id="inputEmail4" value="<?php echo $resultuser['Home'] ;?>">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-row">
+                                        <div class="form-group col-md-3">
+                                            <label for="inputCity">ตำบล</label>
+                                            <input type="text" name="T_District" class="form-control" id="inputCity" value="<?php echo $resultuser['T_District'] ;?>">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputZip">อำเภอ</label>
+                                            <input type="text" name="A_District" class="form-control" id="inputZip" value="<?php echo $resultuser['A_District'] ;?>">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputZip">จังหวัด</label>
+                                            <input type="text" name="Province" class="form-control" id="inputZip" value="<?php echo $resultuser['Province'] ;?>">
+                                        </div>
+                                        <div class="form-group col-md-3">
+                                            <label for="inputZip">ไปรษณีย์</label>
+                                            <input type="text" name="zip" class="form-control" id="inputZip" value="<?php echo $resultuser['zip'] ;?>" >
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="inputEmail4">เบอร์โทรศัพย์</label>
+                                    <input type="text" name="U_Phone" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Phone'] ;?>">
+                                </div>
+                                <br>
+                                <div align="right" style="padding-top:50px;">
+                                    <button type="submit" class="btn btn-primary">บันทึก</button> <a href="http://"
+                                        class="btn btn-primary" style="margin-left:50px;">ย้อนกลับ</a>
+                                </div>
+                            </form>
+                        </div> <!-- main -->
 
                     </div>
 
@@ -255,7 +321,6 @@ session_start();
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -270,7 +335,7 @@ session_start();
                 <div class="modal-body">คุณต้องการออกจากระบบ ?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
-                    <a class="btn btn-primary" href="login.html">ออกจากระบบ</a>
+                    <a class="btn btn-primary" href="../login/logout.php">ออกจากระบบ</a>
                 </div>
             </div>
         </div>

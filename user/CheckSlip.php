@@ -13,7 +13,6 @@ mysqli_query($conn, $sql2);
 if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
     echo "<script type='text/javascript'>alert('สำเร็จ');</script>";
     echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ./Market.php'>";
-    
   }else{
       echo "Failed to insert ";
       echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ./Market.php'>";

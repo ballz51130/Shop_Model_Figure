@@ -1,7 +1,9 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
-
+$sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
+$queryuser = mysqli_query($conn,$sqluser);
+$resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +16,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin</title>
+    <title>User</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -35,10 +37,10 @@ session_start();
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                 </div>
-                <div class="sidebar-brand-text mx-3">Admin</div>
+                <div class="sidebar-brand-text mx-3">Main</div>
             </a>
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
@@ -183,14 +185,14 @@ session_start();
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultuser['U_Name']; ?></span>
                                 <img class="img-profile rounded-circle"
-                                    src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                                    src="<?php echo '../photo/User/'.$resultuser['U_Photo']; ?>">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Profile
                                 </a>
@@ -213,11 +215,8 @@ session_start();
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                        <h1 class="h3 mb-0 text-gray-800">รายระเอียด</h1>
                     </div>
-
                     <!-- Content Row -->
                     <div class="row">
                         <div class="main">
@@ -226,9 +225,10 @@ session_start();
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='ยืนยันการสั่งซื้อ' ";
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='ยืนยันการสั่งซื้อ'";
                                 $query = mysqli_query($conn,$sql); // ใช้ $resultcheck
                                 $query2 = mysqli_query($conn,$sql); // while $result
+                                echo $sql;
                                 $SUM =0;
                                 $AllSum = 0;
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
@@ -238,7 +238,6 @@ session_start();
                                 <h1> ยืนยันการสั่งซื้อ </h1>
                             </center>
                             <div class="table" align="center">
-
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -324,11 +323,12 @@ session_start();
                                         <tr>
                                             <?php
                                             while($result = mysqli_fetch_array($query2,MYSQLI_ASSOC)) {
+                                                $num = 1;
                                                 if($result['O_Status']=='รอการชำระ'){
                                                     $bg="#FF6600";
                                                 }
                                                 ?>
-                                            <td align="center"> <?php echo $result['O_ID'];?></td>
+                                            <td align="center"> <?php echo $num?></td>
                                             <td align="center"> <?php echo $result['P_Name'];?></td>
                                             <td align="center"> <?php echo $result['OD_Unit']; ?> </td>
                                             <td align="center"> <?php echo $result['P_Price']; ?> </td>
@@ -342,7 +342,7 @@ session_start();
                                                         class="btn btn-outline-dark">แจ้งชำระเงิน</button></a> </td>
 
                                         </tr>
-                                        <?php } ?>
+                                        <?php $num++; } ?>
                                         </tbodt>
                                 </table>
                             </div>
@@ -502,7 +502,6 @@ session_start();
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -517,7 +516,7 @@ session_start();
                 <div class="modal-body">คุณต้องการออกจากระบบ ?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
-                    <a class="btn btn-primary" href="login.html">ออกจากระบบ</a>
+                    <a class="btn btn-primary" href="../login/logout.php">ออกจากระบบ</a>
                 </div>
             </div>
         </div>

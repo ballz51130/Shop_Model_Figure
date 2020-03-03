@@ -76,7 +76,7 @@ session_start();
                         <h6 class="collapse-header">รายการ</h6>
                         <a class="collapse-item" href="utilities-color.html">ตรวจการชำระเงิน</a>
                         <a class="collapse-item" href="utilities-border.html">สินค้าค้างส่ง</a>
-                        <a class="collapse-item" href="utilities-animation.html">รายการPreOrder</a>
+                        <a class="collapse-item" href="./FormPreOrder.php">รายการPreOrder</a>
                         <a class="collapse-item" href="utilities-other.html">รายงานคืนสินค้า</a>
                     </div>
                 </div>
@@ -339,11 +339,12 @@ session_start();
                         <div class="product">
                             <div class="table">
                                 <?php 
-                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status,status_tb.St_Name
                                 FROM orders
                                 INNER JOIN product ON orders.P_Number = product.P_Number
                                 INNER JOIN user ON orders.U_ID = user.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
                                  WHERE  orders.O_Status ='รอตรวจสอบ' ";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);
                                 $check = mysqli_query($conn,$sqlOrder);
@@ -359,6 +360,7 @@ session_start();
                                             <th scope="col"> รหัสสินค้า </th>
                                             <th scope="col"> ชื่อสินค้า </th>
                                             <th scope="col"> ชื่อ </th>
+                                            <th scope="col"> สถานะสินค้า </th>
                                             <th scope="col"> จำนวน </th>
                                             <th scope="col"> ราคา </th>
                                             <th scope="col"> ยอดชำระ </td>
@@ -376,6 +378,7 @@ session_start();
                                             <td> <?php echo $resultOrder['P_Number']; ?> </td>
                                             <td> <?php echo $resultOrder['P_Name']; ?> </td>
                                             <td> <?php echo $resultOrder['U_Name']; ?> </td>
+                                            <td> <?php echo $resultOrder['St_Name']; ?> </td>
                                             <td> <?php echo $resultOrder['OD_Unit']; ?> </td>
                                             <td> <?php echo $resultOrder['P_Price']; ?> </td>
                                             <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
@@ -388,16 +391,15 @@ session_start();
                                 </table>
                                 <?php } ?>  <!-- if $resultcheck -->
                                 <?php if($resultcheck="") { echo "";}?>
-
                             </div>
                             <div class="table">
                                 <?php 
-                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,product.P_Name,product.P_Status,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
                                 FROM orders
                                 INNER JOIN product ON orders.P_Number = product.P_Number
                                 INNER JOIN user ON orders.U_ID = user.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                 WHERE  orders.O_Status ='เตรียมจัดส่ง' ";
+                                 WHERE  orders.O_Status ='เตรียมจัดส่ง' AND product.P_Status='1' ";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);
                                 $check = mysqli_query($conn,$sqlOrder);
                                 $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);
@@ -416,13 +418,13 @@ session_start();
                                             <th scope="col"> ราคา </th>
                                             <th scope="col"> ยอดชำระ </td>
                                             <th scope="col"> สถานะ </th>
+                                            <th scope="col"> รายงาน</th>
                                             <th scope="col"> จัดการ </th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <?php 
-                                            
+                                            <?php  
                                             while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
                                             {?>
                                             <td> <?php echo $num ?> </td>
@@ -434,6 +436,7 @@ session_start();
                                             <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
                                             <td> <?php echo $SumOrder ; ?> </td>
                                             <td> <?php echo $resultOrder['O_Status']; ?> </td>
+                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>">Report</a></td>
                                             <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>">edit</a></td>
                                         </tr>
                                         <?php $num++; }?>

@@ -10,11 +10,11 @@
     justify-content: center;
     align-items: center;
     padding: 15px;
-    background-color: #ECFFFC;
+    background-color:  rgba(0,0,0,0.05);
 }
 .login-form{
     width: 560px;
-    background: #fff;
+    background: white;
     border-radius: 10px;
     height: auto;
     padding-left: 130px;
@@ -22,7 +22,7 @@
     padding-right: 100px;
     padding-bottom: 50px;
     position: relative;
-    box-shadow: 4px 4px 4px 4px gainsboro;
+    box-shadow: 0px 10px 30px -10px #aaa;
 }
 .login-form1{
     font-family: Raleway-Medium;

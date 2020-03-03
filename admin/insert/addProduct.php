@@ -1,5 +1,5 @@
 <?php 
-include '../conn/conn.php';
+include '../../conn/conn.php';
 session_start(); 
 
 ?>
@@ -16,13 +16,13 @@ session_start();
 
   <title>Admin</title>
   <!-- Custom fonts for this template-->
-  <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+  <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link
     href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
     rel="stylesheet">
 
   <!-- Custom styles for this template-->
-  <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+  <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -57,7 +57,7 @@ session_start();
         <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">รายการ</h6>
-            <a class="collapse-item" href="../admin/MainProduct.php">รายการสินค้าทั้งหมด</a>
+            <a class="collapse-item" href="../../admin/MainProduct.php">รายการสินค้าทั้งหมด</a>
             <a class="collapse-item" href="cards.html">เพื่มรายการสินค้า</a>
             <a class="collapse-item" href="cards.html">จัดการสินค้าPreOrder</a>
           </div>
@@ -237,7 +237,7 @@ session_start();
               <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">ชื่อ-นามสกุล</span>
-                <img class="img-profile rounded-circle" src="../photo/User/zz.jpg">
+                <img class="img-profile rounded-circle" src="../../photo/User/zz.jpg">
               </a>
               <!-- Dropdown - User Information -->
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
@@ -246,7 +246,7 @@ session_start();
                   Profile
                 </a>
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="../login/logout.php" data-toggle="modal" data-target="#logoutModal">
+                <a class="dropdown-item" href="../../login/logout.php" data-toggle="modal" data-target="#logoutModal">
                   <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                   Logout
                 </a>
@@ -287,7 +287,7 @@ session_start();
                 <div class="inputphoto">
                   <label for="Name">รายระเอียดสินค้า</label>
                   <div>
-                    <textarea  id="text" cols="30" rows="4" name="image_text"></textarea>
+                    <textarea id="text" cols="30" rows="4" name="image_text"></textarea>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -336,14 +336,37 @@ session_start();
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">สถานะสินค้า</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputtext" name="P_Status" value="">
+                    <select id="P_Status" name="P_Status" class="form-control">
+                      <?php $sqlstatus = "SELECT * FROM status_tb " ;
+                            $querystatus = mysqli_query($conn,$sqlstatus);
+                      ?>
+                      <option class="form-control" value="">---
+                        <?php while($rowstatus= mysqli_fetch_array($querystatus)) {?>
+                      <option class="form-control" value="<?php echo $rowstatus['St_Number'];?>">
+                        <?php echo $rowstatus['St_Name'];?>
+                      </option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="inputtext" class="col-sm-2 col-form-label">ประเภทสินค้า(กลุ่ม)</label>
-                  <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputtext" name="P_Group" value="">
-                  </div>
+                <label for="inputtext" class="col-sm-2 col-form-label">ประเภท</label>
+                <div class="col-sm-4">
+                <select id="P_Group" name="P_Group" class="form-control">
+                      <?php $sqlstatus = "SELECT * FROM group_tb " ;
+                            $querystatus = mysqli_query($conn,$sqlstatus);
+                      ?>
+                      <option class="form-control" value="">---
+                        <?php while($rowstatus= mysqli_fetch_array($querystatus)) {?>
+                      <option class="form-control" value="<?php echo $rowstatus['G_Name'];?>">
+                        <?php echo $rowstatus['G_Name'];?>
+                      </option>
+                      <?php } ?>
+                    </select>
+                    <div class="addStatus" style="position: absolute; margin-left:200px;margin-top:-30px;">
+                    <a href="../insert/addProduct.php">เพิ่ม</a>
+                    </div>
+                    </div>
                 </div>
                 <div class="col-sm-12">
                   <button type="submit" class="btn btn-primary">[บันทึก]</button>
@@ -410,8 +433,9 @@ session_start();
       padding: 50px;
       background-color: #d2dfdfa8;
     }
-    .data form{
-      margin-left:120px;
+
+    .data form {
+      margin-left: 120px;
     }
 
     .inputphoto {
@@ -420,26 +444,26 @@ session_start();
     }
 
     .col-sm-12 button {
-      margin-top:20px;
+      margin-top: 20px;
       margin-left: 200px;
     }
   </style>
   <!-- Bootstrap core JavaScript-->
-  <script src="../vendor/jquery/jquery.min.js"></script>
-  <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="../../vendor/jquery/jquery.min.js"></script>
+  <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   <!-- Core plugin JavaScript-->
-  <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+  <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
 
   <!-- Custom scripts for all pages-->
-  <script src="../js/sb-admin-2.min.js"></script>
+  <script src="../../js/sb-admin-2.min.js"></script>
 
   <!-- Page level plugins -->
-  <script src="../vendor/chart.js/Chart.min.js"></script>
+  <script src="../../vendor/chart.js/Chart.min.js"></script>
 
   <!-- Page level custom scripts -->
-  <script src="../js/demo/chart-area-demo.js"></script>
-  <script src="../js/demo/chart-pie-demo.js"></script>
+  <script src="../../js/demo/chart-area-demo.js"></script>
+  <script src="../../js/demo/chart-pie-demo.js"></script>
 
 </body>
 

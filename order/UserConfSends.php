@@ -4,10 +4,10 @@ $sqlsend = "UPDATE orders SET O_Status = 'รอการชำระ',Sn_id = '
 $query = mysqli_query($conn,$sqlsend);
 if($query){
     echo "บันทึกสำเร็จ";
-    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL=../user/user.php'>";
+    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL=../user/Market.php'>";
 }
 else{
     echo "เกิดข้อผิดพลาด กรุณาติดต่อ Admin";
-    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '3;URL=../user/user.php'>";
+    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '3;URL=../user/Market.php'>";
 }
 ?>

@@ -1,10 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
-$sqladd ="SELECT * FROM user WHERE U_ID= '".$_GET['U_ID']."'";
-$queryadd = mysqli_query($conn,$sqladd);
-$resultadd = mysqli_fetch_array($queryadd)
- 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -16,6 +13,7 @@ $resultadd = mysqli_fetch_array($queryadd)
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
+
     <title>Admin</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -25,7 +23,6 @@ $resultadd = mysqli_fetch_array($queryadd)
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
-
 
 </head>
 
@@ -62,7 +59,7 @@ $resultadd = mysqli_fetch_array($queryadd)
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">รายการ</h6>
                         <a class="collapse-item" href="../admin/MainProduct.php">รายการสินค้าทั้งหมด</a>
-                        <a class="collapse-item" href="cards.html">เพื่มรายการสินค้า</a>
+                        <a class="collapse-item" href="./addProduct.php">เพื่มรายการสินค้า</a>
                         <a class="collapse-item" href="cards.html">จัดการสินค้าPreOrder</a>
                     </div>
                 </div>
@@ -92,6 +89,7 @@ $resultadd = mysqli_fetch_array($queryadd)
             <div class="sidebar-heading">
                 รายงาน
             </div>
+
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
@@ -115,7 +113,7 @@ $resultadd = mysqli_fetch_array($queryadd)
             <li class="nav-item">
                 <a class="nav-link" href="tables.html">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ข้อมูลลูกค้า</span></a>
+                    <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
 
             <!-- Divider -->
@@ -203,6 +201,28 @@ $resultadd = mysqli_fetch_array($queryadd)
                                         <span class="font-weight-bold">A new monthly report is ready to download!</span>
                                     </div>
                                 </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-success">
+                                            <i class="fas fa-donate text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 7, 2019</div>
+                                        $290.29 has been deposited into your account!
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="mr-3">
+                                        <div class="icon-circle bg-warning">
+                                            <i class="fas fa-exclamation-triangle text-white"></i>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="small text-gray-500">December 2, 2019</div>
+                                        Spending Alert: We've noticed unusually high spending for your account.
+                                    </div>
+                                </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
                             </div>
                         </li>
@@ -213,13 +233,13 @@ $resultadd = mysqli_fetch_array($queryadd)
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span> <!-- แสดงเจ้งเตือน -->
+                                <span class="badge badge-danger badge-counter">7</span>
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
-                                    สินค้าค้างส่ง
+                                    Message Center
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
@@ -233,7 +253,43 @@ $resultadd = mysqli_fetch_array($queryadd)
                                         <div class="small text-gray-500">Emily Fowler · 58m</div>
                                     </div>
                                 </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">ดูทั้งหมด</a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="https://source.unsplash.com/AU4VPcFN4LE/60x60"
+                                            alt="">
+                                        <div class="status-indicator"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">I have the photos that you ordered last month, how
+                                            would you like them sent to you?</div>
+                                        <div class="small text-gray-500">Jae Chun · 1d</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="https://source.unsplash.com/CS2uCrpNzJY/60x60"
+                                            alt="">
+                                        <div class="status-indicator bg-warning"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">Last month's report looks great, I am very happy with
+                                            the progress so far, keep up the good work!</div>
+                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item d-flex align-items-center" href="#">
+                                    <div class="dropdown-list-image mr-3">
+                                        <img class="rounded-circle" src="https://source.unsplash.com/Mv9hjnEUHR4/60x60"
+                                            alt="">
+                                        <div class="status-indicator bg-success"></div>
+                                    </div>
+                                    <div>
+                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
+                                            told me that people say this to all dogs, even if they aren't good...</div>
+                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
+                                    </div>
+                                </a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                             </div>
                         </li>
 
@@ -243,8 +299,9 @@ $resultadd = mysqli_fetch_array($queryadd)
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">ชื่อ-นามสกุล</span>
-                                <img class="img-profile rounded-circle" src="../photo/User/zz.jpg">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                                <img class="img-profile rounded-circle"
+                                    src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -272,87 +329,126 @@ $resultadd = mysqli_fetch_array($queryadd)
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">การส่งของ</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                        <h1 class="h3 mb-0 text-gray-800"><a href="./addProduct.php" class="btn btn-primary">เพื่มรายการสินค้า</a></h1>
                     </div>
-
                     <!-- Content Row -->
                     <div class="row">
-                        <!-- เนื้อหา -->
-                        <div class="data">
-                            <div class="form-group">
-                                <div class="form-group col-md-12">
-                                    <div class="form-row col-md-4">
-                                        <label for="inputEmail4">ชื่อ-สกุล</label>
-                                        <input type="hidden" name="form" class="form-control" value="address">
-                                        <input type="text" name="U_Name" class="form-control"
-                                            value="<?php echo $resultadd['U_Name'] ?>">
-                                    </div>
-                                    <div class="form-row col-md-4">
-                                        <label for="inputPassword4">หมายเลขโทรศัพย์</label>
-                                        <input type="text" name="U_LName" class="form-control"
-                                            value="<?php echo $resultadd['U_Phone'];?>">
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-12" style="margin-left:10px;">
-                                    <label for="inputEmail4">ที่อยู่</label>
-                                    <textarea id="U_add" name="Home" class="form-control" rows="5"
-                                        style=" width:700px;"> <?php echo $resultadd['Home']; ?></textarea>
-                                </div>
-                                <div class="form-row col-md-12">
-                                    <div class="form-group col-md-2">
-                                        <label for="inputCity">ตำบล</label>
-                                        <input type="text" name="T_District" class="form-control" id="inputCity"
-                                            value="<?php echo $resultadd['T_District'];?>">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="inputZip">อำเภอ</label>
-                                        <input type="text" name="A_District" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['A_District'];?>">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="inputZip">จังหวัด</label>
-                                        <input type="text" name="Province" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['Province'];?>">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="inputZip">ไปรษณีย์</label>
-                                        <input type="text" name="zip" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['zip'];?>">
-                                    </div>
-                                </div>
-                                <div class="form-row col-md-12">
-                                    <div class="form-group col-md-2">
-                                        <label for="inputZip">ส่งแบบ</label>
-                                        <input type="text" name="zip" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['zip'];?>">
-                                    </div>
-                                </div>
-                                <div class="form-row col-md-12">
-                                    <div class="form-row col-md-4">
-                                        <label for="inputEmail4">หมายเลข การส่งของ / EMS</label>
-                                        <input type="hidden" name="form" class="form-control" value="address">
-                                        <input type="text" name="U_Name" class="form-control"
-                                            value="<?php echo $resultadd['U_Name'] ?>">
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-12" style="padding-top:50px; margin-right:500px;">
-                                    <a href="./reportSend.php?U_ID=<?php echo  $resultadd['U_ID'];?>">Report</a>
-                                    
-                                </div>
-                                <div class="form-group col-md-12" style="padding-top:50px; margin-right:500px;">
-                                    <button type="submit" class="btn btn-primary"
-                                        style="float:right; margin-right:50px">ยืนยันการส่ง</button>
-                                </div>
-
+                        <div class="product">
+                            <div class="table">
+                                <?php 
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status,status_tb.St_Name
+                                FROM orders
+                                INNER JOIN product ON orders.P_Number = product.P_Number
+                                INNER JOIN user ON orders.U_ID = user.U_ID
+                                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
+                                 WHERE  orders.O_Status ='รอตรวจสอบ' ";
+                                $queryOrder = mysqli_query($conn,$sqlOrder);
+                                $check = mysqli_query($conn,$sqlOrder);
+                                $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);
+                                $num = 1;
+                                if($resultcheck>0){
+                                ?>
+                                <H3>สินค้ารอตรวจสอบการชำระเงิน</H3>
+                                <table  class="table table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col"> No</th>
+                                            <th scope="col"> รหัสสินค้า </th>
+                                            <th scope="col"> ชื่อสินค้า </th>
+                                            <th scope="col"> ชื่อ </th>
+                                            <th scope="col"> ประเภทสินค้า </th>
+                                            <th scope="col"> จำนวน </th>
+                                            <th scope="col"> ราคา </th>
+                                            <th scope="col"> ยอดชำระ </td>
+                                            <th scope="col"> สถานะ </th>
+                                            <th scope="col"> จัดการ </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <?php 
+                                            
+                                            while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
+                                            {?>
+                                            <td> <?php echo $num ?> </td>
+                                            <td> <?php echo $resultOrder['P_Number']; ?> </td>
+                                            <td> <?php echo $resultOrder['P_Name']; ?> </td>
+                                            <td> <?php echo $resultOrder['U_Name']; ?> </td>
+                                            <td> <?php echo $resultOrder['St_Name']; ?> </td>
+                                            <td> <?php echo $resultOrder['OD_Unit']; ?> </td>
+                                            <td> <?php echo $resultOrder['P_Price']; ?> </td>
+                                            <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
+                                            <td> <?php echo $SumOrder ; ?> </td>
+                                            <td> <?php echo $resultOrder['O_Status']; ?> </td>
+                                            <td> <a href="./FormConfSlip.php?O_ID=<?php echo $resultOrder['O_ID'];?>">edit</a></td>
+                                        </tr>
+                                        <?php $num++; }?>
+                                    </tbody>
+                                </table>
+                                <?php } ?>  <!-- if $resultcheck -->
+                                <?php if($resultcheck="") { echo "";}?>
                             </div>
-
-                            </form>
-
+                            <div class="table">
+                                <?php 
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,product.P_Name,product.P_Status,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status,Status_tb.St_Name 
+                                FROM orders
+                                INNER JOIN product ON orders.P_Number = product.P_Number
+                                INNER JOIN user ON orders.U_ID = user.U_ID
+                                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
+                                 WHERE  orders.O_Status ='เตรียมจัดส่ง' AND product.P_Status='2' ";
+                                $queryOrder = mysqli_query($conn,$sqlOrder);
+                                $check = mysqli_query($conn,$sqlOrder);
+                                $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);
+                                $num = 1;
+                                if($resultcheck>0){
+                                ?>
+                                <H3>สินค้าค้างส่ง</H3>
+                                <table  class="table table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col"> No</th>
+                                            <th scope="col"> รหัสสินค้า </th>
+                                            <th scope="col"> ชื่อสินค้า </th>
+                                            <th scope="col"> ชื่อ </th>
+                                            <th scope="col"> สถานะ </th>
+                                            <th scope="col"> จำนวน </th>
+                                            <th scope="col"> ราคา </th>
+                                            <th scope="col"> ยอดชำระ </td>
+                                            <th scope="col"> สถานะ </th>
+                                            <th scope="col"> จัดการ </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <?php 
+                                            while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
+                                            {?>
+                                            <td> <?php echo $num ?> </td>
+                                            <td> <?php echo $resultOrder['P_Number']; ?> </td>
+                                            <td> <?php echo $resultOrder['P_Name']; ?> </td>
+                                            <td> <?php echo $resultOrder['U_Name']; ?> </td>
+                                            <td> <?php echo $resultOrder['St_Name']; ?> </td>
+                                            <td> <?php echo $resultOrder['OD_Unit']; ?> </td>
+                                            <td> <?php echo $resultOrder['P_Price']; ?> </td>
+                                            <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
+                                            <td> <?php echo $SumOrder ; ?> </td>
+                                            <td> <?php echo $resultOrder['O_Status']; ?> </td>
+                                            <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>">edit</a></td>
+                                        </tr>
+                                        <?php $num++; }?>
+                                    </tbody>
+                                </table>
+                                <?php } ?>  <!-- if $resultcheck -->
+                                <?php if($resultcheck="") { echo "";}?>
+                                
+                            </div>
                         </div>
                     </div>
+
                     <!-- Content Row -->
+
                 </div>
                 <!-- /.container-fluid -->
 
@@ -399,18 +495,15 @@ $resultadd = mysqli_fetch_array($queryadd)
             </div>
         </div>
     </div>
-    <style>
-        .row {
-            margin: 30px;
-        }
-
-        .data {
-            margin-left: 350px;
-            width: 850px;
+<style>
+    .product {
+            margin-left: 300px;
+            width: auto;
             padding: 50px;
-            background-color: #d2dfdfa8;
+            background-color: white;
+
         }
-    </style>
+</style>
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

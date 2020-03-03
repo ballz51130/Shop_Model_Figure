@@ -301,7 +301,6 @@ $sqlre = "SELECT user.U_UserName,product.P_Name,P_ID,orderdetail.OD_Unit,product
                 <label for="inputEmail3" class="col-sm-4 col-form-label">รหัสรายการสินค้า</label>
                 <div class="col-sm-4">
                 <label for="" class="form-control"><?php echo $_GET['O_ID'] ;?></label>
-                  
                 </div>
               </div>
               <div class="form-group row">
@@ -383,7 +382,12 @@ $sqlre = "SELECT user.U_UserName,product.P_Name,P_ID,orderdetail.OD_Unit,product
           <div class="photo-img">
             <img src="<?php echo '../photo/Slip/'.$result['Sp_Img'];?>">
           </div>
-          
+          <div class="lable">
+            <select id="cars" name="cars">	                                        
+              <option value="เตรียมจัดส่ง">ยืนยันการชำระเงิน</option>	           
+              <option value="ปฏิเสธการชำระเงิน">หมายเลขโอนไม่ถูกต้อง</option>	       
+            </select>	          
+          </div>	    
           <div class="Note">
             <label for="Note">หมายเหตุ <p id="not"></p></label> <br>
             <textarea name="Note" id="Note" cols="20" rows="2" value=""></textarea>

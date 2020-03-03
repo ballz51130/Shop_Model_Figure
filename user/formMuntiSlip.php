@@ -1,12 +1,12 @@
 <?php
 include '../conn/conn.php';
-$sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,Sn_Price FROM orders 
+session_start();
+$sqlproduct="SELECT * FROM orders 
                 INNER JOIN product ON product.P_Number = orders.P_Number
                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
                 INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
-                    WHERE orders.O_ID='".$_GET['O_ID']."'";
+                    WHERE O_Status = 'รอการชำระ' AND U_ID='".$_SESSION['User']."'";
                     $queryproduct = mysqli_query($conn,$sqlproduct);
-                    $resultproduct = mysqli_fetch_array($queryproduct); //  เอาไว้แสดง ข้อมูลOrder จาก GET O_ID
  $sqlbk= "SELECT * FROM bank_tb";
  $querybk = mysqli_query($conn,$sqlbk);//  เอาไว้แสดง option ช่องที่1
  $querybk2 = mysqli_query($conn,$sqlbk); //  เอาไว้แสดง option ช่องที่1
@@ -37,37 +37,33 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
         </div> <!-- topmenu -->
         <div class="maimMenu">
             <div class="menu">
-                <form id="SendForm" action="./CheckSlip.php?O_ID=<?php echo $_GET['O_ID'];?>" method="post"
-                    enctype="multipart/form-data">
+                <form id="SendForm" action="./CheckSlip.php?O_ID=<?php echo $_GET['O_ID'];?>" method="post" enctype="multipart/form-data">
+                <div class="input"></div>
                     <input type="hidden" name="ID" value="<?php echo $_GET['O_ID']?>">
                     <div class="form-group">
                         <div class="rowp">
                             <h3>รายการสั่งซื้อ</h3>
-                            <div class="col-md-4">
-                                <img src="<?php echo '../photo/Order/'.$resultproduct['P_Photo'] ;?>" width="150px"
-                                    height="150px">
+                            <div class="input">
+                            <?php while ($row = mysqli_fetch_array($queryproduct)) 
+                                    { ?>
+                            <div class="row">
+                               <img src="<?php echo'../photo/Order/'.$row['P_Photo'] ?>" width="80px"  alt=""> 
                             </div>
-                        </div>
-                        <div class="col-md-6" style="margin-left:30px;">
-                            <label for="" style="margin-top:20px;">ชื้อสินค้า :
-                                <?php echo $resultproduct['P_Name'] ;?></label> <br>
-                            <label for="" style="margin-top:20px;"> X <?php echo $resultproduct['OD_Unit'] ;?></label>
-                            <br>
-                            <label for="" style="margin-top:20px;">THB <?php echo $resultproduct['P_Price'] ;?> </label>
+                            <?php } ?>
                             <br>
                         </div>
                         <div class="form-group col-md-12" style="padding-top:50px;">
-                            <h4>ยอดรวมสินค้า (<?php echo $resultproduct['OD_Unit'] ;?>) ชิ้น <label
-                                    style="float:right;margin-right:50px;"><?php $price=$resultproduct['P_Price']*$resultproduct['OD_Unit']; echo $price ;?></label>
+                            <h4>ยอดรวมสินค้า (<?php echo $row['OD_Unit'] ;?>) ชิ้น <label
+                                    style="float:right;margin-right:50px;"><?php $price=$row['P_Price']*$row['OD_Unit']; echo $price ;?></label>
                             </h4>
                             <input type="hidden" name="sump" class="form-control" value="<?php echo $price ;?>">
                             <div class="sends">
                                 <h4>ค่าจัดส่ง<label
-                                        style="float:right;margin-right:50px;"><?php echo $resultproduct['Sn_Price'] ;?></label>
+                                        style="float:right;margin-right:50px;"><?php echo $row['Sn_Price'] ;?></label>
                                 </h4>
                             </div>
                             <h4 class="sum">รวม :
-                                <?php $price=($resultproduct['P_Price']*$resultproduct['OD_Unit'])+$resultproduct['Sn_Price']; echo $price ;?>
+                                <?php $price=($row['P_Price']*$row['OD_Unit'])+$row['Sn_Price']; echo $price ;?>
                             </h4>
                         </div>
                         <div class="form-group col-md-12">
@@ -145,6 +141,7 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
                 </div>
                 </form>
                 
+            </div>
             </div>
         </div> <!-- contrinner-->
         <footer>

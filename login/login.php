@@ -19,17 +19,17 @@
             <div class="wrap-login">
                 <form class="login-form" method="POST" action="./check_login.php">
                     <div class="login-form1">
-                        Login
+                        เข้าสู่ระบบ
                     </div>
                     <div class="txtuser">
-                        Username
+                        ชื่อผู้ใช้งาน
                     </div>
                     <div class="wrap-inputuser" data-validate="Username is required">
                         <input class="input100" type="text" name="username">
                         <div class="focus-input"></div>
                     </div>
                     <div class="txtpass">
-                        Password
+                        รหัสผ่าน
                     </div>
                     <div class="wrap-inputpass" data-validate="Password is required">
                         <div class="btn-show-pass">
@@ -40,21 +40,21 @@
                     </div>
                     <div class="flex-forgot">
                         <div>
-                            <a href="#" class="txt3">
-                                Forgot Password?
+                            <a href="./forgotpass.php" class="txt3">
+                                ลืมรหัสผ่าน ?
                             </a>
                         </div>
                     </div>
                     <div class="flex-register">
                         <div>
-                            <a href="#" class="txt3">
-                                Register
+                            <a href="../user/addUser.php" class="txt3">
+                                สมัครสมาชิก
                             </a>
                         </div>
                     </div>
                     <div class="container-login">
                         <button class="login-form-btn">
-                            Login
+                            เข้าสู่ระบบ
                         </button>
                     </div>
                 </form>
