@@ -227,8 +227,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
                                 WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='ยืนยันการสั่งซื้อ'";
                                 $query = mysqli_query($conn,$sql); // ใช้ $resultcheck
-                                $query2 = mysqli_query($conn,$sql); // while $result
-                                echo $sql;
+                                $query2 = mysqli_query($conn,$sql); // while $result    
                                 $SUM =0;
                                 $AllSum = 0;
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
@@ -237,10 +236,13 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                             <center>
                                 <h1> ยืนยันการสั่งซื้อ </h1>
                             </center>
+                            <form method="post" action="./test.php">
                             <div class="table" align="center">
+                                
                                 <table class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
+                                            <th scope="col"> - </th>
                                             <th scope="col"> ชื่อสินค้า </th>
                                             <th scope="col"> จำนวน </th>
                                             <th scope="col"> ราคา </th>
@@ -248,8 +250,6 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                             <th scope="col"> สถานะ </th>
                                             <th scope="col"> จัดการ </th>
                                             <th scope="col"> ลบรายการ </th>
-                                            <th scope="col">
-                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -259,12 +259,12 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                     if($result['O_Status']=='ยืนยันการสั่งซื้อ'){
                                      $bg="#8cff66"; 
                                     }
-                            ?>
+                            ?>              <td> <input type="checkbox" name="check[]" class="checkbox" value="<?php echo $result['O_ID'] ?>"> </td>
                                             <td align="center"> <?php echo $result['P_Name'];?></td>
                                             <td align="center"> <?php echo $result['OD_Unit']; ?> </td>
-                                            <td align="center"> <?php echo $result['P_Price']; ?> </td>
+                                            <td align="center"> <?php echo $result['P_Price']; ?>     </td>
                                             <?php $SUM = $result['P_Price'] * $result['OD_Unit']; $AllSum = $AllSum + $SUM ;?>
-                                            <td align="center"> <?php echo $SUM ;?> </td>
+                                            <td align="center"><span class="price"><?php echo $SUM ;?></span></td>
                                             <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?>
                                             </td>
                                             <td align="center"> <a href="../order/Edit_Order.php"><img
@@ -280,10 +280,13 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                                     </button></a></td>
                                         </tr>
                                         <?php } ?>
-                                        </tbodt>
+                                        </tbody>
                                 </table>
+                                <button type="submit" class="btn btn-primary">Test</button>
+                                </form>
                                 <h4 align='right' style="width: 900px;">
-                                    <?php  echo "<br>ราคารวมทั้งหมด" ,"&nbsp",$AllSum; ?> </h4>
+                                <p>รวม : <span id="alert">0</span></p>
+                                   </h4>
                                 <br>
                             </div>
                             <br>
@@ -325,13 +328,13 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                             while($result = mysqli_fetch_array($query2,MYSQLI_ASSOC)) {
                                                 $num = 1;
                                                 if($result['O_Status']=='รอการชำระ'){
-                                                    $bg="#FF6600";
+                                                    $bg="#F9C26E";
                                                 }
                                                 ?>
                                             <td align="center"> <?php echo $num?></td>
                                             <td align="center"> <?php echo $result['P_Name'];?></td>
                                             <td align="center"> <?php echo $result['OD_Unit']; ?> </td>
-                                            <td align="center"> <?php echo $result['P_Price']; ?> </td>
+                                            <td align="center"> <span class="price"><?php echo $result['P_Price']; ?></span> </td>
                                             <?php $SUM = $result['P_Price'] * $result['OD_Unit']; $AllSum = $AllSum + $SUM ;?>
                                             <td align="center"> <?php echo $SUM ;?> </td>
                                             <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?>
@@ -530,6 +533,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 
         }
     </style>
+    
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -546,7 +550,18 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
     <!-- Page level custom scripts -->
     <script src="../js/demo/chart-area-demo.js"></script>
     <script src="../js/demo/chart-pie-demo.js"></script>
+<script>
+  $('.checkbox').click(function(){
+      var total = 0;
+    $('input.checkbox:checked').each(function() {
+        var tr = $(this).closest( 'tr' );
+        var price = tr.find(".price").text();
+        total = parseInt(total) + parseInt(price);
+    });
+    $("#alert").text(total.toFixed(2));
+  });
 
+</script>
 </body>
 
 </html>

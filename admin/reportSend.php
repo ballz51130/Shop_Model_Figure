@@ -12,7 +12,7 @@ $mpdf = new \Mpdf\Mpdf([
 ]);
 $stylesheet = file_get_contents('https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css');
 $mpdf->WriteHTML($stylesheet,1);
-$name = $resultadd['U_Name'];
+$name = "";
 $phone = $resultadd['U_Phone'];
 $mpdf->WriteHTML('
 <table>

@@ -206,11 +206,11 @@ if ($list == "")
                             <div class="product_code">รหัสสินค้า <span class="code"><?php echo $row['P_Number'] ?></span></div>
                             <p class="text-info"><?php echo $row["P_Name"]; ?></p>
                             <h5 class="text"><?php echo '฿ '.$row["P_Price"]; ?></h5>
-                            <!-- <h5 class="text"><?php// echo 'มีสินค้า '.$row["P_Unit"].' ชิ้น'; ?></h5> -->
+                            <!-- <h5 class="text"><?php // echo 'มีสินค้า '.$row["P_Unit"].' ชิ้น'; ?></h5> -->
                             <input type="hidden" name="hidden_name" value="<?php echo $row["P_Name"]; ?>">
                             <input type="hidden" name="P_Status" value="<?php echo $row["P_Status"]; ?>">
                             <input type="hidden" name="quantity" id="quantity" class="form-control" value="1"
-                                style="width:40px; position: relative; ttext-align: center; ">
+                                style="width:40px; position: relative; text-align: center; ">
                             <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>"> <br>
                             <div class="buttons">
                             <?php if($row['P_Status']==1){ ?>
@@ -282,10 +282,10 @@ if ($list <> "")
                             <div class="product_code">รหัสสินค้า <span class="code"><?php echo $row['P_Number'] ?></span></div>
                             <p class="text-info"><?php echo $row["P_Name"]; ?></p>
                             <h5 class="text"><?php echo '฿ '.$row["P_Price"]; ?></h5>
-                            <!-- <h5 class="text"><?php// echo 'มีสินค้า '.$row["P_Unit"].' ชิ้น'; ?></h5> -->
+                            <!-- <h5 class="text"><?php // echo 'มีสินค้า '.$row["P_Unit"].' ชิ้น'; ?></h5> -->
                             <input type="hidden" name="hidden_name" value="<?php echo $row["P_Name"]; ?>">
                             <input type="hidden" name="quantity" id="quantity" class="form-control" value="1"
-                                style="width:40px; position: relative; ttext-align: center; ">
+                                style="width:40px; position: relative; text-align: center; ">
                             <input type="hidden" name="hidden_price" value="<?php echo $row["P_Price"]; ?>"> <br>
                             <div class="buttons">
                             <?php if($row['P_Status'] == 1){ ?> 

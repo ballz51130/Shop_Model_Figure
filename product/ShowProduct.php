@@ -6,6 +6,7 @@ $sql = "SELECT * FROM product
         WHERE product.P_Number='".$_GET['P_Number']."'";
    	$query = mysqli_query($conn, $sql);
 	$result = mysqli_fetch_array($query);
+	print_r($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -19,14 +20,14 @@ $sql = "SELECT * FROM product
     <title>Document</title>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container-fluid" style="margin-top:100px;padding:50px">
     <div class="content-wrapper">	
 		<div class="item-container">	
 			<div class="container">	
 				<div class="col-md-12">
 					<div class="product col-md-3 service-image-left">
             
-						
+		
 							<img id="item-display" src="<?php echo '../photo/Order/'.$result['P_Photo']; ?>" alt="" style="width:350px;height:321px;"> </img>
 						
 					</div>
