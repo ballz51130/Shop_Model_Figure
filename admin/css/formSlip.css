@@ -9,7 +9,7 @@
     padding: 50px;
     border: 0.5px solid black;
     width: 700px;
-    height: 800px;
+    
     
 }
 input {
@@ -81,3 +81,18 @@ select{
     text-align: center;
     height: 30px;
 }
+.detailsum{
+    margin-left: 250px;
+  }
+  .detailsum ul{
+    list-style: none;
+    float: left;
+  }
+  .detailsum ul li{
+    margin: 10px;
+    margin-left: 50px;
+  }
+  .detailsum ul li span{
+    float: right;
+    margin-left: 50px;
+  }

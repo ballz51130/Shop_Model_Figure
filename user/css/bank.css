@@ -176,3 +176,22 @@ html {
     padding: 30px;
    background-color: rgba(241, 238, 238, 0.815);
  }
+ 
+ .col-md-4 .form-group{
+   position: initial;
+ 
+ }
+ .detailsum{
+   position: static;
+  margin-top: 300px;
+  margin-right: 50px;
+  margin-left:50%;
+ }
+ .detailsum h4{
+  margin-top: 3spx;
+  float:left;
+}
+.detailsum span{
+  margin-top: 3spx;
+  float:right;
+}

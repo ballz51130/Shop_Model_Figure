@@ -7,7 +7,9 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -166,7 +168,6 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">รายระเอียด</h1>
@@ -174,77 +175,65 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     <!-- Content Row -->
                     <div class="row">
                         <div class="main">
-                            <?php 
-                                $sql ="SELECT * FROM orders
+                            <?php
+                                $sql ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,O_Detail,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='ยืนยันการสั่งซื้อ'";
-                                $query = mysqli_query($conn,$sql); // ใช้ $resultcheck
-                                $query2 = mysqli_query($conn,$sql); // while $result    
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอตรวจสอบ' ";
+                                $query = mysqli_query($conn,$sql);
+                                $query2 = mysqli_query($conn,$sql);
+                                $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
                                 $SUM =0;
                                 $AllSum = 0;
-                                $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
+                                $num = 1;
                                 if($resultcheck>0){
                                 ?>
                             <center>
-                                <h1> กระกร้าสินค้า </h1>
+                                <H2> สถานะสินค้า</H2>
                             </center>
-                            <form method="post" action="./FormPayment.php">
                             <div class="table" align="center">
                                 <table class="table table-striped table-bordered">
-                                    <span style="float:left;">เลือกรายการชำระ</span>
                                     <thead>
                                         <tr>
-                                            <th scope="col"> No. </th>
+                                            <th scope="col"> No</th>
                                             <th scope="col"> ชื่อสินค้า </th>
                                             <th scope="col"> จำนวน </th>
                                             <th scope="col"> ราคา </th>
                                             <th scope="col"> ยอดชำระ </th>
                                             <th scope="col"> สถานะ </th>
-                                            <th scope="col"> จัดการ </th>
-                                            <th scope="col"> ลบรายการ </th>
+                                            <th scope="col">รายระเอียด</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
-                                    <?php
-                                    while($result = mysqli_fetch_array($query2,MYSQLI_ASSOC)){
-                                    if($result['O_Status']=='ยืนยันการสั่งซื้อ'){
-                                     $bg="#8cff66"; 
+                                            <?php
+                                    while($result = mysqli_fetch_array($query2,MYSQLI_ASSOC)) {
+   
+                                    if($result['O_Status']=='รอการชำระ'){
+                                    $bg="#FF6600";
                                     }
-                            ?>              <td> <input type="checkbox" name="check[]" class="checkbox" value="<?php echo $result['O_ID'] ?>"> </td>
+                                ?>
+                                            <td align="center"> <?php echo $num;?></td>
                                             <td align="center"> <?php echo $result['P_Name'];?></td>
                                             <td align="center"> <?php echo $result['OD_Unit']; ?> </td>
-                                            <td align="center"> <?php echo $result['P_Price']; ?>     </td>
+                                            <td align="center"> <?php echo $result['P_Price']; ?> </td>
                                             <?php $SUM = $result['P_Price'] * $result['OD_Unit']; $AllSum = $AllSum + $SUM ;?>
-                                            <td align="center"><span class="price"><?php echo $SUM ;?></span></td>
+                                            <td align="center"> <?php echo $SUM ;?> </td>
                                             <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?>
                                             </td>
-                                            <td align="center"> <a href="../order/Edit_Order.php"><img
-                                                        src="../photo/edit.png" width="15px" hight="15px"></a>
-                                            </td>
-                                            <td align="center"> <a
-                                                    href="../order/Delete_Order.php?ID=<?php echo $result['O_ID'];?>"><img
-                                                        src="../photo/trash.png" width="15px" hight="15px"></a>
-                                            </td>
+                                            <td align="center"> </td>
+
                                         </tr>
                                         <?php } ?>
-                                        </tbody>
+                                        </tbodt>
                                 </table>
-                                <button type="submit" style="margin-left:800px;" class="btn btn-primary">ยืนยันการสั่งซื้อ</button>
-                                </form>
-                                <h4 align='right' style="width: 900px; margin-top:20px;">
-                                <p>รวม : <span id="alert">0</span></p>
-                                   </h4>
-                                <br>
+
                             </div>
-                            <br>
                             <?php } else{
-                                    echo "<span style=' padding:300px; width:100px'>---- ไม่พบข้อมูล ----</span>" ;                                                                                                                                                           
-                                } ?>
+                echo "<span style=' padding:300px; width:100px'>---- ไม่พบข้อมูล ----</span>" ;                                                                                                                                                     
+            } ?>
                                 
-                            
                         </div> <!-- main -->
 
                     </div>
@@ -300,12 +289,9 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
         .main {
             margin-left: 400px;
             width: auto;
-            padding: 50px;
-          
 
         }
         .table{
-            
             background-color: white;
             padding: 50px;
         }

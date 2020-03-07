@@ -168,13 +168,14 @@ footer p {
 
 .sends {
   margin-left: 20px;
+  position: relative;
 
 }
 
 .send-detail {
   position: relative;
   margin-top: 750px;
-  top: -200px;
+  top: -150px;
   margin-left: 100px;
   width: 800px;
   height: 370px;
@@ -188,4 +189,7 @@ footer p {
   margin: 10px;
   border: 0.5px solid gainsboro;
 
+}
+.service1-item :hover img{
+  transform: scale(5);
 }

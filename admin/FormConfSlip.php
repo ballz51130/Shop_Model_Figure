@@ -2,8 +2,8 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
-$sqlre = "SELECT user.U_UserName,product.P_Name,P_ID,orderdetail.OD_Unit,product.P_Price,send_tb.Sn_Price,bank_tb.Bk_Name,Bk_Number,
- slip_tb.Sp_Price,slip_tb.Sp_Frombank,Sp_LastNum,slip_tb.Sp_Tobank,slip_tb.Sp_Time,slip_tb.Sp_Date,slip_tb.Sp_Img
+$sqlre = "SELECT orders.O_ID,user.U_UserName,product.P_Name,P_ID,orderdetail.OD_Unit,product.P_Price,product.P_Photo,send_tb.Sn_Price,bank_tb.Bk_Name,Bk_Number,orders.C_ID,
+ slip_tb.Sp_Price,slip_tb.Sp_Frombank,Sp_LastNum,slip_tb.Sp_Tobank,slip_tb.Sp_Time,slip_tb.Sp_Date,slip_tb.Sp_Img,send_tb.Sn_id
  FROM orders
  INNER JOIN user ON user.U_ID = orders.U_ID
  INNER JOIN product ON product.P_Number = orders.P_Number
@@ -11,8 +11,9 @@ $sqlre = "SELECT user.U_UserName,product.P_Name,P_ID,orderdetail.OD_Unit,product
  INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
  INNER JOIN bank_tb ON bank_tb.Bk_id = orders.Bk_id 
  INNER JOIN slip_tb ON slip_tb.O_ID = orders.O_ID
- WHERE orders.O_ID = ".$_GET['O_ID'];
+ WHERE orders.C_ID = ".$_GET['C_ID'];
  $query = mysqli_query($conn,$sqlre);
+ $queryproduct = mysqli_query($conn,$sqlre); 
  $result = mysqli_fetch_array($query,MYSQLI_ASSOC);
  $SumPrice = ($result['P_Price']*$result['OD_Unit'])+ $result['Sn_Price'];
 
@@ -296,45 +297,49 @@ $sqlre = "SELECT user.U_UserName,product.P_Name,P_ID,orderdetail.OD_Unit,product
       <div class="row">
         <div class="col-md-5">
           <div class="input">
-              <input type="hidden" id="P_ID" name="P_ID" value="">
+          <form action="./checkSlip.php" method="POST" enctype="multipart/form-data">
+              <?php 
+                $unit = 0;
+                $sumproduct = 0;
+                while($resultproduct = mysqli_fetch_array($queryproduct)){
+                    $unit = $unit + $resultproduct['OD_Unit'];
+                    $Sn_id = $resultproduct['Sn_id'];
+                    $sumproduct = $sumproduct+($resultproduct['P_Price']*$resultproduct['OD_Unit']);   
+              ?>
               <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-4 col-form-label">รหัสรายการสินค้า</label>
-                <div class="col-sm-4">
-                <label for="" class="form-control"><?php echo $_GET['O_ID'] ;?></label>
-                </div>
+              <div class="col-md-3">
+                    <input type="hidden" name="check[]" value="<?php echo $resultproduct['O_ID']?>">
+                    <input type="hidden" name="product[]" value="<?php echo $resultproduct['P_ID']?>">
+                    <input type="hidden" name="unit[]" value="<?php echo $resultproduct['OD_Unit']?>">
+                                <img src="<?php echo '../photo/Order/'.$resultproduct['P_Photo'] ;?>" width="80px"
+                                    height="80px">
+                            </div>
+                            <div class="col-md-9" style="padding:3px;">
+                                <label for="" style="margin-top:2px;">ชื้อสินค้า :
+                                    <?php echo $resultproduct['P_Name'] ;?></label> <br>
+                                <label for="" style="margin-top:2px;"> X <?php echo $resultproduct['OD_Unit'] ;?></label>
+                                <br>
+                                <label for="" style="margin-top:2px;">THB <?php echo $resultproduct['P_Price'] ;?> </label>
+                            </div>
+                            
               </div>
+              <?php } ?>
               <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">ชื่อสินค้า</label>
-                <div class="col-sm-4">
-                  <textarea type="label" class="form-control" cols="30" rows="auto"><?php echo $result['P_Name'];?></textarea>
-                  
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-4 col-form-label">จำนวน</label>
-                <div class="col-sm-4">
-                <label for="" class="form-control"><?php echo $result['OD_Unit'] ;?></label>
-                  
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-4 col-form-label">ราคาสินค้า</label>
-                <div class="col-sm-4">
-                <label for="" class="form-control"><?php echo $result['P_Price']; ?></label>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputPassword3" class="col-sm-4 col-form-label">ค่าจัดส่ง</label>
-                <div class="col-sm-4">
-                <label for="" class="form-control"><?php echo $result['Sn_Price']; ?></label>
-                </div>
-              </div>
-              <div class="form-group row">
-                <label for="inputEmail3" class="col-sm-4 col-form-label">รวม</label>
-                <div class="col-sm-4">
-                <label for="" class="form-control"><?php echo $SumPrice ?></label>
-                </div>
-              </div>
+              <?php 
+                        $sqlsends="SELECT Sn_Price FROM send_tb WHERE Sn_id= '".$Sn_id."' ";
+                        $querysends = mysqli_query($conn,$sqlsends);
+                        $reslutsen = mysqli_fetch_array($querysends);
+                        $sumsends = $unit*$reslutsen['Sn_Price']
+                    ?>
+                        <div class="detailsum">
+                                <ul>
+                                <li>ค่าส่ง(ชิ้น) : <span><?php  echo $reslutsen['Sn_Price']; ?></span>  </li>
+                                <li>รวมค่าส่ง : <span><?php echo $sumsends  ;?></span> </li>
+                                <li> รวมสินค้า : <span><?php echo$sumproduct ; ?></span> </li>
+                                <li>รวม : <span><?php echo $sumsends+$sumproduct;  ?></span> </li>
+                                </ul>
+                        </div>
+                                </div>
               <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">โอนจากธนคาร</label>
                 <div class="col-sm-6">
@@ -374,10 +379,6 @@ $sqlre = "SELECT user.U_UserName,product.P_Name,P_ID,orderdetail.OD_Unit,product
               </div>
           </div>
         </div>
-        <form action="./checkSlip.php" method="POST" enctype="multipart/form-data">
-          <input type="hidden" name="O_ID" value=" <?php echo $_GET['O_ID'];?>">
-          <input type="hidden" name="P_Unit" value="<?php echo $result['OD_Unit']; ?>">
-          <input type="hidden" name="P_ID" value="<?php echo $result['P_ID']; ?>">
         <div class="col-md-5">
           <div class="photo-img">
             <img src="<?php echo '../photo/Slip/'.$result['Sp_Img'];?>">

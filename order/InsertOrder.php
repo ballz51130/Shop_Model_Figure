@@ -1,7 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start();
-$sql = "SELECT P_Number,U_ID FROM orders WHERE U_ID='".$_SESSION['User']."' AND P_Number = '".$_POST['P_Number']."' AND O_Status='ยืนยันการสั่งซื้อ' or orders.O_Status ='รอการชำระ' ";
+$sql = "SELECT P_Number,U_ID FROM orders WHERE U_ID='".$_SESSION['User']."' AND P_Number = '".$_POST['P_Number']."' AND O_Status='ยืนยันการสั่งซื้อ'";
 $query = mysqli_query($conn, $sql);
 $result = mysqli_fetch_array($query,MYSQLI_ASSOC);
 

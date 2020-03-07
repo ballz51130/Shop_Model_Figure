@@ -1,13 +1,21 @@
+
 <?php 
+session_start();
 include '../conn/conn.php';
-$sqlsend = "UPDATE orders SET O_Status = 'รอการชำระ',Sn_id = '".$_POST['gender']."',Bk_id = '".$_POST['bank']."', O_Date = current_timestamp  WHERE O_ID = '".$_POST['O_ID']."'";
+$sql = "INSERT INTO conforder(U_ID) VALUES ('".$_SESSION['User']."')";
+    $query = mysqli_query($conn,$sql);
+    $lest = $conn -> insert_id;
+for($i = 0; $i < count($_POST['check']); $i++){
+    $num = $_POST['check'][$i];
+$sqlsend = "UPDATE orders SET O_Status = 'รอการชำระ',Sn_id = '".$_POST['gender']."',Bk_id = '".$_POST['bank']."',C_ID='".$lest."' WHERE O_ID = '$num'";
 $query = mysqli_query($conn,$sqlsend);
+}
 if($query){
-    echo "บันทึกสำเร็จ";
-    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL=../user/Market.php'>";
+    echo "<script type='text/javascript'>alert('สำเร็จ');</script>";
+    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=../user/Market.php'>";
 }
 else{
-    echo "เกิดข้อผิดพลาด กรุณาติดต่อ Admin";
-    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '3;URL=../user/Market.php'>";
+    echo "<script type='text/javascript'>alert('Error');</script>";
+    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=../user/Market.php'>";
 }
 ?>

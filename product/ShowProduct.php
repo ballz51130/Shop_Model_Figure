@@ -6,7 +6,6 @@ $sql = "SELECT * FROM product
         WHERE product.P_Number='".$_GET['P_Number']."'";
    	$query = mysqli_query($conn, $sql);
 	$result = mysqli_fetch_array($query);
-	print_r($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -20,7 +19,34 @@ $sql = "SELECT * FROM product
     <title>Document</title>
 </head>
 <body>
-<div class="container-fluid" style="margin-top:100px;padding:50px">
+</body>
+<body>
+    <div class="head_bar">
+        <div class="manu_login">
+            <ul>
+                <li> <?php if($_SESSION['login'] == ""){ ?>
+                    <a href="../login/login.php">Login</a>
+                    <?php }  if($_SESSION['login'] == 1){?>
+                <li><?php echo$resultU['U_FName'];?></li>
+                <li> <a href="">MY ACCOUNT </a></li>
+                <li><a href="../login/logout.php">Logout</a></li>
+                <?php } ?>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="contriner">
+        <div class="topmenu">
+            <div class="row">
+                <!-- โลโก้ -->
+                <div class="col-md-3" id="homeicon" style="margin-left:px5;">
+                    <a href=""><img src="../photo/home.png" alt="" width="40px" hight="40px"></a>
+                </div>
+
+            </div>
+        </div> <!-- topmenu -->
+        <div class="maimMenu">
+		<div class="container-fluid" style="margin-top:100px;padding:50px">
     <div class="content-wrapper">	
 		<div class="item-container">	
 			<div class="container">	
@@ -28,23 +54,11 @@ $sql = "SELECT * FROM product
 					<div class="product col-md-3 service-image-left">
             
 		
-							<img id="item-display" src="<?php echo '../photo/Order/'.$result['P_Photo']; ?>" alt="" style="width:350px;height:321px;"> </img>
+							<img  src="<?php echo '../photo/Order/'.$result['P_Photo']; ?>" alt="" style="width:350px;height:321px;"> </img>
 						
 					</div>
 					
-					<div class="container service1-items col-sm-2 col-md-2 pull-left">
-						<center>
-							<a id="item-1" class="service1-item">
-								<img src="<?php echo '../photo/Order/orderdetail/'.$result['Pd_image1']; ?>" alt=""></img>
-							</a>
-							<a id="item-2" class="service1-item">
-								<img src="<?php echo '../photo/Order/orderdetail/'.$result['Pd_image2']; ?>" alt=""></img>
-							</a>
-							<a id="item-3" class="service1-item">
-								<img src="<?php echo '../photo/Order/orderdetail/'.$result['Pd_image3']; ?>" alt=""></img>
-							</a>
-						</center>
-					</div>
+					
 				</div>
 				<form action="../order/InsertOrder.php" method="post">	
 				<div class="col-md-7">
@@ -89,21 +103,60 @@ $sql = "SELECT * FROM product
 							</section>
 										  
 						</div>
-					<div class="tab-pane fade" id="service-two">
-						
-						<section class="container">
-								
-						</section>
-						
-					</div>
-					<div class="tab-pane fade" id="service-three">
-												
-					</div>
+					
 				</div>
+				<br>
+				<div >
+					
+								<img src="<?php echo '../photo/Order/orderdetail/'.$result['Pd_image1']; ?>" style="width:200px;height:200px;"></img>
+							
+						
+								<img src="<?php echo '../photo/Order/orderdetail/'.$result['Pd_image2']; ?>" style="width:200px;height:200px;"></img>
+							</a>
+							
+								<img src="<?php echo '../photo/Order/orderdetail/'.$result['Pd_image3']; ?>" style="width:200px;height:200px;"></img>
+							</a>
+					
+					</div>	
 				<hr>
 			</div>
 		</div>
+		
 	</div>
 </div>  
+<footer>
+        <p> Power By Harumyx </p>
+    </footer>
+        </div>
+    </div> <!-- contrinner-->
+    
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous">
+    </script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"
+        integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous">
+    </script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
+        integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
+    </script>
+
+	<script>
+        var mysrc = "";
+        function changeImage() {
+            if (mysrc == "mars.jpg") {
+                document.images["pic"].src = "http://www.fluidoweb.com/images/SoloLearn/mars.jpg";
+                document.images["pic"].alt = "Mars";
+                mysrc = "earth.jpg";
+            } else {
+                document.images["pic"].src = "http://www.fluidoweb.com/images/SoloLearn/earth.jpg";
+                document.images["pic"].alt = "Earth";
+                mysrc = "mars.jpg";
+            }
+        }
+    </script>
 </body>
+
 </html>

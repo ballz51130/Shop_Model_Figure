@@ -1,15 +1,7 @@
 <?php 
 include '../conn/conn.php';
-session_start(); // คำสั่ง เปิดใช้งาน session 
- if(isset($_POST['form'])=="address"){
-
-    }
-    if(isset($_POST['form'])=="send"){
-        echo "Send";
-        echo $_POST['sump'];
-    } 
-
-?>
+session_start();
+  ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,24 +41,16 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 </div>
 
             </div>
-            <div class="list">
-                <ul class="list">
-                    <a href="../index.php" class="btn btn-primary">หน้าแรก</a>
-                    <a href="#" class="btn btn-primary">Home</a>
-                    <a href="#" class="btn btn-primary">Home</a>
-                </ul>
-            </div>
         </div> <!-- topmenu -->
         <div class="maimMenu">
             <div class="rowmenu">
                 <div class="col-md-8">
-                    <?php 
+                <?php 
                             $sqladd ="SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
                             $queryadd = mysqli_query($conn,$sqladd);
                             $resultadd = mysqli_fetch_array($queryadd)
                                 ?>
                     <form action="" method="post" enctype="multipart/form-data">
-                        <div>
                             <div class="form-group">
                                 <div class="form-group col-md-12">
                                     <div class="form-row col-md-4">
@@ -108,59 +92,50 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                                             value="<?php echo $resultadd['zip'];?>">
                                     </div>
                                 </div>
-                                <div class="form-row col-md-12">
-                                </div>
                                 <div class="form-group col-md-12" style="padding-top:50px; margin-right:200px;">
                                     <button type="submit" class="btn btn-primary"
                                         style="float:right; margin-right:50px">[บันทึกที่อยู่]</button>
                                 </div>
-
                             </div>
-
                     </form>
-
                 </div>
-                <div class="send">
-
-                </div>
-            </div>
-            <div class="col-md-4" style="width:500px;margin-left:100px;border: 1px solid black;">
-                <?php 
-                    $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
-                    INNER JOIN product ON product.P_Number = orders.P_Number
-                    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                    WHERE orders.O_ID='".$_GET['O_ID']."'";
-                    $queryproduct = mysqli_query($conn,$sqlproduct);
-                    $resultproduct = mysqli_fetch_array($queryproduct);
-                ?>
-                <form id="SendForm" action="./FormBank.php?O_ID=<?php echo $_GET['O_ID'];?>" method="post"
-                    enctype="multipart/form-data">
-                    <input type="hidden" name="form" value="send">
-                    <div class="form-group">
-                        <div class="rowp">
+                <div class="col-md-4" style="padding:20px;width:500px;margin-left:100px;border: 1px solid black;">
+                    <form id="SendForm" action="./FormBank.php" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
                             <h3>สรุปรายการสั่งซื้อ</h3>
-                            <div class="col-md-4">
-                                <img src="<?php echo '../photo/Order/'.$resultproduct['P_Photo'] ;?>" width="150px"
-                                    height="150px">
+                            <?php
+              $price = 0;
+               for($i = 0; $i < count($_POST['check']); $i++){
+                $num = $_POST['check'][$i];
+                $sql = "SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
+                INNER JOIN product ON product.P_Number = orders.P_Number
+                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                WHERE orders.O_ID='$num'";
+                $query = mysqli_query($conn,$sql);
+                $result = mysqli_fetch_array($query);
+              ?>
+
+                            <input type="hidden" name="check[]" value="<?php echo $result['O_ID']?>">
+                            <div class="col-md-3">
+                                <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>" width="80px"
+                                    height="80px">
                             </div>
-                        </div>
-                        <div class="col-md-6" style="margin-left:30px;">
-                            <label for="" style="margin-top:20px;">ชื้อสินค้า :
-                                <?php echo $resultproduct['P_Name'] ;?></label> <br>
-                            <label for="" style="margin-top:20px;"> X <?php echo $resultproduct['OD_Unit'] ;?></label>
-                            <br>
-                            <label for="" style="margin-top:20px;">THB <?php echo $resultproduct['P_Price'] ;?> </label>
-                            <br>
-                        </div>
-                        <div class="form-group col-md-12" style="padding-top:50px;">
-                            <h4>ยอดรวมสินค้า (<?php echo $resultproduct['OD_Unit'] ;?>) ชิ้น <label
-                                    style="float:right;margin-right:50px;"><?php  $price=$resultproduct['P_Price']*$resultproduct['OD_Unit']; echo $price ;?></label>
-                            </h4>
-                            <input type="hidden" name="sump" class="form-control" value="<?php echo $price ;?>">
-                            <!-- วิธีการจัดสุ่ง -->
-                            <label for="titlesend">วิธีการจัดส่ง</label> <br>
-                            <p id="alert" style="color: red;"></p>
+
+                            <div class="col-md-9" style="padding:3px;">
+                                <label for="" style="margin-top:2px;">ชื้อสินค้า :
+                                    <?php echo $result['P_Name'] ;?></label> <br>
+                                <label for="" style="margin-top:2px;"> X <?php echo $result['OD_Unit'] ;?></label>
+                                <br>
+                                <label for="" style="margin-top:2px;">THB <?php echo $result['P_Price'] ;?> </label>
+                            </div>
+                            <?php 
+                        $price = $price + ($result['OD_Unit'] * $result['P_Price']); //sum Price Product
+                        } // for loop 
+                    ?>
+                           <h4><span style="margin-top:50px;margin-left:300px"> รวม : <?php echo $price; ?></span></h4>
                             <div class="sends">
+                                <label for="titlesend">วิธีการจัดส่ง (ต่อชิ้น)</label><br>
+                                <p id="alert" style="color: red;"></p>
                                 <?php 
                                     $sqlSend = "SELECT * FROM `send_tb` WHERE Sn_Status = 1";
                                     $querySend = mysqli_query($conn,$sqlSend);
@@ -173,24 +148,14 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                                 <br>
                                 <?php } ?>
                             </div>
-                            <h4 style="margin-top:30px; margin-left:310px ">รวม :
-                                <?php  $price=$resultproduct['P_Price']*$resultproduct['OD_Unit']; echo $price ;?></h4>
+                            
                         </div>
-                        <div class="form-group col-md-12" style="padding-top:50px; margin-right:150px;">
-
-                        </div>
-                    </div>
-
-                </form>
-                <button class="btn btn-primary" style="float:right; margin-right:50px" type="button">[ถัดไป]</button>
-            </div>
-
-
-
+                        <button class="btn btn-primary" style="float:right; margin-right:50px" type="button">[ถัดไป]</button>
+                        </form>
+                </div>
+            </div> 
         </div>
-
-    </div>
-    <div class="send-detail">
+        <div class="send-detail">
         <label style="margin-left:20px">
             <h4>วิธีการจัดส่ง</h4>
         </label>
@@ -212,6 +177,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
             </div>
         </div>
     </div>
+
     </div> <!-- contrinner-->
     <footer>
         <p> Power By Harumyx </p>
@@ -222,17 +188,17 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 var r = confirm('คุณต้องการจัดส่งที่สินค้าตามนี้หรือไม่');
                 var radioValue = $("input[name='gender']:checked").val();
                 var txt;
-                if(r == true){
-                if (!radioValue) {
-                    txt = "กรุณาเลีอกวิธีการจัดส่ง";
-                    //ta
-                    document.getElementById("alert").innerHTML = txt;
+                if (r == true) {
+                    if (!radioValue) {
+                        txt = "กรุณาเลีอกวิธีการจัดส่ง";
+                        //ta
+                        document.getElementById("alert").innerHTML = txt;
+                    }
+                    if (radioValue) {
+                        //form id 
+                        document.getElementById("SendForm").submit();
+                    }
                 }
-                if (radioValue) {
-                    //form id 
-                    document.getElementById("SendForm").submit();
-                }
-            }
             });
         });
     </script>
@@ -249,4 +215,4 @@ session_start(); // คำสั่ง เปิดใช้งาน session
     </script>
 </body>
 
-</html>
+</html>                                 

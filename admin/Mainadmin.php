@@ -339,13 +339,13 @@ session_start();
                         <div class="product">
                             <div class="table">
                                 <?php 
-                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status,status_tb.St_Name
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,orders.C_ID,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status,status_tb.St_Name
                                 FROM orders
                                 INNER JOIN product ON orders.P_Number = product.P_Number
                                 INNER JOIN user ON orders.U_ID = user.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
                                 INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
-                                 WHERE  orders.O_Status ='รอตรวจสอบ' ";
+                                 WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);
                                 $check = mysqli_query($conn,$sqlOrder);
                                 $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);
@@ -384,7 +384,7 @@ session_start();
                                             <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
                                             <td> <?php echo $SumOrder ; ?> </td>
                                             <td> <?php echo $resultOrder['O_Status']; ?> </td>
-                                            <td> <a href="./FormConfSlip.php?O_ID=<?php echo $resultOrder['O_ID'];?>">edit</a></td>
+                                            <td> <a href="./FormConfSlip.php?C_ID=<?php echo $resultOrder['C_ID'];?>">edit</a></td>
                                         </tr>
                                         <?php $num++; }?>
                                     </tbody>
@@ -394,12 +394,12 @@ session_start();
                             </div>
                             <div class="table">
                                 <?php 
-                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,product.P_Name,product.P_Status,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,orders.C_ID,product.P_Name,product.P_Status,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
                                 FROM orders
                                 INNER JOIN product ON orders.P_Number = product.P_Number
                                 INNER JOIN user ON orders.U_ID = user.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                 WHERE  orders.O_Status ='เตรียมจัดส่ง' AND product.P_Status='1' ";
+                                 WHERE  orders.O_Status ='เตรียมจัดส่ง' AND product.P_Status='1'  ";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);
                                 $check = mysqli_query($conn,$sqlOrder);
                                 $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);

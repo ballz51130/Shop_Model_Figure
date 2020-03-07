@@ -18,12 +18,15 @@ body{
   height: 50px;
   background-color: turquoise;
 }
+.row h3{
+  margin-top: -15px;
+}
 .maimMenu {
   position: relative;
   margin-left: 200px;
   font-size: 1.7rem;
   height: auto;
-  padding: 50px;
+  padding: 30px;
 }
 footer {
   position: relative;
@@ -43,7 +46,6 @@ footer {
 width: 400px;
 }
 .menu{
-  height: 1000px;
   border: 1px solid black;
   padding: 50px;
   box-shadow: 2px 2px 2px gray;   
@@ -66,5 +68,26 @@ label{
 }
 .col-sm-10 a{
   float: right;
+  margin-right: -100px;
+}
+.col-sm-10 button{
+  margin-left: 300px;
+}
+.detailsum{
+  padding: 20px;
+  font-size: 20px;
+  margin-left: 250px;
+}
+.detailsum ul{
+  list-style: none;
+  float: left;
+  margin-bottom: 50px;
+}
+.detailsum ul li{
   margin: 10px;
+  margin-left: 50px;
+}
+.detailsum ul li span{
+  float: right;
+  margin-left: 50px;
 }

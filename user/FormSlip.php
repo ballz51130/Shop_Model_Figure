@@ -1,15 +1,18 @@
 <?php
 include '../conn/conn.php';
-$sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,Sn_Price FROM orders 
-                INNER JOIN product ON product.P_Number = orders.P_Number
-                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
-                    WHERE orders.O_ID='".$_GET['O_ID']."'";
-                    $queryproduct = mysqli_query($conn,$sqlproduct);
-                    $resultproduct = mysqli_fetch_array($queryproduct); //  เอาไว้แสดง ข้อมูลOrder จาก GET O_ID
+$sqlproduct="SELECT *  FROM orders 
+INNER JOIN product ON product.P_Number = orders.P_Number
+INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
+INNER JOIN bank_tb ON bank_tb.Bk_id = orders.Bk_id
+WHERE orders.C_ID='".$_GET['C_ID']."'";
+$queryproduct = mysqli_query($conn,$sqlproduct);
+$queryproduct2 = mysqli_query($conn,$sqlproduct);
+$resultbk = mysqli_fetch_array($queryproduct2);
  $sqlbk= "SELECT * FROM bank_tb";
  $querybk = mysqli_query($conn,$sqlbk);//  เอาไว้แสดง option ช่องที่1
- $querybk2 = mysqli_query($conn,$sqlbk); //  เอาไว้แสดง option ช่องที่1
+ $sqlbk2= "SELECT * FROM bank_tb where Bk_id = '".$resultbk['Bk_id']."' ";
+ $querybk2 = mysqli_query($conn,$sqlbk2); //  เอาไว้แสดง option ช่องที่2
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -37,38 +40,57 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
         </div> <!-- topmenu -->
         <div class="maimMenu">
             <div class="menu">
-                <form id="SendForm" action="./CheckSlip.php?O_ID=<?php echo $_GET['O_ID'];?>" method="post"
+                <form action="./CheckSlip.php" method="post"
                     enctype="multipart/form-data">
                     <input type="hidden" name="ID" value="<?php echo $_GET['O_ID']?>">
                     <div class="form-group">
-                        <div class="rowp">
-                            <h3>รายการสั่งซื้อ</h3>
-                            <div class="col-md-4">
-                                <img src="<?php echo '../photo/Order/'.$resultproduct['P_Photo'] ;?>" width="150px"
-                                    height="150px">
+                        <div class="row">
+                        <h3>สรุปรายการสั่งซื้อ</h3>
+                        <?php
+                $unit = 0;
+                $sumproduct = 0;
+                while($result = mysqli_fetch_array($queryproduct)){
+                    $unit = $unit + $result['OD_Unit'];
+                    $Sn_id = $result['Sn_id'];
+                    $sumproduct = $sumproduct+($result['P_Price']*$result['OD_Unit']);
+              ?>
+                        <div class="form-group">
+                            <input type="hidden" name="check[]" value="<?php echo $result['O_ID']?>">
+                            
+                            <div class="col-md-3">
+                                <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>" width="80px"
+                                    height="80px">
+                            </div>
+                            <div class="col-md-9" style="padding:3px;">
+                                <label for="" style="margin-top:2px;">ชื้อสินค้า :
+                                    <?php echo $result['P_Name'] ;?></label> <br>
+                                <label for="" style="margin-top:2px;"> X <?php echo $result['OD_Unit'] ;?></label>
+                                <br>
+                                <label for="" style="margin-top:2px;">THB <?php echo $result['P_Price'] ;?> </label>
                             </div>
                         </div>
-                        <div class="col-md-6" style="margin-left:30px;">
-                            <label for="" style="margin-top:20px;">ชื้อสินค้า :
-                                <?php echo $resultproduct['P_Name'] ;?></label> <br>
-                            <label for="" style="margin-top:20px;"> X <?php echo $resultproduct['OD_Unit'] ;?></label>
-                            <br>
-                            <label for="" style="margin-top:20px;">THB <?php echo $resultproduct['P_Price'] ;?> </label>
-                            <br>
-                        </div>
-                        <div class="form-group col-md-12" style="padding-top:50px;">
-                            <h4>ยอดรวมสินค้า (<?php echo $resultproduct['OD_Unit'] ;?>) ชิ้น <label
-                                    style="float:right;margin-right:50px;"><?php $price=$resultproduct['P_Price']*$resultproduct['OD_Unit']; echo $price ;?></label>
-                            </h4>
-                            <input type="hidden" name="sump" class="form-control" value="<?php echo $price ;?>">
-                            <div class="sends">
-                                <h4>ค่าจัดส่ง<label
-                                        style="float:right;margin-right:50px;"><?php echo $resultproduct['Sn_Price'] ;?></label>
-                                </h4>
-                            </div>
-                            <h4 class="sum">รวม :
-                                <?php $price=($resultproduct['P_Price']*$resultproduct['OD_Unit'])+$resultproduct['Sn_Price']; echo $price ;?>
-                            </h4>
+                        <?php 
+                        
+                                }
+                    ?>
+                    <?php 
+                        $sqlsends="SELECT Sn_Price FROM send_tb WHERE Sn_id= '".$Sn_id."' ";
+                        $querysends = mysqli_query($conn,$sqlsends);
+                        $reslutsen = mysqli_fetch_array($querysends);
+                        $sumsends = $unit*$reslutsen['Sn_Price']
+                    ?>
+                        <div class="detailsum">
+                                <ul>
+                                <li>ค่าส่ง(ชิ้น) : <span><?php  echo $reslutsen['Sn_Price']; ?></span>  </li>
+                                <li>รวมค่าส่ง : <span><?php echo $sumsends  ;?></span> </li>
+                                <li> รวมสินค้า : <span><?php echo$sumproduct ; ?></span> </li>
+                                <li>รวม : <span><?php echo $sumsends+$sumproduct;  ?></span> </li>
+                                </ul>
+
+                        
+                          
+                            
+                         
                         </div>
                         <div class="form-group col-md-12">
                             <div class="inputphoto">
@@ -98,7 +120,6 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
                                 <div class="form-group col-md-4">
                                     <label for="inputZip">ถึงธนคาร</label>
                                     <select id="ToBank" name="ToBank" class="form-control">
-                                        <option class="form-control" value="">
                                             <?php while($rowbk2= mysqli_fetch_array($querybk2)) {?>
                                         <option class="form-control" value="<?php echo $rowbk2['Bk_Name'];?>">
                                             <?php echo $rowbk2['Bk_Name'];?>
@@ -122,7 +143,7 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
                             </div>
                         </div>
                         <div class="form-group col-md-12">
-                            <h5 style="margin-top:30px;position: absolute;margin-left:200px"> AM = ก่อนเที่ยงวัน<br>PM =
+                            <h5 style="margin-top:30px;position: absolute;margin-left:220px"> AM = ก่อนเที่ยงวัน<br>PM =
                                 หลังเที่ยงวัน </h5>
                             <div class="form-row col-md-4">
                                 <label for="inputEmail4">เวลาที่โอน</label>
@@ -139,12 +160,10 @@ $sqlproduct="SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_N
                     </div>
                     <div class="col-sm-10">
                     <button type="submit" name="submit" class="btn btn-primary">[ยืนยันการชำระเงิน]</button>
-                    <a href="./user.php" class="btn btn-primary">ย้อนหลับ</a>
-                    
-                    
+                    <a href="./Market.php" class="btn btn-primary">ย้อนหลับ</a>  
                 </div>
                 </form>
-                
+                </div>
             </div>
         </div> <!-- contrinner-->
         <footer>
