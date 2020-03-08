@@ -276,81 +276,35 @@ $resultadd = mysqli_fetch_array($queryadd)
                         <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                                 class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
                     </div>
-
                     <!-- Content Row -->
                     <div class="row">
                         <!-- เนื้อหา -->
                         <div class="data">
+                        <form action="./CheckEms.php" method="post">
+                        <input type="hidden" name="O_ID" value="<?php echo $_GET['O_ID']; ?>">
                             <div class="form-group">
-                                <div class="form-group col-md-12">
-                                    <div class="form-row col-md-4">
-                                        <label for="inputEmail4">ชื่อ-สกุล</label>
-                                        <input type="hidden" name="form" class="form-control" value="address">
-                                        <input type="text" name="U_Name" class="form-control"
-                                            value="<?php echo $resultadd['U_Name'] ?>">
-                                    </div>
-                                    <div class="form-row col-md-4">
-                                        <label for="inputPassword4">หมายเลขโทรศัพย์</label>
-                                        <input type="text" name="U_LName" class="form-control"
-                                            value="<?php echo $resultadd['U_Phone'];?>">
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-12" style="margin-left:10px;">
-                                    <label for="inputEmail4">ที่อยู่</label>
-                                    <textarea id="U_add" name="Home" class="form-control" rows="5"
-                                        style=" width:700px;"> <?php echo $resultadd['Home']; ?></textarea>
-                                </div>
                                 <div class="form-row col-md-12">
-                                    <div class="form-group col-md-2">
-                                        <label for="inputCity">ตำบล</label>
-                                        <input type="text" name="T_District" class="form-control" id="inputCity"
-                                            value="<?php echo $resultadd['T_District'];?>">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="inputZip">อำเภอ</label>
-                                        <input type="text" name="A_District" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['A_District'];?>">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="inputZip">จังหวัด</label>
-                                        <input type="text" name="Province" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['Province'];?>">
-                                    </div>
-                                    <div class="form-group col-md-2">
-                                        <label for="inputZip">ไปรษณีย์</label>
-                                        <input type="text" name="zip" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['zip'];?>">
-                                    </div>
-                                </div>
-                                <div class="form-row col-md-12">
-                                    <div class="form-group col-md-2">
-                                        <label for="inputZip">ส่งแบบ</label>
-                                        <input type="text" name="zip" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['zip'];?>">
-                                    </div>
-                                </div>
-                                <div class="form-row col-md-12">
-                                    <div class="form-row col-md-4">
+                                <label for="inputEmail4">รหัสสินค้า <?php echo $_GET['O_ID']; ?></label>
+                                    <div class="form-row col-md-12">
                                         <label for="inputEmail4">หมายเลข การส่งของ / EMS</label>
                                         <input type="hidden" name="form" class="form-control" value="address">
-                                        <input type="text" name="U_Name" class="form-control"
-                                            value="<?php echo $resultadd['U_Name'] ?>">
+                                        <input type="text" name="EMS" class="form-control"value="">
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12" style="padding-top:50px; margin-right:500px;">
                                     <a href="./reportSend.php?U_ID=<?php echo  $resultadd['U_ID'];?>">Report</a>
-                                    
                                 </div>
-                                <div class="form-group col-md-12" style="padding-top:50px; margin-right:500px;">
+                                <div class="form-group col-md-12">
                                     <button type="submit" class="btn btn-primary"
-                                        style="float:right; margin-right:50px">ยืนยันการส่ง</button>
+                                    style="margin-left:170px;posision:absolute;">ยืนยันการส่ง</button>
                                 </div>
-
-                            </div>
-
+                                <div class="form-group col-md-12" style=" margin-left:300px; margin-top:-53px;posision:absolute;">
+                                <a href="./Mainadmin.php" class="btn btn-primary">ย้อนกลับ</a>
+                                </div>
                             </form>
 
                         </div>
+                    </div>
                     </div>
                     <!-- Content Row -->
                 </div>
@@ -405,8 +359,8 @@ $resultadd = mysqli_fetch_array($queryadd)
         }
 
         .data {
-            margin-left: 350px;
-            width: 850px;
+            margin-left: 500px;
+            width: 500px;
             padding: 50px;
             background-color: #d2dfdfa8;
         }

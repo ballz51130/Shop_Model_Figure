@@ -428,7 +428,7 @@ session_start();
                                             while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
                                             {?>
                                             <td> <?php echo $num ?> </td>
-                                            <td> <?php echo $resultOrder['P_Number']; ?> </td>
+                                            <td> <?php echo $resultOrder['O_ID']; ?> </td>
                                             <td> <?php echo $resultOrder['P_Name']; ?> </td>
                                             <td> <?php echo $resultOrder['U_Name']; ?> </td>
                                             <td> <?php echo $resultOrder['OD_Unit']; ?> </td>
@@ -436,8 +436,8 @@ session_start();
                                             <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
                                             <td> <?php echo $SumOrder ; ?> </td>
                                             <td> <?php echo $resultOrder['O_Status']; ?> </td>
-                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>">Report</a></td>
-                                            <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>">edit</a></td>
+                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>">Report</a></td>
+                                            <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>">edit</a></td>
                                         </tr>
                                         <?php $num++; }?>
                                     </tbody>

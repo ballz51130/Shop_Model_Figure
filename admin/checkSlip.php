@@ -22,13 +22,14 @@ if ($_POST['cars'] == 'เตรียมจัดส่ง'){
         
        } 
        else{
-           echo "เกิดข้อผิดพลาดขึ้น";
+        echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
+        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./Mainadmin.php'>";
        }
     }
     else{
-        echo "เกิดข้อผิดพลาดขึ้น";
+        echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
+        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./Mainadmin.php'>";
     }
-
 }
 if($_POST['cars'] == 'ปฏิเสธการชำระเงิน'){
     for($i = 0; $i < count($_POST['check']); $i++){
@@ -41,7 +42,8 @@ if($_POST['cars'] == 'ปฏิเสธการชำระเงิน'){
          
         } 
         else{
-            echo "เกิดข้อผิดพลาดขึ้น";
+            echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
+            echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./Mainadmin.php'>";
         }
 
 }
