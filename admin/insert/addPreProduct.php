@@ -275,19 +275,19 @@ session_start();
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">รหัสสินค้า</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputtext" name="P_Number" value="" required> 
+                    <input type="text" class="form-control" id="inputtext" name="P_Number" value="" required>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputPassword3" class="col-sm-2 col-form-label">ชื่อสินค้า</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputPassword3" name="P_Name" value="" required>
+                    <input type="text" class="form-control" id="inputPassword3" name="P_Name" value="" required> 
                   </div>
                 </div>
                 <div class="inputphoto">
                   <label for="Name">รายระเอียดสินค้า</label>
                   <div>
-                    <textarea id="text" cols="30" rows="4" name="image_text" required></textarea>
+                    <textarea id="text" cols="30" rows="4" name="image_text"></textarea>
                   </div>
                 </div>
                 <div class="form-group row">
@@ -299,50 +299,57 @@ session_start();
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">รูปรายระเอียด1</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image1" required>
+                    <input type="file" name="image1">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">รูปรายระเอียด2</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image2" required>
+                    <input type="file" name="image2">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">รูปรายระเอียด3</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image3" required>
+                    <input type="file" name="image3">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">น้ำหนัก</label>
                   <div class="col-sm-4">
-                    <input type="number" class="form-control" id="inputtext" name="P_weight" value="" required>
+                    <input type="text" class="form-control" id="inputtext" name="P_weight" value="">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">แบรนด์สินค้า</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputtext" name="P_Brand" value="" required>
-                  </div>
-                  </div>
-                <div class="form-group row">
-                  <label for="inputtext" class="col-sm-2 col-form-label">จำนวน</label>
-                  <div class="col-sm-4">
-                    <input type="number" class="form-control" id="inputtext" name="P_Unit" value="" required>
+                    <input type="text" class="form-control" id="inputtext" name="P_Brand" value="">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">ราคาสินค้า</label>
                   <div class="col-sm-4">
-                    <input type="number" min="0" class="form-control" id="inputtext" name="P_Price" value="" required>
+                    <input type="text" class="form-control" id="inputtext" name="P_Price" value="">
                   </div>
                 </div>
-               <input type="hidden" name="P_Status" value="1">
+                <input type="hidden" name="P_Status" value="2">
+                <div class="form-group row">
+                  <label for="inputtext" class="col-sm-2 col-form-label">เปิดถึงวันที่</label>
+                  <div class="col-sm-4">
+                    <input type="date" class="form-control" id="inputtext" name="Pre_Month" value="">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputtext" class="col-sm-2 col-form-label">ได้รับของประมาณ</label>
+                  <div class="col-sm-4">
+                    <input type="date" class="form-control" id="inputtext" name="Pre_Comin" value="">
+                  </div>
+                </div>
+                <input type="hidden" name="P_Status" value="2">
                 <div class="form-group row">
                 <label for="inputtext" class="col-sm-2 col-form-label">ประเภท</label>
                 <div class="col-sm-4">
-                <select id="P_Group" name="P_Group" class="form-control" required>
+                <select id="P_Group" name="P_Group" class="form-control">
                       <?php $sqlstatus = "SELECT * FROM group_tb " ;
                             $querystatus = mysqli_query($conn,$sqlstatus);
                       ?>

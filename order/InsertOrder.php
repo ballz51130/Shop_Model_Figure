@@ -10,10 +10,10 @@ if($result > 0){
     echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=../index.php'>";
 }
 else{
-if($_POST['P_Status'] ==1){
+if($_POST['P_Status'] == 1){
 $sql2 = "INSERT INTO orders(P_Number, U_ID,O_Status) VALUES ('".$_POST['P_Number']."','".$_SESSION['User']."','ยืนยันการสั่งซื้อ')";
 $query2 = mysqli_query($conn, $sql2);
-$sqlc = "SELECT O_ID FROM orders WHERE U_ID='".$_SESSION['User']."' AND P_Number = '".$_POST['P_Number']."'";
+$sqlc = "SELECT O_ID FROM orders WHERE U_ID='".$_SESSION['User']."' AND O_Status = 'ยืนยันการสั่งซื้อ' AND P_Number='".$_POST['P_Number']."' ";
 $queryc = mysqli_query($conn, $sqlc);
 $resultc = mysqli_fetch_array($queryc,MYSQLI_ASSOC);
 $sql3 = "INSERT INTO orderdetail(O_ID,OD_Unit) VALUE ('".$resultc['O_ID']."','".$_POST['quantity']."') ";
@@ -32,10 +32,10 @@ else
 if($_POST['P_Status'] ==2){
     
     // เช็ควันที่ PREORER กับ วันที่ สั่งซื้อ
-    $sqlcheckMont = "SELECT P_Date ,DATE(now()) as DateOnPre  FROM product WHERE P_Number = '".$_POST['P_Number']."'";
+    $sqlcheckMont = "SELECT Pre_Month ,DATE(now()) as DateOnPre  FROM preorder WHERE P_Number = '".$_POST['P_Number']."'";
     $querydate= mysqli_query($conn, $sqlcheckMont);
     $resultdate = mysqli_fetch_array($querydate,MYSQLI_ASSOC);
-    if($resultdate['P_Date'] >= $resultdate['DateOnPre']){
+    if($resultdate['Pre_Month'] >= $resultdate['DateOnPre']){
         $queryinsert = "INSERT INTO orders(P_Number,U_ID,O_Status) VALUES ('".$_POST['P_Number']."','".$_SESSION['User']."','ยืนยันการสั่งซื้อ')";
         $resuktinsert = mysqli_query($conn,$queryinsert);
         $sqlc = "SELECT O_ID FROM orders WHERE U_ID='".$_SESSION['User']."' AND P_Number = '".$_POST['P_Number']."'";
@@ -58,7 +58,7 @@ else
 
     }
     else{
-        $newDate = date("d-m-Y", strtotime($resultdate['P_Date']));
+        $newDate = date("d-m-Y", strtotime($resultdate['Pre_Month']));
         echo '<script type="text/javascript">alert("หมดเวลาในPreOrderแล้ว สินสุด เมื่อวันที่ '.$newDate.'");</script>';
         echo "<META HTTP-EQUIV='Refresh'CONTENT = '0;URL=../index.php'>";
 

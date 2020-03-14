@@ -1,7 +1,9 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
-
+$sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
+$queryuser = mysqli_query($conn,$sqluser);
+$resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,7 +16,7 @@ session_start();
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Admin</title>
+    <title>Market</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -35,10 +37,10 @@ session_start();
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./Mainadmin.php">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../index.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                 </div>
-                <div class="sidebar-brand-text mx-3">Admin</div>
+                <div class="sidebar-brand-text mx-3">Main</div>
             </a>
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
@@ -47,49 +49,29 @@ session_start();
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                รายการสินค้า
+                จัดการสินค้า
             </div>
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="./MainProduct.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>จัดการคลังสินค้า</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./Mainadmin.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>สินค้ารอตรวจสอบ</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./Mainsends.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>สินค้าค้างส่ง</span></a>
-            </li>
-            <div class="sidebar-heading">
-               รายการPreOrder
-            </div>
-            <li class="nav-item">
-                <a class="nav-link" href="./MainPreOrder.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>จัดสินค้าPreOrder</span></a>
-            </li>
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                รายงาน
-            </div>
+         
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="./Market.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>การสินค้าคืน</span></a>
+                    <span>ตระกร้าสินค้า</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./insert/addProduct.php">
+                <a class="nav-link" href="./payment.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดการข้อมูลสมาชิก</span></a>
+                    <span>แจ้งชำระเงิน</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./status.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ตรวจสอบสถานะสินค้า</span></a>
+            </li>
+                  <li class="nav-item">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ข้อมูลลูกค้า</span></a>
             </li>
 
             <!-- Divider -->
@@ -111,6 +93,8 @@ session_start();
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
+
+            
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -137,28 +121,29 @@ session_start();
                                 </form>
                             </div>
                         </li>
+                   
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultuser['U_Name']; ?></span>
                                 <img class="img-profile rounded-circle"
-                                    src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                                    src="<?php echo '../photo/User/'.$resultuser['U_Photo']; ?>">
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    จัดการข้อมูลส่วนตัว
+                                    Profile
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="../login/logout.php" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    ออกจากระบบ
+                                    Logout
                                 </a>
                             </div>
                         </li>
@@ -170,49 +155,140 @@ session_start();
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    <!-- Page Heading -->
+                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">รายระเอียด</h1>
+                    </div>
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="maimMenu">
-                            <a class="btn btn-primary" style="float:left; margin-left:50px;margin:10px"
-                                href="./insert/addProduct.php">เพิ่มสินค้า</a>
-                    
-                            <table class="table table-bordered-md">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">ชื่อสินค้า </th>
-                                        <th scope="col ">รูป</th>
-                                        <th scope="col">จำนวน </th>
-                                        <th scope="col">ราคา </th>
-                                        <th scope="col">แก้ไข</th>
-                                        <th scope="col">ลบ</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php 
-                        $sql="SELECT * FROM Product WHERE P_Status='1' ORDER BY `P_Unit`  ASC " ;
-                        $query = mysqli_query($conn,$sql);
-                        $count=1;
-                        while($result = mysqli_fetch_array($query,MYSQLI_ASSOC)) {
-                    ?>
-                                    <tr>
-                                        <td scope="col"><?php echo $count;?></td>
-                                        <td scope="col"><?php echo $result['P_Name'];?></td>
-                                        <td scope="col"><img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>"
-                                                width="50px" height="50px"></td>
-                                        <td scope="col"><?php echo $result['P_Unit'];?></td>
-                                        <td scope="col"><?php echo $result['P_Price'];?> </td>
-                                        <td scope="col"> <a
-                                                href="./edit/editProduct.php?ID=<?php echo $result['P_ID'];?>">Edit</a></td>
-                                        <td scope="col"><a
-                                                href="./delProduct.php?ID=<?php echo $result['P_ID'] ;?>">Del</a></td>
-                                    </tr>
-                                    <?php 
-                    $count++;
-                    } ?>
-                                    </tbodt>
-                            </table>
-                        </div>
+                        <div class="main">
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link rel="stylesheet" href="./css/add.css">
+  <title>Document</title>
+</head>
+<script language=Javascript>
+        function Inint_AJAX() {
+           try { return new ActiveXObject("Msxml2.XMLHTTP");  } catch(e) {} //IE
+           try { return new ActiveXObject("Microsoft.XMLHTTP"); } catch(e) {} //IE
+           try { return new XMLHttpRequest();          } catch(e) {} //Native Javascript
+           alert("XMLHttpRequest not supported");
+           return null;
+        };
+
+        function dochange(src, val) {
+             var req = Inint_AJAX();
+             req.onreadystatechange = function () { 
+                  if (req.readyState==4) {
+                       if (req.status==200) {
+                            document.getElementById(src).innerHTML=req.responseText; //รับค่ากลับมา
+                       } 
+                  }
+             };
+             req.open("GET", "localtion.php?data="+src+"&val="+val); //สร้าง connection
+             req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8"); // set Header
+             req.send(null); //ส่งค่า
+        }
+        window.onLoad=dochange('province', -1);     
+</script>
+<body>
+  <div class="container register-form">
+    <div class="form">
+      <div class="note">
+        <p>ข้อมูลส่วนตัว</p>
+      </div>
+      <div class="form-content">
+        <form action="./Checkeditprofile.php" method="POST" enctype="multipart/form-data">
+          <div class="form-row">
+          <div class="col-md-12">
+            <div class="form-group">
+              <label for="inputEmail4">ชื่อผูใช้</label>
+              <input type="text" name="U_UserName" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_UserName']; ?>" required>
+            </div>
+            </div>
+            <div class="col-md-12">
+            <div class="form-group">
+              <label for="inputPassword4">รหัสผ่าน</label>
+              <input type="password" name="U_Password" class="form-control" id="inputPassword4" value="" >
+            </div>
+            </div>
+            <div class="col-md-12">
+            <div class="form-group">
+              <label for="inputEmail4">ชื่อ-นามสกุล</label>
+              <input type="text" name="U_Name" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Name']; ?>" required>
+            </div>
+            <div class="col-md-12">
+            <div class="form-group">
+              <label for="inputEmail4">อีเมล์</label>
+              <input type="email" name="Email" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Email']; ?>" required>
+            </div>
+            </div>
+            <div class="col-md-12">
+             <div class="form-group">
+            <div class="inputphoto">
+              <label for="Name">รูป</label>
+              <div class="">
+                <input type="hidden" id="text" cols="40" rows="4" name="image_text"></input>
+              </div>
+              <div>
+                <input type="file" name="image">
+              </div>
+          </div>
+          </div>
+          <div class="col-md-12">
+          <div class="form-group">
+            <label for="inputEmail4">ที่อยู่</label>
+            <input type="text" name="Home" class="form-control" id="inputEmail4" value="<?php echo $resultuser['Home']; ?>" required>
+          </div>
+          </div>
+          <div class="form-row">
+          <div class="form-group col-md-3">
+              <label for="inputZip">จังหวัด</label>
+              <span id="province">
+                    <select class="form-control" name="Province" >
+                        <option value="0" ><?php echo $resultuser['Province']; ?></option>
+                    </select>
+                </span>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="inputZip">อำเภอ</label>
+              <span id="amphur" >
+                    <select class='form-control' name="A_District" > 
+                        <option value="0"><?php echo $resultuser['A_District']; ?></option>
+                    </select>
+                </span>
+            </div>
+  
+              <div class="form-group col-md-3">
+              <label for="inputCity">ตำบล</label>
+              <span id="district">
+                    <select class='form-control' name="T_District" >
+                        <option value="0"><?php echo $resultuser['T_District']; ?></option>
+                    </select>
+                </span>
+            </div>
+            <div class="form-group col-md-3">
+              <label for="inputZip">ไปรษณีย์</label>
+              <input type="text" name="zip" class="form-control" id="inputZip" value="<?php echo $resultuser['zip']; ?>" required>
+            </div>
+            </div>
+          <div class="form-group">
+            <label for="inputEmail4">เบอร์โทรศัพย์</label>
+            <input type="text" name="U_Phone" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Phone']; ?>" required>
+          </div>
+          <div align="right" style="padding-top:50px;">
+            <button type="submit" class="btn btn-primary">สมัคร</button> <a href="../login/login.php" class="btn btn-primary"
+              style="margin-left:50px;">ย้อนกลับ</a>
+          </div>
+      </div>
+      </form>
+    </div>
+    </div>
+</body>
+
+</html>
+                                
+                        </div> <!-- main -->
+
                     </div>
 
                     <!-- Content Row -->
@@ -243,7 +319,6 @@ session_start();
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
-
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
@@ -258,21 +333,23 @@ session_start();
                 <div class="modal-body">คุณต้องการออกจากระบบ ?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
-                    <a class="btn btn-primary" href="login.html">ออกจากระบบ</a>
+                    <a class="btn btn-primary" href="../login/logout.php">ออกจากระบบ</a>
                 </div>
             </div>
         </div>
     </div>
     <style>
-        .maimMenu {
-            margin-left: 350px;
-            width: 850px;
+        .main {
+            margin-left: 400px;
+            width: auto;
+
+        }
+        .table{
+            background-color: white;
             padding: 50px;
-            margin-bottom: 50px;
-            background-color: #d2dfdfa8;
         }
     </style>
-    <!-- css mainProduct -->
+    
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -289,7 +366,18 @@ session_start();
     <!-- Page level custom scripts -->
     <script src="../js/demo/chart-area-demo.js"></script>
     <script src="../js/demo/chart-pie-demo.js"></script>
+<script>
+  $('.checkbox').click(function(){
+      var total = 0;
+    $('input.checkbox:checked').each(function() {
+        var tr = $(this).closest( 'tr' );
+        var price = tr.find(".price").text();
+        total = parseInt(total) + parseInt(price);
+    });
+    $("#alert").text(total.toFixed(2));
+  });
 
+</script>
 </body>
 
 </html>

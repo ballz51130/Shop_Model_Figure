@@ -7,7 +7,9 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -49,7 +51,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
             <div class="sidebar-heading">
                 จัดการสินค้า
             </div>
-         
+
             <!-- Nav Item - Tables -->
             <li class="nav-item">
                 <a class="nav-link" href="./Market.php">
@@ -64,10 +66,10 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
             <li class="nav-item">
                 <a class="nav-link" href="./status.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบ/คืนสินค้า</span></a>
+                    <span>ตรวจสอบสถานะสินค้า</span></a>
             </li>
-                  <li class="nav-item">
-                <a class="nav-link" href="./EditUser.php">
+            <li class="nav-item">
+                <a class="nav-link" href="#">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ข้อมูลลูกค้า</span></a>
             </li>
@@ -91,7 +93,8 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-                 
+
+
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -118,14 +121,15 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 </form>
                             </div>
                         </li>
-                   
+
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultuser['U_Name']; ?></span>
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultuser['U_Name']; ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="<?php echo '../photo/User/'.$resultuser['U_Photo']; ?>">
                             </a>
@@ -152,7 +156,6 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                         <h1 class="h3 mb-0 text-gray-800">รายระเอียด</h1>
@@ -160,101 +163,152 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     <!-- Content Row -->
                     <div class="row">
                         <div class="main">
-                            <?php 
-                                $sql ="SELECT * FROM orders
+                            <div class="table">
+
+                                <form action="./CheckReturnProduct.php" method="post" enctype="multipart/form-data">
+                                    <?php
+                                $sql ="SELECT  * FROM orders
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='ยืนยันการสั่งซื้อ' ";
-                                $query = mysqli_query($conn,$sql); // ใช้ $resultcheck
-                                $query2 = mysqli_query($conn,$sql); // while $result    
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND  C_ID = '".$_GET['C_ID']."'";
+                                $query = mysqli_query($conn,$sql);
+                                $query2 = mysqli_query($conn,$sql);
+                                $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
                                 $SUM =0;
                                 $AllSum = 0;
-                                $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
+                                $num = 1;
+                                $C_ID = $resultcheck['C_ID'];
                                 if($resultcheck>0){
                                 ?>
-                            <center>
-                                <h1> ตระกร้าสินค้า </h1>
-                            </center>
-                            <form method="post" id="SendForm" action="./FormPayment.php">
-                            <div class="table" align="center">
-                                <table class="table table-striped table-bordered">
-                                    <span style="float:left;">เลือกรายการชำระ</span>
-                                    <thead>
-                                        <tr>
-                                            <th scope="col"> No. </th>
-                                            <th scope="col"> ชื่อสินค้า </th>
-                                            <th scope="col"> จำนวน </th>
-                                            <th scope="col"> ราคา </th>
-                                            <th scope="col"> ยอดชำระ </th>
-                                            <th scope="col"> สถานะ </th>
-                                            <th scope="col"> จัดการ </th>
-                                            <th scope="col"> ลบรายการ </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                    <?php
-                                    while($result = mysqli_fetch_array($query2,MYSQLI_ASSOC)){
-                                    if($result['O_Status']=='ยืนยันการสั่งซื้อ'){
-                                     $bg="#8cff66"; 
-                                    }
-                            ?>              <td> <input type="checkbox" name="check[]" class="checkbox" value="<?php echo $result['O_ID'] ?>"> </td>
-                                            <td align="center"> <?php echo $result['P_Name'];?></td>
-                                            <td align="center"> <?php echo $result['OD_Unit']; ?> </td>
-                                            <td align="center"> <?php echo $result['P_Price']; ?>     </td>
-                                            <?php $SUM = $result['P_Price'] * $result['OD_Unit']; $AllSum = $AllSum + $SUM ;?>
-                                            <td align="center"><span class="price"><?php echo $SUM ;?></span></td>
-                                            <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?>
-                                            </td>
-                                            <td align="center"> <a href="./editOrder.php?P_Number=<?php echo $result['P_Number'] ?>&O_ID=<?php echo $result['O_ID'] ?>"><img
-                                                        src="../photo/edit.png" width="15px" hight="15px"></a>
-                                            </td>
-                                            <td align="center"> <a
-                                                    href="../order/Delete_Order.php?ID=<?php echo $result['O_ID'];?>"><img
-                                                        src="../photo/trash.png" width="15px" hight="15px"></a>
-                                            </td>
-                                        </tr>
-                                        <?php } ?>
-                                        </tbody>
-                                </table>
-                                <button type="button" id="checked" style="margin-left:800px;" class="btn btn-primary">ยืนยันการสั่งซื้อ</button>
-                                </form>
-                                <h4 align='right' style="width: 900px; margin-top:20px;">
-                                <p>รวม : <span id="alert">0</span></p>
-                                   </h4>
-                                <br>
+                                    <h3>เลือกรายการสินค้าที่ต้องการคืน</h3>
+                                    <table class="table table-bordered" align="center">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"> เลีอกสินค้า</th>
+                                                <th scope="col"> รายการ </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <?php
+                $unit = 0;
+                $sumproduct = 0;
+                while($result = mysqli_fetch_array($query2)){
+                    $unit = $unit + $result['OD_Unit'];
+                    $Sn_id = $result['Sn_id'];
+                    $sumproduct = $sumproduct+($result['P_Price']*$result['OD_Unit']);
+              ?>
+                    <td>
+                    <div class="form-group">
+                    <div class="row">
+                    <div class="col-md-1">
+                     <input type="checkbox" name="check[]" style="margin-left:-50px;" value="<?php echo $result['O_ID']?>">
+                     </div>
+                    </td>
+                      <td>
+                       <div class="col-md-3">
+                           <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>"width="80px" height="80px">
+                         </div>
+                         <div class="col-md-8" style="padding:3px;">
+                          <label for="" style="margin-top:2px;">ชื้อสินค้า :
+                           <?php echo $result['P_Name'] ;?></label> <br>
+                            <label for="" style="margin-top:2px;"> X <?php echo $result['OD_Unit'] ;?></label>
+                             <br>
+                             <label for="" style="margin-top:2px;">THB <?php echo $result['P_Price'] ;?> </label>
+                              </div>
                             </div>
-                            <br>
-                            <?php } else{
-                                    echo "<span style=' padding:300px; width:100px'>---- ไม่พบข้อมูล ----</span>" ;                                                                                                                                                           
-                                } ?>
+
+                        </div>
+                        </td>
+                        </tr>
+                        <?php 
+                        }
+                    }
+                    ?>
+                        </tbody>
+                        </table>
+                        <div class="detail">
+                            <label for="Re_Feedback">สาเหตุการคืนสินค้า</label>
+                            <select name="Re_feedback" class="form-control" required>
+                                <option value="" selected disabled>กรุณาเลีอกสาเหตุการคืนสืนค้า</option>
+                                <option class="form-control" value="1">ได้รับสินค้าไม่สมบูรณ์(สิ้นส่วนบางชิ้นหานไป)
+                                </option>
+                                <option class="form-control" value="2">ได้รับสินค้าไม่ตรงตามที่สั่ง</option>
+                                <option class="form-control" value="3">ได้รับสินค้าสภาพไม่ดี</option>
+                            </select>
                                 
-                            
-                        </div> <!-- main -->
+                            <div class="description">
+                            <label for="description"> รายระเอียด </label>
+                            <textarea name="Re_Detail" class="form-control" cols="30" rows="5"placeholder="รายระเอียดเพิ่มเติม(ไม่จำเป็นต้องระบุ)"></textarea>
+                            <label for="Re_Nameback">ธนคาร</label>
+                            <select name="Re_NameBank" class="form-control" required>
+                                <option value="" selected disabled>กรุณาเลีอกธนคาร</option>
+                                <option class="form-control" value="1">ได้รับสินค้าไม่สมบูรณ์(สิ้นส่วนบางชิ้นหานไป)
+                                </option>
+                                <option class="form-control" value="2">ได้รับสินค้าไม่ตรงตามที่สั่ง</option>
+                                <option class="form-control" value="3">ได้รับสินค้าสภาพไม่ดี</option>
+                            </select>
+                            <label for="bank">หมายเลขบัญชี </label>
+                            <input type="text" name="Re_NumberBank" class="form-control" required>
+                            <span>หากตรวจสอบสำเร็จทางร้านจะทำการโอนเงินคืนให้</span>
+                            </div>
+                            <div class="formphoto" >
+                            <label for="photo">รูปหลักฐาน *ใช้ในการตรวจสอบ</label>
+                            <p>กรุณาใส่ให้ครบ3รูป</p> 
+                        <div class="form-group row">
+                  <label for="inputtext" class="col-sm-3 col-form-label">รูปที่ 1</label>
+                  <div class="col-sm-2">
+                    <input type="file" name="image1">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputtext" class="col-sm-3 col-form-label">รูปที่ 2</label>
+                  <div class="col-sm-2">
+                    <input type="file" name="image2">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputtext" class="col-sm-3 col-form-label">รูปที่ 3</label>
+                  <div class="col-sm-2">
+                    <input type="file" name="image3">
+                  </div>
+                </div>
+                            </div>
+                        </div>
+
+                        <div class="buttons">
+                            <button type="submit" style="margin-left:150px;margin-top:50px;"
+                                class="btn btn-primary">ยืนยันการคืนสินค้า</button>
+
+                        </div>
 
                     </div>
-
-                    <!-- Content Row -->
-
-                </div>
-                <!-- /.container-fluid -->
+                    </form>
+                </div> <!-- main -->
 
             </div>
-            <!-- End of Main Content -->
 
-            <!-- Footer -->
-            <footer class="sticky-footer bg-white">
-                <div class="container my-auto">
-                    <div class="copyright text-center my-auto">
-                        <span>Power By &copy; Nititad 2020</span>
-                    </div>
-                </div>
-            </footer>
-            <!-- End of Footer -->
+            <!-- Content Row -->
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- /.container-fluid -->
+
+    </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+        <div class="container my-auto">
+            <div class="copyright text-center my-auto">
+                <span>Power By &copy; Nititad 2020</span>
+            </div>
+        </div>
+    </footer>
+    <!-- End of Footer -->
+
+    </div>
+    <!-- End of Content Wrapper -->
 
     </div>
     <!-- End of Page Wrapper -->
@@ -284,19 +338,33 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
     </div>
     <style>
         .main {
-            margin-left: 400px;
+            margin-left: 500px;
             width: auto;
-            padding: 50px;
-          
 
         }
-        .table{
-            
+
+        .table {
             background-color: white;
+            width: auto;
             padding: 50px;
         }
+
+        .form-group {
+            margin-left: 50px;
+        }
+
+        h3 {
+            margin-left: 50px;
+        }
+        .description{
+        margin-top:30px;
+        }
+        .formphoto{
+            margin-top:30px;
+            
+        }
     </style>
-    
+
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -313,39 +381,17 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
     <!-- Page level custom scripts -->
     <script src="../js/demo/chart-area-demo.js"></script>
     <script src="../js/demo/chart-pie-demo.js"></script>
-<script>
-  $('.checkbox').click(function(){
-      var total = 0;
-    $('input.checkbox:checked').each(function() {
-        var tr = $(this).closest( 'tr' );
-        var price = tr.find(".price").text();
-        total = parseInt(total) + parseInt(price);
-    });
-    $("#alert").text(total.toFixed(2));
-  });
-  
-</script>
-<script>
-        $(document).ready(function () {
-            $("#checked").click(function () {
-                var r = confirm('คุณต้องการชำระรายการสินค้าตามที่เลีือก?');
-                var radioValue = $("input[type='checkbox']:checked").val();
-                var txt;
-                if (r == true) {
-                    if (!radioValue) {
-                        txt = "กรุณาเลีอกสินค้า";
-                        //ta
-                        document.getElementById("alert").innerHTML = txt;
-                    }
-                    if (radioValue) {
-                        //form id 
-                        document.getElementById("SendForm").submit();
-                    }
-                }
+    <script>
+        $('.checkbox').click(function () {
+            var total = 0;
+            $('input.checkbox:checked').each(function () {
+                var tr = $(this).closest('tr');
+                var price = tr.find(".price").text();
+                total = parseInt(total) + parseInt(price);
             });
+            $("#alert").text(total.toFixed(2));
         });
     </script>
-
 </body>
 
 </html>

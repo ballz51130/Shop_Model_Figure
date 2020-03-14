@@ -53,6 +53,11 @@ session_start();
             <li class="nav-item">
                 <a class="nav-link" href="./MainProduct.php">
                     <i class="fas fa-fw fa-table"></i>
+                    <span>ตรวจสอบรายการ</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainProduct.php">
+                    <i class="fas fa-fw fa-table"></i>
                     <span>จัดการคลังสินค้า</span></a>
             </li>
             <li class="nav-item">
@@ -172,46 +177,57 @@ session_start();
                 <div class="container-fluid">
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="maimMenu">
-                            <a class="btn btn-primary" style="float:left; margin-left:50px;margin:10px"
-                                href="./insert/addProduct.php">เพิ่มสินค้า</a>
-                    
-                            <table class="table table-bordered-md">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">ชื่อสินค้า </th>
-                                        <th scope="col ">รูป</th>
-                                        <th scope="col">จำนวน </th>
-                                        <th scope="col">ราคา </th>
-                                        <th scope="col">แก้ไข</th>
-                                        <th scope="col">ลบ</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php 
-                        $sql="SELECT * FROM Product WHERE P_Status='1' ORDER BY `P_Unit`  ASC " ;
-                        $query = mysqli_query($conn,$sql);
-                        $count=1;
-                        while($result = mysqli_fetch_array($query,MYSQLI_ASSOC)) {
-                    ?>
-                                    <tr>
-                                        <td scope="col"><?php echo $count;?></td>
-                                        <td scope="col"><?php echo $result['P_Name'];?></td>
-                                        <td scope="col"><img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>"
-                                                width="50px" height="50px"></td>
-                                        <td scope="col"><?php echo $result['P_Unit'];?></td>
-                                        <td scope="col"><?php echo $result['P_Price'];?> </td>
-                                        <td scope="col"> <a
-                                                href="./edit/editProduct.php?ID=<?php echo $result['P_ID'];?>">Edit</a></td>
-                                        <td scope="col"><a
-                                                href="./delProduct.php?ID=<?php echo $result['P_ID'] ;?>">Del</a></td>
-                                    </tr>
-                                    <?php 
-                    $count++;
-                    } ?>
-                                    </tbodt>
-                            </table>
+                        <div class="product">
+                            
+                        <div class="table">
+                                <?php 
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,orders.C_ID,product.P_Name,product.P_Status,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
+                                ,count(orders.O_ID) AS Unit, sum(orderdetail.OD_Unit) AS OUnit FROM orders
+                                INNER JOIN product ON orders.P_Number = product.P_Number
+                                INNER JOIN user ON orders.U_ID = user.U_ID
+                                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                 WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by O_ID  ";
+                                $queryOrder = mysqli_query($conn,$sqlOrder);
+                                $check = mysqli_query($conn,$sqlOrder);
+                                $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);
+                                $num = 1;
+                                if($resultcheck>0){
+                                ?>
+                                <H3>สินค้าค้างส่ง</H3>
+                                <table  class="table table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col"> No</th>
+                                            <th scope="col"> รหัสสินค้า </th>
+                                            <th scope="col"> รายการ </th>
+                                            <th scope="col"> ชื่อ </th>
+                                            <th scope="col"> จำนวน </th>
+                                            <th scope="col"> สถานะ </th>
+                                            <th scope="col"> รายงาน</th>
+                                            <th scope="col"> จัดการ </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <?php  
+                                            while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
+                                            {?>
+                                            <td> <?php echo $num ?> </td>
+                                            <td> <?php echo $resultOrder['O_ID']; ?> </td>
+                                            <td> <?php echo $resultOrder['Unit'].'รายการ'; ?> </td>
+                                            <td> <?php echo $resultOrder['U_Name']; ?> </td>
+                                            <td> <?php echo $resultOrder['OUnit'].'ชิ้น'; ?> </td>
+                                            <td> <?php echo $resultOrder['O_Status']; ?> </td>
+                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>">Report</a></td>
+                                            <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&C_ID=<?php echo $resultOrder['C_ID'] ;?>">edit</a></td>
+                                        </tr>
+                                        <?php $num++; }?>
+                                    </tbody>
+                                </table>
+                                <?php } ?>  <!-- if $resultcheck -->
+                                <?php if($resultcheck="") { echo "<p>ไม่พบข้อมูล</p>";}?>
+                                
+                            </div>
                         </div>
                     </div>
 
@@ -263,16 +279,16 @@ session_start();
             </div>
         </div>
     </div>
-    <style>
-        .maimMenu {
-            margin-left: 350px;
-            width: 850px;
+<style>
+    .product {
+            margin-top:100px;
+            margin-left: 300px;
+            width: auto;
             padding: 50px;
-            margin-bottom: 50px;
-            background-color: #d2dfdfa8;
+            background-color: white;
+
         }
-    </style>
-    <!-- css mainProduct -->
+</style>
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -293,3 +309,10 @@ session_start();
 </body>
 
 </html>
+
+
+
+
+
+
+

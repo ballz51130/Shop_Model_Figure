@@ -54,7 +54,7 @@ if ( isset( $_POST['submit'] ) ) {
                     <div class="row">
                         <div class="col-md-10">
                             <div class="form-group">
-                                <input type="text" class="form-control" name="UserName"  placeholder="UserName / ชื่อผู้ใช้ *" value="" />
+                                <input type="text" class="form-control" name="UserName"  placeholder="UserName *" value="" />
                             </div>
                             <div class="form-group">
                                 <input type="text" class="form-control" name="Phone" placeholder="เบอร์โทรศัพย์ *" value="" />

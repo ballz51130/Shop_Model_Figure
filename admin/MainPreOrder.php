@@ -170,12 +170,13 @@ session_start();
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+
                     <!-- Content Row -->
                     <div class="row">
                         <div class="maimMenu">
-                            <a class="btn btn-primary" style="float:left; margin-left:50px;margin:10px"
-                                href="./insert/addProduct.php">เพิ่มสินค้า</a>
-                    
+                                <a class="btn btn-primary" style="float:left; margin-left:50px;margin:10px"
+                                href="./insert/addPreProduct.php">เพิ่มสินค้าPreOrder</a>
+                                <br>
                             <table class="table table-bordered-md">
                                 <thead>
                                     <tr>
@@ -190,7 +191,7 @@ session_start();
                                 </thead>
                                 <tbody>
                                     <?php 
-                        $sql="SELECT * FROM Product WHERE P_Status='1' ORDER BY `P_Unit`  ASC " ;
+                        $sql="SELECT * FROM Product  WHERE P_StatuS ='2' ORDER BY P_Unit  ASC " ;
                         $query = mysqli_query($conn,$sql);
                         $count=1;
                         while($result = mysqli_fetch_array($query,MYSQLI_ASSOC)) {

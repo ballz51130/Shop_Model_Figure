@@ -17,7 +17,7 @@ $sql = "SELECT * FROM product
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 	<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.1/js/bootstrap.min.js"></script>
 	<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
-	<link rel="stylesheet" href="./css/showProduct.css">
+	<link rel="stylesheet" href="../product/css/showProduct.css">
 	<title>Document</title>
 </head>
 
@@ -53,7 +53,9 @@ $sql = "SELECT * FROM product
 
 
 							</div>
-							<form action="../order/InsertOrder.php" method="post">
+                            <form action="./UpdateOrder.php" method="post">
+                            <input type="hidden" name="O_ID" value="<?php echo $_GET['O_ID']; ?>">
+                            <input type="hidden" name="P_Number" value="<?php echo $_GET['P_Number']; ?>">
 								<div class="col-md-7">
 									<div class="product-title">ชื่อสินค้า</div>
 									<div class="product-desc"><?php echo $result['P_Name'] ?></div>
@@ -71,10 +73,10 @@ $sql = "SELECT * FROM product
 									<?php } ?>
 									<label for="">จำนวน</label>
 									<?php if($result["P_Status"]==1){ ?>
-									<input type="number" name="quantity" class="form-control" value="1" min="0"
+									<input type="number" name="quantity" class="form-control" value="1" min="1"
 										max="<?php echo $result['P_Unit']; ?>" style="width:80px">
 									<?php } if($result["P_Status"]==2){ ?>
-									<input type="number" name="quantity" class="form-control" value="1" min="0"
+									<input type="number" name="quantity" class="form-control" value="1" min="1"
 										style="width:80px">
 									<?php  }?>
 									<hr>

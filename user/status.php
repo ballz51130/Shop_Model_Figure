@@ -94,20 +94,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
+            
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -176,11 +163,11 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     <div class="row">
                         <div class="main">
                             <?php
-                                $sql ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,O_Detail,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo,user.U_Name,orders.O_Status FROM orders
+                                $sql ="SELECT  * ,count(orders.O_ID) AS Unit,sum(orderdetail.OD_Unit) AS OUnit FROM orders
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอตรวจสอบ' ";
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='จัดส่งแล้ว' OR orders.O_Status ='ยืนยันการชำระเงิน'   group by C_ID";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
@@ -197,12 +184,11 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                     <thead>
                                         <tr>
                                             <th scope="col"> No</th>
-                                            <th scope="col"> ชื่อสินค้า </th>
+                                            <th scope="col"> รายการ </th>
                                             <th scope="col"> จำนวน </th>
-                                            <th scope="col"> ราคา </th>
-                                            <th scope="col"> ยอดชำระ </th>
                                             <th scope="col"> สถานะ </th>
-                                            <th scope="col">รายระเอียด</th>
+                                            <th scope="col">หมายเลขพัสดุ</th>
+                                            <th scope="col">ตรวจสอบ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -210,23 +196,27 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                             <?php
                                     while($result = mysqli_fetch_array($query2,MYSQLI_ASSOC)) {
    
-                                    if($result['O_Status']=='รอการชำระ'){
-                                    $bg="#FF6600";
+                                    if($result['O_Status'] =='ยืนยันการชำระเงิน'){
+                                    $bg="#66b3ff";
                                     }
+                                    if($result['O_Status'] =='จัดส่งแล้ว'){
+                                        $bg="#80ff80";
+                                        }
                                 ?>
                                             <td align="center"> <?php echo $num;?></td>
-                                            <td align="center"> <?php echo $result['P_Name'];?></td>
-                                            <td align="center"> <?php echo $result['OD_Unit']; ?> </td>
-                                            <td align="center"> <?php echo $result['P_Price']; ?> </td>
-                                            <?php $SUM = $result['P_Price'] * $result['OD_Unit']; $AllSum = $AllSum + $SUM ;?>
-                                            <td align="center"> <?php echo $SUM ;?> </td>
+                                            <td align="center"><a href="./listProduct.php?C_ID=<?php echo $result['C_ID']; ?>"> <?php echo $result['Unit'].' รายการ';?> </a> </td>
+                                            <td align="center"> <?php echo $result['OUnit'].' ชิ้น'; ?> </td>
                                             <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?>
+                                            <td align="center"><?php echo $result['O_EMS']; ?> </td>
                                             </td>
-                                            <td align="center"> </td>
-
+                                            <?php if($result['O_Status'] =='จัดส่งแล้ว'){ ?>
+                                            <td align="center"> <a href="./ConfGetProduct.php?C_ID=<?php echo $result['C_ID']; ?>">ตรวจสอบ</a> </td>
+                                            <?php  } else{
+                                               ?> <td></td> <?php
+                                            } ?>
                                         </tr>
-                                        <?php } ?>
-                                        </tbodt>
+                                        <?php $num ++; } ?>
+                                        </tbody>
                                 </table>
 
                             </div>

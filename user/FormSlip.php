@@ -64,6 +64,9 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                             <div class="col-md-9" style="padding:3px;">
                                 <label for="" style="margin-top:2px;">ชื้อสินค้า :
                                     <?php echo $result['P_Name'] ;?></label> <br>
+                                    <input type="hidden" name="product[]" value="<?php echo $result['P_Number'] ;?>">
+                                    <input type="hidden" name="unit[]" value="<?php echo $result['OD_Unit'] ;?>">
+                                    <input type="hidden" name="status[]" value="<?php echo $result['P_Status'] ;?>" >
                                 <label for="" style="margin-top:2px;"> X <?php echo $result['OD_Unit'] ;?></label>
                                 <br>
                                 <label for="" style="margin-top:2px;">THB <?php echo $result['P_Price'] ;?> </label>
@@ -86,12 +89,7 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                                 <li> รวมสินค้า : <span><?php echo$sumproduct ; ?></span> </li>
                                 <li>รวม : <span><?php echo $sumsends+$sumproduct;  ?></span> </li>
                                 </ul>
-
-                        
-                          
-                            
-                         
-                        </div>
+                      </div>
                         <div class="form-group col-md-12">
                             <div class="inputphoto">
                                 <label for="Name">รูปสริป</label>

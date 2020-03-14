@@ -1,10 +1,12 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
-$sqladd ="SELECT * FROM user WHERE U_ID= '".$_GET['U_ID']."'";
+$sqladd ="SELECT * FROM orders 
+INNER JOIN product ON product.P_Number = orders.P_Number
+INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+ WHERE U_ID= '".$_GET['U_ID']."' AND C_ID = '".$_GET['C_ID']."'";
 $queryadd = mysqli_query($conn,$sqladd);
-$resultadd = mysqli_fetch_array($queryadd)
- 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -281,16 +283,27 @@ $resultadd = mysqli_fetch_array($queryadd)
                         <!-- เนื้อหา -->
                         <div class="data">
                         <form action="./CheckEms.php" method="post">
-                        <input type="hidden" name="O_ID" value="<?php echo $_GET['O_ID']; ?>">
+                        <?php while($resultadd = mysqli_fetch_array($queryadd,MYSQLI_ASSOC)) { ?>
+                        <input type="hidden" name="O_ID[]" value="<?php echo $resultadd['O_ID']; ?>">
                             <div class="form-group">
                                 <div class="form-row col-md-12">
-                                <label for="inputEmail4">รหัสสินค้า <?php echo $_GET['O_ID']; ?></label>
+                                <label for="inputEmail4">รหัสสินค้า <?php echo $resultadd['O_ID']; ?></label>
+                                </div>
+                                <div class="form-row col-md-12">
+                                <label for="inputEmail4">ชื่อสินค้า : <?php echo $resultadd['P_Name']; ?></label>
+                                </div>
+                                <div class="form-row col-md-12">
+                                <label for="inputEmail4"> จำนวน <?php echo $resultadd['OD_Unit']; ?></label>
+                                </div>
+                                </div>
+                                
+                                
+                        <?php } ?>
                                     <div class="form-row col-md-12">
                                         <label for="inputEmail4">หมายเลข การส่งของ / EMS</label>
                                         <input type="hidden" name="form" class="form-control" value="address">
                                         <input type="text" name="EMS" class="form-control"value="">
                                     </div>
-                                </div>
                                 <div class="form-group col-md-12" style="padding-top:50px; margin-right:500px;">
                                     <a href="./reportSend.php?U_ID=<?php echo  $resultadd['U_ID'];?>">Report</a>
                                 </div>
@@ -303,7 +316,7 @@ $resultadd = mysqli_fetch_array($queryadd)
                                 </div>
                             </form>
 
-                        </div>
+                       
                     </div>
                     </div>
                     <!-- Content Row -->

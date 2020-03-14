@@ -42,13 +42,6 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                     </div>
 
                 </div>
-                <div class="list">
-                    <ul class="list">
-                        <a href="../index.php" class="btn btn-primary">หน้าแรก</a>
-                        <a href="#" class="btn btn-primary">Home</a>
-                        <a href="#" class="btn btn-primary">Home</a>
-                    </ul>
-                </div>
             </div> <!-- topmenu -->
             <div class="maimMenu">
                 <div class="rowmenu">

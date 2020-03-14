@@ -15,31 +15,56 @@
   <link rel="stylesheet" href="./css/add.css">
   <title>Document</title>
 </head>
+<script language=Javascript>
+        function Inint_AJAX() {
+           try { return new ActiveXObject("Msxml2.XMLHTTP");  } catch(e) {} //IE
+           try { return new ActiveXObject("Microsoft.XMLHTTP"); } catch(e) {} //IE
+           try { return new XMLHttpRequest();          } catch(e) {} //Native Javascript
+           alert("XMLHttpRequest not supported");
+           return null;
+        };
 
+        function dochange(src, val) {
+             var req = Inint_AJAX();
+             req.onreadystatechange = function () { 
+                  if (req.readyState==4) {
+                       if (req.status==200) {
+                            document.getElementById(src).innerHTML=req.responseText; //รับค่ากลับมา
+                       } 
+                  }
+             };
+             req.open("GET", "localtion.php?data="+src+"&val="+val); //สร้าง connection
+             req.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8"); // set Header
+             req.send(null); //ส่งค่า
+        }
+
+        window.onLoad=dochange('province', -1);     
+</script>
 <body>
   <div class="container register-form">
     <div class="form">
       <div class="note">
         <p>สมัครสมาชิก</p>
       </div>
+      
       <div class="form-content">
         <form action="./checkAddUser.php" method="POST" enctype="multipart/form-data">
           <div class="form-row">
             <div class="form-group">
               <label for="inputEmail4">ชื่อผูใช้</label>
-              <input type="text" name="U_UserName" class="form-control" id="inputEmail4">
+              <input type="text" name="U_UserName" class="form-control" id="inputEmail4" required>
             </div>
             <div class="form-group">
               <label for="inputPassword4">รหัสผ่าน</label>
-              <input type="password" name="U_Password" class="form-control" id="inputPassword4">
+              <input type="password" name="U_Password" class="form-control" id="inputPassword4" required>
             </div>
             <div class="form-group">
               <label for="inputEmail4">ชื่อ-นามสกุล</label>
-              <input type="text" name="U_Name" class="form-control" id="inputEmail4">
+              <input type="text" name="U_Name" class="form-control" id="inputEmail4" required>
             </div>
             <div class="form-group">
               <label for="inputEmail4">อีเมล์</label>
-              <input type="email" name="Email" class="form-control" id="inputEmail4">
+              <input type="email" name="Email" class="form-control" id="inputEmail4" required>
             </div>
             <div class="inputphoto">
               <label for="Name">รูป</label>
@@ -52,33 +77,45 @@
             </div>
           </div>
           <br>
+          
           <div class="form-group">
             <label for="inputEmail4">ที่อยู่</label>
-            <input type="text" name="Home" class="form-control" id="inputEmail4">
+            <input type="text" name="Home" class="form-control" id="inputEmail4" required>
           </div>
-          <div class="form-row">
-
-            <div class="form-group col-md-3">
-              <label for="inputCity">ตำบล</label>
-              <input type="text" name="T_District" class="form-control" id="inputCity">
+  
+          <div class="form-group col-md-3">
+              <label for="inputZip">จังหวัด</label>
+              <span id="province">
+                    <select class="form-control" name="Province" required>
+                        <option value="" >- เลือกจังหวัด -</option>
+                    </select>
+                </span>
             </div>
             <div class="form-group col-md-3">
               <label for="inputZip">อำเภอ</label>
-              <input type="text" name="A_District" class="form-control" id="inputZip">
+              <span id="amphur" >
+                    <select class='form-control' name="A_District" required> 
+                        <option value="">- เลือกอำเภอ -</option>
+                    </select>
+                </span>
             </div>
-            <div class="form-group col-md-3">
-              <label for="inputZip">จังหวัด</label>
-              <input type="text" name="Province" class="form-control" id="inputZip">
+  
+              <div class="form-group col-md-3">
+              <label for="inputCity">ตำบล</label>
+              <span id="district">
+                    <select class='form-control' name="T_District" required>
+                        <option value="">- เลือกตำบล -</option>
+                    </select>
+                </span>
             </div>
             <div class="form-group col-md-3">
               <label for="inputZip">ไปรษณีย์</label>
-              <input type="text" name="zip" class="form-control" id="inputZip">
+              <input type="text" name="zip" class="form-control" id="inputZip" required>
             </div>
-
-          </div>
+  
           <div class="form-group">
             <label for="inputEmail4">เบอร์โทรศัพย์</label>
-            <input type="text" name="U_Phone" class="form-control" id="inputEmail4">
+            <input type="text" name="U_Phone" class="form-control" id="inputEmail4" required>
           </div>
           <br>
           <div align="right" style="padding-top:50px;">

@@ -24,8 +24,8 @@
                     <div class="txtuser">
                         ชื่อผู้ใช้งาน
                     </div>
-                    <div class="wrap-inputuser" data-validate="Username is required">
-                        <input class="input100" type="text" name="username">
+                    <div class="wrap-inputuser" data-validate="Username is required" >
+                        <input class="input100" type="text" name="username" required>
                         <div class="focus-input"></div>
                     </div>
                     <div class="txtpass">
@@ -35,7 +35,7 @@
                         <div class="btn-show-pass">
                             <i class="fa fa-eye"></i>
                         </div>
-                        <input class="input100" type="password" name="pass">
+                        <input class="input100" type="password" name="pass" required>
                         <div class="focus-input100"></div>
                     </div>
                     <div class="flex-forgot">

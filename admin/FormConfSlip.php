@@ -385,7 +385,7 @@ $sqlre = "SELECT orders.O_ID,user.U_UserName,product.P_Name,P_ID,orderdetail.OD_
           </div>
           <div class="lable">
             <select id="cars" name="cars">	                                        
-              <option value="เตรียมจัดส่ง">ยืนยันการชำระเงิน</option>	           
+              <option value="ยืนยันการชำระเงิน">ยืนยันการชำระเงิน</option>	           
               <option value="ปฏิเสธการชำระเงิน">หมายเลขโอนไม่ถูกต้อง</option>	       
             </select>	          
           </div>	    
