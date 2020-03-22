@@ -4,6 +4,21 @@ session_start();
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
+
+if(isset($_POST['submit'])){
+    $sqlupdate= "UPDATE orders SET O_Status = 'รับของแล้ว' WHERE O_ID ='".$_POST['O_ID']."'";
+    $query = $conn->query($sqlupdate);
+    if($query){
+        echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
+        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL= ./status.php'>";
+        
+    }
+    else{
+        echo '<script type="text/javascript">alert("ไม่สำเร็จ");</script>';
+        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL= ./status.php'>";
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -169,22 +184,20 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND  C_ID = '".$_GET['C_ID']."'";
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_ID = '".$_GET['O_ID']."'";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
                                 $SUM =0;
                                 $AllSum = 0;
                                 $num = 1;
-                                $C_ID = $resultcheck['C_ID'];
                                 if($resultcheck>0){
                                 ?>
                                 <h3>รายการสั่งซื้อ</h3>
-
+                                            <p>*หากกดยอมรับของแล้วจะไม่สามารถคืนสินค้าได้</p>
                                 <table class="table table-bordered" align="center">
                                     <thead>
                                         <tr>
-                                            <th scope="col"> เลีอกสินค้า</th>
                                             <th scope="col"> รายการ </th>
                                         </tr>
                                     </thead>
@@ -199,18 +212,14 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     $Sn_id = $result['Sn_id'];
                     $sumproduct = $sumproduct+($result['P_Price']*$result['OD_Unit']);
               ?>
-                       <td>  <div class="form-group">
-                        
-                       <div class="col-md-1">
-                          <input type="checkbox" name="check[]" style="margin-left:-50px;" value="<?php echo $result['O_ID']?>">
-                            </div>
-                            </td>
+                       
                           <td>
                           <div class="col-md-3">
                                 <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>" width="80px"
                                     height="80px">
                             </div>
                             <div class="col-md-9" style="padding:3px;">
+                            <input type="hidden" name="O_ID" value=<?php echo $result['O_ID']; ?> >
                                 <label for="" style="margin-top:2px;">ชื้อสินค้า :
                                     <?php echo $result['P_Name'] ;?></label> <br>
                                 <label for="" style="margin-top:2px;"> X <?php echo $result['OD_Unit'] ;?></label>
@@ -235,11 +244,15 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                 
                             <?php }?> <!-- if check Product -->
                             <div class="buttons">
-                           <button type="submit" style="margin-left:200px ;position: absolute;" class="btn btn-primary" >ยืนยันการรับของ</button>
-                           <a href="./FormRetuen.php?C_ID=<?php echo $_GET['C_ID'] ?>" style="margin-left:70px;" class="btn btn-primary" >แจ้งคืน/สินค้า </a>
+                           <button type="submit" name="submit" style="margin-left:150px ;position: absolute;" class="btn btn-primary" >ยืนยันการรับของ</button>
+                           </form> 
+                           <form action="./FormRetuen.php" method="post">
+                           <input type="hidden" name="O_ID" value="<?php echo $_GET['O_ID'] ?>">
+                           <button type="submit" style="margin-left:30px ;position: absolute;" class="btn btn-primary" >แจ้งคืน/สินค้า</button>
+                           </form>
                            </div>
                             </div> 
-                            </form>   
+                             
                         </div> <!-- main -->
 
                     </div>

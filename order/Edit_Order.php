@@ -27,7 +27,6 @@ include '../conn/conn.php';
       </div>
     </div> <!-- topmenu -->
     <div class="maimMenu">
-ads
  </div>
   </div> <!-- contrinner-->
   <footer>

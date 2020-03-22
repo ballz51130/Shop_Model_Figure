@@ -3,6 +3,10 @@ include '../conn/conn.php';
 session_start(); 
 
 if ($_SESSION['User'] == 1){
+    // แสดงข้อมูล ADMIN
+    $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
+    $queryUser = mysqli_query($conn,$sqlUser);
+    $resultUser = mysqli_fetch_array($queryUser);
     //แจ้งเตือนสินค้ารอตรวจสอบ
     $sqlalertorder =$sqlOrder = "SELECT * FROM orders
     INNER JOIN product ON orders.P_Number = product.P_Number
@@ -101,17 +105,17 @@ if ($_SESSION['User'] == 1){
                รายการPreOrder
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="./MainPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainNumPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainNumPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>รายการPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainsendsPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainsendsPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
                     <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
@@ -126,12 +130,12 @@ if ($_SESSION['User'] == 1){
             </div>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="./ReturnOrder/MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>การสินค้าคืน</span></a>
+                    <span>รายการสินค้าคืน</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./insert/addProduct.php">
+                <a class="nav-link" href="./ManageUser.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
@@ -139,7 +143,7 @@ if ($_SESSION['User'] == 1){
                ยีนยันการรับของ
             </div>
             <li class="nav-item">
-                <a class="nav-link" href=" ">
+                <a class="nav-link" href="./MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>สถานะสินค้า</span></a>
             </li>
@@ -194,14 +198,15 @@ if ($_SESSION['User'] == 1){
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultUser['U_Name'] ;?></span>
                                 <img class="img-profile rounded-circle"
-                                    src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                                src="<?php echo '../photo/User/' . $resultUser['U_Photo']; ?>">
+                            
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID']; ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     จัดการข้อมูลส่วนตัว
                                 </a>
@@ -221,16 +226,12 @@ if ($_SESSION['User'] == 1){
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
-                    <!-- Page Heading -->
-                    
-
                     <!-- Content Row -->
                     <div class="row">
                         <div class="product">
                             <div class="table">
                                 <?php 
-                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,orders.C_ID,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status,status_tb.St_Name
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,orders.C_ID,product.P_Name,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status,status_tb.St_Name,count(orders.O_ID) AS Unit 
                                 FROM orders
                                 INNER JOIN product ON orders.P_Number = product.P_Number
                                 INNER JOIN user ON orders.U_ID = user.U_ID
@@ -248,14 +249,9 @@ if ($_SESSION['User'] == 1){
                                     <thead class="thead-dark">
                                         <tr>
                                             <th scope="col"> No</th>
-                                            <th scope="col"> รหัสสินค้า </th>
-                                            <th scope="col"> ชื่อสินค้า </th>
                                             <th scope="col"> ชื่อ </th>
-                                            <th scope="col"> สถานะสินค้า </th>
                                             <th scope="col"> จำนวน </th>
                                             <th scope="col"> ราคา </th>
-                                            <th scope="col"> ยอดชำระ </td>
-                                            <th scope="col"> สถานะ </th>
                                             <th scope="col"> จัดการ </th>
                                         </tr>
                                     </thead>
@@ -266,14 +262,8 @@ if ($_SESSION['User'] == 1){
                                             while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
                                             {?>
                                             <td> <?php echo $num ?> </td>
-                                            <td> <?php echo $resultOrder['P_Number']; ?> </td>
-                                            <td> <?php echo $resultOrder['P_Name']; ?> </td>
                                             <td> <?php echo $resultOrder['U_Name']; ?> </td>
-                                            <td> <?php echo $resultOrder['St_Name']; ?> </td>
-                                            <td> <?php echo $resultOrder['OD_Unit']; ?> </td>
-                                            <td> <?php echo $resultOrder['P_Price']; ?> </td>
-                                            <?php $SumOrder = $resultOrder['OD_Unit'] * $resultOrder['P_Price']; ?>
-                                            <td> <?php echo $SumOrder ; ?> </td>
+                                            <td> <?php echo $resultOrder['Unit'].'รายการ'; ?> </td>
                                             <td> <?php echo $resultOrder['O_Status']; ?> </td>
                                             <td> <a href="./FormConfSlip.php?C_ID=<?php echo $resultOrder['C_ID'];?>">edit</a></td>
                                         </tr>
@@ -338,8 +328,8 @@ if ($_SESSION['User'] == 1){
     </div>
 <style>
     .product {
-            margin-top:100px;
-            margin-left: 300px;
+            margin-top:50px;
+            margin-left: 500px;
             width: auto;
             padding: 50px;
         }

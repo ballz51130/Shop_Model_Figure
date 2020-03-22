@@ -43,10 +43,9 @@ $numrow = 1;
 $num_per_page = 6;
 $start_from = ($page - 1) * $num_per_page;
 // แสดงจำนวนที่ค้าอยู่ในสต้อกของลูกค้า แสดงใน button ตระกร้าสินค้า
-$sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='ยืนยันการสั่งซื้อ' or orders.O_Status ='รอการชำระ' ";
+$sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND (O_Status='ยืนยันการสั่งซื้อ' or orders.O_Status ='รอการชำระ') ";
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
-echo $sqlN;
 $sqlU = "SELECT `U_ID`,U_Name,`U_Photo`,'' FROM `user` WHERE U_ID = '" . $_SESSION['User'] . "' ";
 $queryU = mysqli_query($conn, $sqlU);
 $resultU = mysqli_fetch_array($queryU);
@@ -116,14 +115,16 @@ $resultU = mysqli_fetch_array($queryU);
 
       <div class="col-lg-3">
       
-        <h1 class="my-4">Shop</h1>
+        <h3 class="my-4">ประเภทสินค้า</h3>
         <div class="list-group">
-               <a href="./index.php?list=Vocaloid"><img src="./photo/model/Miku.jpg"><p>Hatsune Miku</p></a> 
-                <a href="./index.php?list=Gundum"><img src="./photo/model/ms.jpg"><p>Hatsune Miku</p></a> 
-                <a href="./index.php?list=sakura-wars"><img src="./photo/model/kh.jpg"><p>Hatsune Miku</p></a> 
-                <a href="./index.php?list=Gundum"><img src="./photo/model/p7.jpg"><p>Hatsune Miku</p></a> 
-                <a href="./index.php?list=Gundum"><img src="./photo/model/rt.jpg"><p>Hatsune Miku</p></a> 
-                <a href="./Preorder.php"><img src="./photo/model/preorder.jpg"><p>Hatsune Miku</p></a> 
+        <?php $sqllist="SELECT * FROM group_tb WHERE G_Status = 1 " ;
+        $querylist = $conn->query($sqllist);
+       while($resultlist = $querylist->fetch_array()){
+
+        ?>
+       <a href="./index.php?list=<?php echo $resultlist['G_Name'];?>"><img src="<?php echo'./photo/model/'.$resultlist['G_Photo']; ?>"><p style="color:black;" ><?php echo $resultlist['G_Name']; ?></p></a> 
+       <?php } ?>
+       <a href="./Preorder.php"><img src="./photo/model/preorder.jpg"><p></p></a> 
         </div>
 
       </div>
@@ -164,7 +165,7 @@ if ($list == "")
 {
     $sql = "SELECT * FROM product
         INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
-        ORDER BY  RAND ( )   limit $start_from,$num_per_page ";
+         limit $start_from,$num_per_page ";
     $result = mysqli_query($conn, $sql);
     if (mysqli_num_rows($result) > 0) // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
     {
@@ -314,7 +315,9 @@ if ($list <> "")
 } // if $list
 if ($numrow == "")
 {
+    echo "<div>";
     echo '<p class="textp">ขออภัยสินค้ายังไม่เข้า</p>';
+    echo "</div>";
 }
 
 ?>

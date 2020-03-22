@@ -29,4 +29,5 @@ if ($query){
     echo "<script type='text/javascript'>alert('ERROR');</script>";
     echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ../login/login.php'>";
   }
+  $mysqli->close();
 ?>

@@ -171,7 +171,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND  C_ID = '".$_GET['C_ID']."'";
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND  orders.O_ID = '".$_POST['O_ID']."'";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
@@ -185,7 +185,6 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                     <table class="table table-bordered" align="center">
                                         <thead>
                                             <tr>
-                                                <th scope="col"> เลีอกสินค้า</th>
                                                 <th scope="col"> รายการ </th>
                                             </tr>
                                         </thead>
@@ -199,16 +198,10 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     $Sn_id = $result['Sn_id'];
                     $sumproduct = $sumproduct+($result['P_Price']*$result['OD_Unit']);
               ?>
-                    <td>
-                    <div class="form-group">
-                    <div class="row">
-                    <div class="col-md-1">
-                     <input type="checkbox" name="check[]" style="margin-left:-50px;" value="<?php echo $result['O_ID']?>">
-                     </div>
-                    </td>
                       <td>
+                          <input type="hidden" name="O_ID" value="<?php echo $_POST['O_ID'] ?>">
                        <div class="col-md-3">
-                           <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>"width="80px" height="80px">
+                       <a href="../product/ShowProduct.php?P_Number=<?php echo $result['P_Number'] ;?>" target="_blank"> <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>"width="80px" height="80px"> </a>
                          </div>
                          <div class="col-md-8" style="padding:3px;">
                           <label for="" style="margin-top:2px;">ชื้อสินค้า :
@@ -232,7 +225,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                             <label for="Re_Feedback">สาเหตุการคืนสินค้า</label>
                             <select name="Re_feedback" class="form-control" required>
                                 <option value="" selected disabled>กรุณาเลีอกสาเหตุการคืนสืนค้า</option>
-                                <option class="form-control" value="1">ได้รับสินค้าไม่สมบูรณ์(สิ้นส่วนบางชิ้นหานไป)
+                                <option class="form-control" value="1">ได้รับสินค้าไม่สมบูรณ์(สิ้นส่วนบางชิ้นหายไป)
                                 </option>
                                 <option class="form-control" value="2">ได้รับสินค้าไม่ตรงตามที่สั่ง</option>
                                 <option class="form-control" value="3">ได้รับสินค้าสภาพไม่ดี</option>
@@ -244,14 +237,17 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                             <label for="Re_Nameback">ธนคาร</label>
                             <select name="Re_NameBank" class="form-control" required>
                                 <option value="" selected disabled>กรุณาเลีอกธนคาร</option>
-                                <option class="form-control" value="1">ได้รับสินค้าไม่สมบูรณ์(สิ้นส่วนบางชิ้นหานไป)
-                                </option>
-                                <option class="form-control" value="2">ได้รับสินค้าไม่ตรงตามที่สั่ง</option>
-                                <option class="form-control" value="3">ได้รับสินค้าสภาพไม่ดี</option>
+                                <?php  $sql = "SELECT * FROM bank_tb WHERE BK_Type ='show' ";  
+                            $result = mysqli_query($conn, $sql);   
+                         while($row = mysqli_fetch_array($result)){ ?>
+                                <option class="form-control" value="<?php echo $row['Bk_Name']; ?>"><?php echo $row['Bk_Name'] ;?></option>
+                         <?php }?>
+                             
                             </select>
                             <label for="bank">หมายเลขบัญชี </label>
                             <input type="text" name="Re_NumberBank" class="form-control" required>
-                            <span>หากตรวจสอบสำเร็จทางร้านจะทำการโอนเงินคืนให้</span>
+                            <span>*หากตรวจสอบสำเร็จทางร้านจะทำการโอนเงินคืนให้</span>
+                            <p>*ระยะเวลาการคืนเงินเป็นไปตามธนคารผู้ให้บริการ</p>
                             </div>
                             <div class="formphoto" >
                             <label for="photo">รูปหลักฐาน *ใช้ในการตรวจสอบ</label>
@@ -259,19 +255,19 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                         <div class="form-group row">
                   <label for="inputtext" class="col-sm-3 col-form-label">รูปที่ 1</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image1">
+                    <input type="file" name="image1" required>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-3 col-form-label">รูปที่ 2</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image2">
+                    <input type="file" name="image2" required>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-3 col-form-label">รูปที่ 3</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image3">
+                    <input type="file" name="image3" required>
                   </div>
                 </div>
                             </div>

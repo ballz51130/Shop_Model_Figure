@@ -1,6 +1,35 @@
 <?php 
-include '../conn/conn.php';
+include '../../conn/conn.php';
 session_start(); 
+    // แสดงข้อมูล ADMIN
+    $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
+    $queryUser = mysqli_query($conn,$sqlUser);
+    $resultUser = mysqli_fetch_array($queryUser);
+    //แจ้งเตือนสินค้ารอตรวจสอบ
+    $sqlalertorder =$sqlOrder = "SELECT * FROM orders
+    INNER JOIN product ON orders.P_Number = product.P_Number
+    INNER JOIN user ON orders.U_ID = user.U_ID
+    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
+     WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
+    $queryalertorder = mysqli_query($conn,$sqlalertorder);
+    $resultalertorder = mysqli_num_rows($queryalertorder);
+     //แจ้งเตือนสินค้าค้างส่ง
+     $sqlalertsend = "SELECT * FROM orders
+    INNER JOIN product ON orders.P_Number = product.P_Number
+    INNER JOIN user ON orders.U_ID = user.U_ID
+    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='1' Group by C_ID  ";
+    $queryalertsend = mysqli_query($conn,$sqlalertsend);
+    $resultalertsend = mysqli_num_rows($queryalertsend);
+    // แจ้เตือนรายการสินค้า PREORDER
+    $sqlalertPreOrder = "SELECT * FROM orders
+    INNER JOIN product ON orders.P_Number = product.P_Number
+    INNER JOIN user ON orders.U_ID = user.U_ID
+    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
+    $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
+    $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
 
 ?>
 <!DOCTYPE html>
@@ -16,13 +45,13 @@ session_start();
 
     <title>Admin</title>
     <!-- Custom fonts for this template-->
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -35,7 +64,7 @@ session_start();
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./Mainadmin.php">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../Mainadmin.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                 </div>
                 <div class="sidebar-brand-text mx-3">Admin</div>
@@ -47,37 +76,49 @@ session_start();
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                รายการสินค้า
+                รายการตรวจสอบ
             </div>
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="./MainProduct.php">
+                <a class="nav-link" href="../Mainadmin.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบรายการ</span></a>
+                    <span>รายการสั่งซื้อ </span><?php if($resultalertorder >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertorder  ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainProduct.php">
+                <a class="nav-link" href="../Mainsends.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>สินค้าค้างส่ง</span><?php if($resultalertsend >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertsend  ?></span><?php } else{ } ?></a></a>
+            </li>
+            <div class="sidebar-heading">
+               รายการสินค้า
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainProduct.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดการคลังสินค้า</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./Mainadmin.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>สินค้ารอตรวจสอบ</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./Mainsends.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>สินค้าค้างส่ง</span></a>
             </li>
             <div class="sidebar-heading">
                รายการPreOrder
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="./MainPreOrder.php">
+                <a class="nav-link" href="../MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดสินค้าPreOrder</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainNumPreOrder.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>รายการPreOrder</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainsendsPreOrder.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
+                    <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
+            </li>
+           
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -92,11 +133,18 @@ session_start();
                     <span>การสินค้าคืน</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./insert/addProduct.php">
+                <a class="nav-link" href="../ManageUser.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
-
+            <div class="sidebar-heading">
+               ยีนยันการรับของ
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainStatus.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>สถานะสินค้า</span></a>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -131,7 +179,7 @@ session_start();
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
                                         <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
+                                            placeholder="Search for../..." aria-label="Search"
                                             aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
@@ -148,19 +196,20 @@ session_start();
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultUser['U_Name'] ;?></span>
                                 <img class="img-profile rounded-circle"
-                                    src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                                src="<?php echo '../../photo/User/' . $resultUser['U_Photo']; ?>">
+                            
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="../../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID']; ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     จัดการข้อมูลส่วนตัว
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="../login/logout.php" data-toggle="modal"
+                                <a class="dropdown-item" href="../../login/logout.php" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     ออกจากระบบ
@@ -181,15 +230,15 @@ session_start();
                             
                         <div class="table">
                                 <?php 
-                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,orders.C_ID,product.P_Name,product.P_Status,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
-                                ,count(orders.O_ID) AS Unit, sum(orderdetail.OD_Unit) AS OUnit FROM orders
-                                INNER JOIN product ON orders.P_Number = product.P_Number
-                                INNER JOIN user ON orders.U_ID = user.U_ID
-                                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                 WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by O_ID  ";
+                                $sqlOrder = "SELECT  * FROM returnorder 
+                                INNER JOIN returnorderdetail ON returnorderdetail.O_ID = returnorder.O_ID
+                                    INNER JOIN user ON user.U_ID = returnorder.U_ID
+                                    INNER JOIN orders ON orders.O_ID = returnorder.O_ID
+                                    INNER JOIN product ON product.P_Number = orders.P_Number
+                                ";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);
                                 $check = mysqli_query($conn,$sqlOrder);
-                                $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);
+                                $resultcheck = mysqli_num_rows($check) ;
                                 $num = 1;
                                 if($resultcheck>0){
                                 ?>
@@ -199,12 +248,11 @@ session_start();
                                         <tr>
                                             <th scope="col"> No</th>
                                             <th scope="col"> รหัสสินค้า </th>
-                                            <th scope="col"> รายการ </th>
+                                            <th scope="col"> ชื่อสินค้า </th>
                                             <th scope="col"> ชื่อ </th>
-                                            <th scope="col"> จำนวน </th>
                                             <th scope="col"> สถานะ </th>
-                                            <th scope="col"> รายงาน</th>
-                                            <th scope="col"> จัดการ </th>
+                                            <th scope="col"> สาเหตุ </th>
+                                            <th scope="col"> ตรวจสอบ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -214,12 +262,23 @@ session_start();
                                             {?>
                                             <td> <?php echo $num ?> </td>
                                             <td> <?php echo $resultOrder['O_ID']; ?> </td>
-                                            <td> <?php echo $resultOrder['Unit'].'รายการ'; ?> </td>
+                                            <td>  <a href="../../product/ShowProduct.php?P_Number=<?php echo $resultOrder['P_Number']; ?>" target="_blank"><?php echo $resultOrder['P_Name']; ?> </a></td>
                                             <td> <?php echo $resultOrder['U_Name']; ?> </td>
-                                            <td> <?php echo $resultOrder['OUnit'].'ชิ้น'; ?> </td>
-                                            <td> <?php echo $resultOrder['O_Status']; ?> </td>
-                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>">Report</a></td>
-                                            <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&C_ID=<?php echo $resultOrder['C_ID'] ;?>">edit</a></td>
+                                            <td> <?php echo $resultOrder['Re_Status']; ?> </td>
+                                             <?php   
+                                             $status = "";
+                                             if($resultOrder['Re_feedback']==1){
+                                                   $status = "ได้รับสินค้าไม่สมบูรณ์(สิ้นส่วนบางชิ้นหายไป)" ;
+                                             }
+                                             if($resultOrder['Re_feedback']==2){
+                                                $status = "ได้รับสินค้าไม่ตรงตามที่สั่ง" ;
+                                            }
+                                            if($resultOrder['Re_feedback']==3){
+                                                $status = "ได้รับสินค้าสภาพไม่ดี" ;
+                                                }
+                                                ?>
+                                            <td> <?php echo $status; ?> </td>
+                                            <td> <a href="../ReturnOrder/ShowReturndetail.php?Re_ID=<?php echo $resultOrder['Re_ID'] ;?>">ตรวจสอบ</a></td>
                                         </tr>
                                         <?php $num++; }?>
                                     </tbody>
@@ -290,21 +349,21 @@ session_start();
         }
 </style>
     <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
-    <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="../../vendor/jquery/jquery.min.js"></script>
+    <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../js/sb-admin-2.min.js"></script>
+    <script src="../../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="../vendor/chart.js/Chart.min.js"></script>
+    <script src="../../vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="../js/demo/chart-area-demo.js"></script>
-    <script src="../js/demo/chart-pie-demo.js"></script>
+    <script src="../../js/demo/chart-area-demo.js"></script>
+    <script src="../../js/demo/chart-pie-demo.js"></script>
 
 </body>
 

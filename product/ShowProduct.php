@@ -7,6 +7,23 @@ $sql = "SELECT * FROM product
         WHERE product.P_Number='".$_GET['P_Number']."'";
    	$query = mysqli_query($conn, $sql);
 	$result = mysqli_fetch_array($query);
+	if (isset($_SESSION['login']))
+{
+    $_SESSION['login'] = $_SESSION['login'];
+}
+else
+{
+    $_SESSION['login'] = 0;
+    $_SESSION['User'] = 0;
+}
+if (isset($_SESSION['User']))
+{
+    $_SESSION['User'] = $_SESSION['User'];
+}
+else
+{
+    $_SESSION['User'] = 0;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">

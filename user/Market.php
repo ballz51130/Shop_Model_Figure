@@ -161,11 +161,11 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     <div class="row">
                         <div class="main">
                             <?php 
-                                $sql ="SELECT * FROM orders
+                                $sql ="SELECT  * FROM orders
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='ยืนยันการสั่งซื้อ' ";
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='ยืนยันการสั่งซื้อ'";
                                 $query = mysqli_query($conn,$sql); // ใช้ $resultcheck
                                 $query2 = mysqli_query($conn,$sql); // while $result    
                                 $SUM =0;
@@ -232,6 +232,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 
                             
                         </div> <!-- main -->
+                        
 
                     </div>
 

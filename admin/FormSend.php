@@ -296,14 +296,15 @@ $queryadd = mysqli_query($conn,$sqladd);
                                 <label for="inputEmail4"> จำนวน <?php echo $resultadd['OD_Unit']; ?></label>
                                 </div>
                                 </div>
-                                
-                                
-                        <?php } ?>
-                                    <div class="form-row col-md-12">
+                                <div class="form-row col-md-12">
                                         <label for="inputEmail4">หมายเลข การส่งของ / EMS</label>
                                         <input type="hidden" name="form" class="form-control" value="address">
-                                        <input type="text" name="EMS" class="form-control"value="">
+                                        <input type="text" name="EMS[]" class="form-control"value="">
                                     </div>
+                                    <br>
+                                     
+                        <?php } ?>
+                                   
                                 <div class="form-group col-md-12" style="padding-top:50px; margin-right:500px;">
                                     <a href="./reportSend.php?U_ID=<?php echo  $resultadd['U_ID'];?>">Report</a>
                                 </div>

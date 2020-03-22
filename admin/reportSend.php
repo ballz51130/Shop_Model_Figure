@@ -59,7 +59,7 @@ $mpdf->WriteHTML( '<div style="top:390px;left:130px;position:absolute; width:100
 $mpdf->WriteHTML( '<div style="top:424px;left:140px;position:absolute;">'.$PickDate.'</div>');
 $mpdf->WriteHTML( '<div style="top:453px;left:140px;position:absolute;">'.'</div>');
 //Payment
-$mpdf->WriteHTML( '<div style="top:450px;left:470px;position:absolute;">'.'ไม่ต้องเก็บเงิน'.'</div>');
+$mpdf->WriteHTML( '<div style="top:450px;left:470px;position:absolute;">'.''.'</div>');
 
 
 $mpdf->Output();

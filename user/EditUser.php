@@ -1,9 +1,16 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+if(isset($_GET['U_ID'])){
+    $sqluser="SELECT * FROM user WHERE U_ID='".$_GET['U_ID']."'";
+    $queryuser = mysqli_query($conn,$sqluser);
+    $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
+}
+else{
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -167,7 +174,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
   <title>Document</title>
 </head>
 <script language=Javascript>
-        function Inint_AJAX() {
+ function Inint_AJAX() {
            try { return new ActiveXObject("Msxml2.XMLHTTP");  } catch(e) {} //IE
            try { return new ActiveXObject("Microsoft.XMLHTTP"); } catch(e) {} //IE
            try { return new XMLHttpRequest();          } catch(e) {} //Native Javascript
@@ -190,7 +197,6 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
         }
         window.onLoad=dochange('province', -1);     
 </script>
-<body>
   <div class="container register-form">
     <div class="form">
       <div class="note">
@@ -198,10 +204,12 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
       </div>
       <div class="form-content">
         <form action="./Checkeditprofile.php" method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="U_ID" value="<?php echo $resultuser['U_ID'];?>">
           <div class="form-row">
           <div class="col-md-12">
             <div class="form-group">
               <label for="inputEmail4">ชื่อผูใช้</label>
+              
               <input type="text" name="U_UserName" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_UserName']; ?>" required>
             </div>
             </div>
@@ -276,16 +284,23 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
             <input type="text" name="U_Phone" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Phone']; ?>" required>
           </div>
           <div align="right" style="padding-top:50px;">
-            <button type="submit" class="btn btn-primary">สมัคร</button> <a href="../login/login.php" class="btn btn-primary"
-              style="margin-left:50px;">ย้อนกลับ</a>
+            <button type="submit" class="btn btn-primary">บันทึก</button> 
           </div>
       </div>
       </form>
-    </div>
-    </div>
-</body>
+      <!-- con-md-12 -->
+      </div>
+                <!-- form row -->
+             </div>
+             <!-- form content -->
 
-</html>
+                </div>
+                <!-- FORM -->
+                </div>
+
+                    </div>  
+                    <!-- container register-form -->
+
                                 
                         </div> <!-- main -->
 

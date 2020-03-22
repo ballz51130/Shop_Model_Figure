@@ -117,8 +117,8 @@ session_start();
 
                             <input type="hidden" name="check[]" value="<?php echo $result['O_ID']?>">
                             <div class="col-md-3">
-                                <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>" width="80px"
-                                    height="80px">
+                            <a href="../product/ShowProduct.php?P_Number=<?php echo $result['P_Number'] ;?>" target="_blank"><img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>" width="80px"
+                                    height="80px"> </a>
                             </div>
 
                             <div class="col-md-9" style="padding:3px;">

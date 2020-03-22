@@ -2,6 +2,33 @@
 include '../conn/conn.php';
 session_start(); 
 
+if ($_SESSION['User'] == 1){
+    //แจ้งเตือนสินค้ารอตรวจสอบ
+    $sqlalertorder =$sqlOrder = "SELECT * FROM orders
+    INNER JOIN product ON orders.P_Number = product.P_Number
+    INNER JOIN user ON orders.U_ID = user.U_ID
+    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
+     WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
+    $queryalertorder = mysqli_query($conn,$sqlalertorder);
+    $resultalertorder = mysqli_num_rows($queryalertorder);
+     //แจ้งเตือนสินค้าค้างส่ง
+     $sqlalertsend = "SELECT * FROM orders
+    INNER JOIN product ON orders.P_Number = product.P_Number
+    INNER JOIN user ON orders.U_ID = user.U_ID
+    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='1' Group by C_ID  ";
+    $queryalertsend = mysqli_query($conn,$sqlalertsend);
+    $resultalertsend = mysqli_num_rows($queryalertsend);
+    // แจ้เตือนรายการสินค้า PREORDER
+    $sqlalertPreOrder = "SELECT * FROM orders
+    INNER JOIN product ON orders.P_Number = product.P_Number
+    INNER JOIN user ON orders.U_ID = user.U_ID
+    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
+    $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
+    $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -47,23 +74,28 @@ session_start();
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                รายการสินค้า
+                รายการตรวจสอบ
             </div>
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="./MainProduct.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>จัดการคลังสินค้า</span></a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="./Mainadmin.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สินค้ารอตรวจสอบ</span></a>
+                    <span>รายการสั่งซื้อ </span><?php if($resultalertorder >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertorder  ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./Mainsends.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สินค้าค้างส่ง</span></a>
+                    <span>สินค้าค้างส่ง</span><?php if($resultalertsend >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertsend  ?></span><?php } else{ } ?></a></a>
+            </li>
+            <div class="sidebar-heading">
+               รายการสินค้า
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainProduct.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>จัดการคลังสินค้า</span></a>
             </li>
             <div class="sidebar-heading">
                รายการPreOrder
@@ -73,6 +105,18 @@ session_start();
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดสินค้าPreOrder</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainNumPreOrder.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>รายการPreOrder</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainsendsPreOrder.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
+                    <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
+            </li>
+           
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -91,7 +135,14 @@ session_start();
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
-
+            <div class="sidebar-heading">
+               ยีนยันการรับของ
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href=" ">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>สถานะสินค้า</span></a>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -170,49 +221,49 @@ session_start();
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="maimMenu">
-                                <a class="btn btn-primary" style="float:left; margin-left:50px;margin:10px"
-                                href="./insert/addPreProduct.php">เพิ่มสินค้าPreOrder</a>
-                                <br>
-                            <table class="table table-bordered-md">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">ชื่อสินค้า </th>
-                                        <th scope="col ">รูป</th>
-                                        <th scope="col">จำนวน </th>
-                                        <th scope="col">ราคา </th>
-                                        <th scope="col">แก้ไข</th>
-                                        <th scope="col">ลบ</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <?php 
-                        $sql="SELECT * FROM Product  WHERE P_StatuS ='2' ORDER BY P_Unit  ASC " ;
-                        $query = mysqli_query($conn,$sql);
-                        $count=1;
-                        while($result = mysqli_fetch_array($query,MYSQLI_ASSOC)) {
-                    ?>
-                                    <tr>
-                                        <td scope="col"><?php echo $count;?></td>
-                                        <td scope="col"><?php echo $result['P_Name'];?></td>
-                                        <td scope="col"><img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>"
-                                                width="50px" height="50px"></td>
-                                        <td scope="col"><?php echo $result['P_Unit'];?></td>
-                                        <td scope="col"><?php echo $result['P_Price'];?> </td>
-                                        <td scope="col"> <a
-                                                href="./edit/editProduct.php?ID=<?php echo $result['P_ID'];?>">Edit</a></td>
-                                        <td scope="col"><a
-                                                href="./delProduct.php?ID=<?php echo $result['P_ID'] ;?>">Del</a></td>
-                                    </tr>
-                                    <?php 
-                    $count++;
-                    } ?>
-                                    </tbodt>
-                            </table>
+                        <div class="product">
+                            <div class="table">
+                                <?php 
+                                $sqlUser = "SELECT *  FROM user ";
+                                $queryUser = mysqli_query($conn,$sqlUser);
+                                $check = mysqli_query($conn,$sqlUser);
+                                $num = 1;
+                                ?>
+                                <H3>สินค้ารอตรวจสอบการชำระเงิน</H3>
+                                <table  class="table table-hover">
+                                    <thead class="thead-dark">
+                                        <tr>
+                                            <th scope="col"> No</th>
+                                            <th scope="col"> UserID </th>
+                                            <th scope="col"> ชื่อ-สุกล </th>
+                                            <th scope="col"> รูป </th>
+                                            <th scope="col"> สถานะ </th>
+                                            <th scope="col"> จัดการ </th>
+                                            <th scope="col"> ลบ </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <?php 
+                                            
+                                            while($resultUser = mysqli_fetch_array($queryUser,MYSQLI_ASSOC))
+                                            {?>
+                                            <td> <?php echo $num ?> </td>
+                                            <td> <?php echo $resultUser['U_ID']; ?> </td>
+                                            <td> <?php echo $resultUser['U_Name']; ?> </td>
+                                            <td>  <img src="<?php echo '../photo/User/'.$result['U_Photo'];?>" width="50px" height="50px"> </td>
+                                            <td> <?php echo $resultUser['U_Status']; ?> </td>
+                                            <td> <a href="../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID'];?>">edit</a></td>
+                                            <td> <a href="./FormConfSlip.php?C_ID=<?php echo $resultUser['C_ID'];?>">del</a></td>
+                                        </tr>
+                                        <?php $num++; }?>
+                                    </tbody>
+                                </table>
+                                    
+                            </div>
+                           
                         </div>
                     </div>
 
@@ -259,21 +310,22 @@ session_start();
                 <div class="modal-body">คุณต้องการออกจากระบบ ?</div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
-                    <a class="btn btn-primary" href="login.html">ออกจากระบบ</a>
+                    <a class="btn btn-primary" href="../login/logout.php">ออกจากระบบ</a>
                 </div>
             </div>
         </div>
     </div>
-    <style>
-        .maimMenu {
-            margin-left: 350px;
-            width: 850px;
+<style>
+    .product {
+            margin-top:10px;
+            margin-left: 300px;
+            width: 1000px;
             padding: 50px;
-            margin-bottom: 50px;
-            background-color: #d2dfdfa8;
         }
-    </style>
-    <!-- css mainProduct -->
+        .table{
+            padding: 50px;
+        }
+</style>
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -291,6 +343,13 @@ session_start();
     <script src="../js/demo/chart-area-demo.js"></script>
     <script src="../js/demo/chart-pie-demo.js"></script>
 
+<?php 
+}
+else {
+    echo "กรุณาทำการ Login ก่อน ";
+    echo "<META HTTP-EQUIV='Refresh' CONTENT ='2;URL=../login/login.php'>";
+}
+?>
 </body>
 
 </html>

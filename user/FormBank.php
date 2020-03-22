@@ -20,18 +20,6 @@ session_start(); // คำสั่ง เปิดใช้งาน session
     
     <body>
         <div class="head_bar">
-            <div class="manu_login">
-                <ul>
-                    <li> <?php if($_SESSION['login'] == ""){ ?>
-                        <a href="../login/login.php">Login</a>
-                        <?php }  if($_SESSION['login'] == 1){?>
-                    <li><?php echo$resultU['U_FName'];?></li>
-                    <li> <a href="">MY ACCOUNT </a></li>
-                    <li><a href="../login/logout.php">Logout</a></li>
-                    <?php } ?>
-                    </li>
-                </ul>
-            </div>
         </div>
         <div class="contriner">
             <div class="topmenu">
@@ -49,7 +37,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                         <form action="../order/UserConfSends.php" method="post" enctype="multipart/form-data">
                             <H4>วิธีการชำระเงิน</H4>
                             <?php 
-                            $sql = "SELECT * FROM bank_tb WHERE BK_Type ='show' ";  
+                            $sql = "SELECT * FROM bank_tb WHERE BK_Type ='1' ";  
                             $result = mysqli_query($conn, $sql);   
                          while($row = mysqli_fetch_array($result)){ ?>
                             <div class="bank">
@@ -89,8 +77,8 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                         <div class="form-group">
                             <input type="hidden" name="check[]" value="<?php echo $result['O_ID']?>">
                             <div class="col-md-3">
-                                <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>" width="80px"
-                                    height="80px">
+                            <a href="../product/ShowProduct.php?P_Number=<?php echo $result['P_Number'] ;?>" target="_blank"><img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>" width="80px"
+                                    height="80px"> </a>
                             </div>
                             <div class="col-md-9" style="padding:3px;">
                                 <label for="" style="margin-top:2px;">ชื้อสินค้า :

@@ -34,7 +34,7 @@ $resultbk = mysqli_fetch_array($queryproduct2);
             <div class="row-home">
                 <!-- โลโก้ -->
                 <div class="col-md-3" id="homeicon" style="margin-left:px5;">
-                    <a href="./user.php"><img src="../photo/home.png" alt="" width="40px" hight="40px"></a>
+                    <a href="./Market.php"><img src="../photo/home.png" alt="" width="40px" hight="40px"></a>
                 </div>
             </div>
         </div> <!-- topmenu -->
@@ -56,10 +56,10 @@ $resultbk = mysqli_fetch_array($queryproduct2);
               ?>
                         <div class="form-group">
                             <input type="hidden" name="check[]" value="<?php echo $result['O_ID']?>">
-                            
                             <div class="col-md-3">
-                                <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>" width="80px"
-                                    height="80px">
+                            
+                            <a href="../product/ShowProduct.php?P_Number=<?php  echo $result['P_Number'] ;?>" target="_blank"><img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>" width="80px"
+                                    height="80px"> </a>
                             </div>
                             <div class="col-md-9" style="padding:3px;">
                                 <label for="" style="margin-top:2px;">ชื้อสินค้า :
@@ -97,7 +97,7 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                                     <input type="hidden" id="text" cols="40" rows="4" name="image_text"></input>
                                 </div>
                                 <div>
-                                    <input type="file" name="image">
+                                    <input type="file" name="image" accept=".png, .jpg, .jpeg" required>
                                 </div>
                                 <p > *เพื่อความรวดเร็วในการตรวจสอบ</p>
                             </div>
@@ -106,7 +106,7 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="inputCity">จากธนคาร</label>
-                                    <select id="FormBank" name="FormBank" class="form-control">
+                                    <select id="FormBank" name="FormBank" class="form-control" required>
                                         <option class="form-control" value="">
                                             <?php while($rowbk= mysqli_fetch_array($querybk)) {?>
                                         <option class="form-control" value="<?php echo $rowbk['Bk_Name'];?>">
@@ -115,15 +115,15 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                                         <?php } ?>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-8">
+                                <br>
                                     <label for="inputZip">ถึงธนคาร</label>
-                                    <select id="ToBank" name="ToBank" class="form-control">
                                             <?php while($rowbk2= mysqli_fetch_array($querybk2)) {?>
-                                        <option class="form-control" value="<?php echo $rowbk2['Bk_Name'];?>">
-                                            <?php echo $rowbk2['Bk_Name'];?>
-                                        </option>
+                                            <input type="hidden" name="ToBank" value="<?php echo $resultbk['Bk_Name']; ?>">
+                                        <label for=""> <?php echo $rowbk2['Bk_Name'] ?></label> <br>
+                                        <label for=""> <?php echo 'ชื่อ&nbsp;'.$rowbk2['U_Name'] ?></label>
+                                        <label for=""> <?php echo 'เลขบัณชี&nbsp;'.$rowbk2['Bk_Number'] ?></label>
                                         <?php } ?>
-                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -131,13 +131,13 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                             <h5 style="margin-top:35px;position: absolute;margin-left:200px">*เพื่อใช้ในการตรวจสอบ</h5>
                             <div class="form-row col-md-6">
                                 <label for="inputEmail4">เลขท้ายบัญชี4ตัวสุดท้าย</label>
-                                <input type="text" name="Sp_LastNum" class="form-control" value="" style="width:150px">
+                                <input type="text" pattern="\d*" maxlength="4" name="Sp_LastNum" class="form-control" value="" style="width:150px">
                             </div>
                         </div>
                         <div class="form-group col-md-12">
                             <div class="form-row col-md-4">
                                 <label for="inputEmail4">จำนวน</label>
-                                <input type="text" name="Sp_Price" class="form-control" value="">
+                                <input type="number" pattern="^\d*(\.\d{0,2})?$"name="Sp_Price" class="form-control" value="" required>
                             </div>
                         </div>
                         <div class="form-group col-md-12">
@@ -146,13 +146,13 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                             <div class="form-row col-md-4">
                                 <label for="inputEmail4">เวลาที่โอน</label>
                                 <input name="time" class="form-control" type="time" ng-model="time"
-                                    ng-change="ChangeTime()">
+                                    ng-change="ChangeTime()" required>
                             </div>
                         </div>
                         <div class="form-group col-md-12">
                             <div class="form-row col-md-4">
                                 <label for="inputEmail4">วันที่โอน</label>
-                                <input type="date" name="date" class="form-control" value="" />
+                                <input type="date" name="date" class="form-control" value=""  required/>
                             </div>
                         </div>
                     </div>

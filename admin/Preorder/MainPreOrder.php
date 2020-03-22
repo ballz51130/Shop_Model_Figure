@@ -1,5 +1,5 @@
 <?php 
-include '../conn/conn.php';
+include '../../conn/conn.php';
 session_start(); 
 
 ?>
@@ -16,13 +16,13 @@ session_start();
 
     <title>Admin</title>
     <!-- Custom fonts for this template-->
-    <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
         rel="stylesheet">
 
     <!-- Custom styles for this template-->
-    <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
 
@@ -51,22 +51,17 @@ session_start();
             </div>
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="./MainProduct.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบรายการ</span></a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="./MainProduct.php">
+                <a class="nav-link" href="../MainProduct.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดการคลังสินค้า</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./Mainadmin.php">
+                <a class="nav-link" href="../Mainadmin.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>สินค้ารอตรวจสอบ</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./Mainsends.php">
+                <a class="nav-link" href="../Mainsends.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>สินค้าค้างส่ง</span></a>
             </li>
@@ -92,7 +87,7 @@ session_start();
                     <span>การสินค้าคืน</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./insert/addProduct.php">
+                <a class="nav-link" href="../insert/addProduct.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
@@ -160,7 +155,7 @@ session_start();
                                     จัดการข้อมูลส่วนตัว
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="../login/logout.php" data-toggle="modal"
+                                <a class="dropdown-item" href="../../login/logout.php" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     ออกจากระบบ
@@ -175,61 +170,49 @@ session_start();
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="product">
-                            
-                        <div class="table">
-                                <?php 
-                                $sqlOrder = "SELECT *
-                                ,sum(orderdetail.OD_Unit) AS OUnit,MONTH(Pre_Month) as PreMonth FROM orders
-                                 INNER JOIN product ON orders.P_Number = product.P_Number
-                                 INNER JOIN user ON orders.U_ID = user.U_ID
-                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                 INNER JOIN preorder ON preorder.P_Number = orders.P_Number
-                                  WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' AND MONTH(Pre_Month) = '".$_GET['PreMonth']."'   GROUP BY  product.P_Number  ";
-                                $queryOrder = mysqli_query($conn,$sqlOrder);
-                                $check = mysqli_query($conn,$sqlOrder);
-                                $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);
-                                $num = 1;
-                                if($resultcheck>0){
-                                ?>
-                                <H3>สรุปPreOrder </H3>
-                                <table  class="table table-hover">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th scope="col"> No</th>
-                                            <th scope="col"> รหัสสินค้า </th>
-                                            <th scope="col"> ชื่อ </th>
-                                            <th scope="col"> จำนวน </th>
-                                            <th scope="col"> วันที่ปิดการสั่ง </th>
-                                            <th scope="col"> วันที่ของมาถึง</th>
-                                            <th scope="col"> รายระเอียด </th>
-                                            <th scope="col"> จัดการ </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <?php  
-                                            while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
-                                            {?>
-                                            
-                                            <td> <?php echo $num ?> </td>
-                                            <td> <?php echo $resultOrder['P_Number']; ?> </td>
-                                            <td> <?php echo $resultOrder['P_Name']; ?> </td>
-                                            <td> <?php echo $resultOrder['OUnit'].'ชิ้น'; ?> </td>
-                                            <td> <?php $DatePre = date("d-m-Y", strtotime($resultOrder['Pre_Month'])); echo $DatePre ; ?> </td>
-                                            <td> <?php $DateComin = date("d-m-Y", strtotime($resultOrder['Pre_Comin'])); echo $DateComin ;?> </td>
-                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>">รายระเอียด</a></td>
-                                            <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&C_ID=<?php echo $resultOrder['C_ID'] ;?>">edit</a></td>
-                                        </tr>
-                                        <?php $num++; }?>
-                                    </tbody>
-                                </table>
-                                <?php } ?>  <!-- if $resultcheck -->
-                                <?php if($resultcheck="") { echo "<p>ไม่พบข้อมูล</p>";}?>
-                                
-                            </div>
+                        <div class="maimMenu">
+                                <a class="btn btn-primary" style="float:left; margin-left:50px;margin:10px"
+                                href="../insert/addPreProduct.php">เพิ่มสินค้าPreOrder</a>
+                                <br>
+                            <table class="table table-bordered-md">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">ชื่อสินค้า </th>
+                                        <th scope="col ">รูป</th>
+                                        <th scope="col">จำนวน </th>
+                                        <th scope="col">ราคา </th>
+                                        <th scope="col">แก้ไข</th>
+                                        <th scope="col">ลบ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php 
+                        $sql="SELECT * FROM Product  WHERE P_StatuS ='2' ORDER BY P_Unit  ASC " ;
+                        $query = mysqli_query($conn,$sql);
+                        $count=1;
+                        while($result = mysqli_fetch_array($query,MYSQLI_ASSOC)) {
+                    ?>
+                                    <tr>
+                                        <td scope="col"><?php echo $count;?></td>
+                                        <td scope="col"><?php echo $result['P_Name'];?></td>
+                                        <td scope="col"><img src="<?php echo '../../photo/Order/'.$result['P_Photo'] ;?>"
+                                                width="50px" height="50px"></td>
+                                        <td scope="col"><?php echo $result['P_Unit'];?></td>
+                                        <td scope="col"><?php echo $result['P_Price'];?> </td>
+                                        <td scope="col"> <a
+                                                href="../edit/editProduct.php?ID=<?php echo $result['P_ID'];?>">Edit</a></td>
+                                        <td scope="col"><a
+                                                href="../delProduct.php?ID=<?php echo $result['P_ID'] ;?>">Del</a></td>
+                                    </tr>
+                                    <?php 
+                    $count++;
+                    } ?>
+                                    </tbodt>
+                            </table>
                         </div>
                     </div>
 
@@ -281,40 +264,33 @@ session_start();
             </div>
         </div>
     </div>
-<style>
-    .product {
-            margin-top:100px;
-            margin-left: 300px;
-            width: auto;
+    <style>
+        .maimMenu {
+            margin-left: 350px;
+            width: 850px;
             padding: 50px;
-            background-color: white;
-
+            margin-bottom: 50px;
+            background-color: #d2dfdfa8;
         }
-</style>
+    </style>
+    <!-- css mainProduct -->
     <!-- Bootstrap core JavaScript-->
-    <script src="../vendor/jquery/jquery.min.js"></script>
+    <script src="../../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
     <!-- Core plugin JavaScript-->
-    <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
+    <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
 
     <!-- Custom scripts for all pages-->
-    <script src="../js/sb-admin-2.min.js"></script>
+    <script src="../../js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="../vendor/chart.js/Chart.min.js"></script>
+    <script src="../../vendor/chart.js/Chart.min.js"></script>
 
     <!-- Page level custom scripts -->
-    <script src="../js/demo/chart-area-demo.js"></script>
-    <script src="../js/demo/chart-pie-demo.js"></script>
+    <script src="../../js/demo/chart-area-demo.js"></script>
+    <script src="../../js/demo/chart-pie-demo.js"></script>
 
 </body>
 
 </html>
-
-
-
-
-
-
-

@@ -181,15 +181,16 @@
   }
 
   .product-info .DetailPhoto  img {
-	width:500px;
-	height:500px;
+	height: auto;
+	width: auto;
+	max-width: 500px;
+	max-height: 500px;
 	margin-left: 200px;
 	margin-top: 10px;
 	box-shadow: 2px 2px 2px gray;
 
   }
 
-  
   
   footer {
     position: relative;

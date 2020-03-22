@@ -1,7 +1,19 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+if(isset($_GET['Bk_id']))  {   
+    $sql = "DELETE FROM bank_tb WHERE Bk_id = '".$_GET['Bk_id']."'";
+    $query= $conn->query($sql);
+    if($query){
+        echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
+        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./MainBank.php'>";
 
+    }
+    else{
+        echo '<script type="text/javascript">alert("ไม่สำเร็จ");</script>';
+        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./MainBank.php'>";
+    }
+}  
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -50,11 +62,6 @@ session_start();
                 รายการสินค้า
             </div>
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link" href="./MainProduct.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบรายการ</span></a>
-            </li>
             <li class="nav-item">
                 <a class="nav-link" href="./MainProduct.php">
                     <i class="fas fa-fw fa-table"></i>
@@ -177,59 +184,49 @@ session_start();
                 <div class="container-fluid">
                     <!-- Content Row -->
                     <div class="row">
-                        <div class="product">
-                            
-                        <div class="table">
-                                <?php 
-                                $sqlOrder = "SELECT *
-                                ,sum(orderdetail.OD_Unit) AS OUnit,MONTH(Pre_Month) as PreMonth FROM orders
-                                 INNER JOIN product ON orders.P_Number = product.P_Number
-                                 INNER JOIN user ON orders.U_ID = user.U_ID
-                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                 INNER JOIN preorder ON preorder.P_Number = orders.P_Number
-                                  WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' AND MONTH(Pre_Month) = '".$_GET['PreMonth']."'   GROUP BY  product.P_Number  ";
-                                $queryOrder = mysqli_query($conn,$sqlOrder);
-                                $check = mysqli_query($conn,$sqlOrder);
-                                $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);
-                                $num = 1;
-                                if($resultcheck>0){
-                                ?>
-                                <H3>สรุปPreOrder </H3>
-                                <table  class="table table-hover">
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th scope="col"> No</th>
-                                            <th scope="col"> รหัสสินค้า </th>
-                                            <th scope="col"> ชื่อ </th>
-                                            <th scope="col"> จำนวน </th>
-                                            <th scope="col"> วันที่ปิดการสั่ง </th>
-                                            <th scope="col"> วันที่ของมาถึง</th>
-                                            <th scope="col"> รายระเอียด </th>
-                                            <th scope="col"> จัดการ </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <?php  
-                                            while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
-                                            {?>
-                                            
-                                            <td> <?php echo $num ?> </td>
-                                            <td> <?php echo $resultOrder['P_Number']; ?> </td>
-                                            <td> <?php echo $resultOrder['P_Name']; ?> </td>
-                                            <td> <?php echo $resultOrder['OUnit'].'ชิ้น'; ?> </td>
-                                            <td> <?php $DatePre = date("d-m-Y", strtotime($resultOrder['Pre_Month'])); echo $DatePre ; ?> </td>
-                                            <td> <?php $DateComin = date("d-m-Y", strtotime($resultOrder['Pre_Comin'])); echo $DateComin ;?> </td>
-                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>">รายระเอียด</a></td>
-                                            <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&C_ID=<?php echo $resultOrder['C_ID'] ;?>">edit</a></td>
-                                        </tr>
-                                        <?php $num++; }?>
-                                    </tbody>
-                                </table>
-                                <?php } ?>  <!-- if $resultcheck -->
-                                <?php if($resultcheck="") { echo "<p>ไม่พบข้อมูล</p>";}?>
-                                
-                            </div>
+                        <div class="maimMenu">
+                            <a class="btn btn-primary" style="float:left; margin-left:50px;margin:10px"
+                                href="./insert/addBank.php">เพิ่มธนคาร</a>
+                    
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">ประเภท</th>
+                                        <th scope="col ">รูป</th>
+                                        <th scope="col ">สถานะ</th>
+                                        <th scope="col">แก้ไข</th>
+                                        <th scope="col">ลบ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        <?php 
+                        $sql="SELECT * FROM bank_tb" ;
+                        $query = mysqli_query($conn,$sql);
+                        $count=1;
+                        while($result = mysqli_fetch_array($query,MYSQLI_ASSOC)) {
+                            if($result['Bk_Type']==1){
+                                $status = "Show" ;
+                               }else{
+           
+                                 $status = "Hidden";}
+                        ?>
+                                    <tr>
+                                        <td scope="col"><?php echo $count;?></td>
+                                        <td scope="col"><?php echo $result['Bk_Name'];?></td>
+                                        <td scope="col"><img src="<?php echo '../photo/'.$result['Bk_img'] ;?>"
+                                                width="50px" height="50px"></td>
+                                        <td scope="col"><?php echo $status;?></td>
+                                        <td scope="col"> <a
+                                                href="./edit/EditBank.php?Bk_id=<?php echo $result['Bk_id'];?>">Edit</a></td>
+                                        <td scope="col"><a
+                                                href="./MainBank.php?Bk_id=<?php echo $result['Bk_id'] ;?>">Del</a></td>
+                                    </tr>
+                                    <?php 
+                    $count++;
+                    } ?>
+                                    </tbodt>
+                            </table>
                         </div>
                     </div>
 
@@ -281,16 +278,17 @@ session_start();
             </div>
         </div>
     </div>
-<style>
-    .product {
-            margin-top:100px;
-            margin-left: 300px;
-            width: auto;
+    <style>
+        .maimMenu {
+            margin-left: 350px;
+            margin-top:80px;
+            width: 850px;
             padding: 50px;
-            background-color: white;
-
+            margin-bottom: 50px;
+            background-color: #d2dfdfa8;
         }
-</style>
+    </style>
+    <!-- css mainProduct -->
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -311,10 +309,3 @@ session_start();
 </body>
 
 </html>
-
-
-
-
-
-
-

@@ -347,7 +347,7 @@ $resultimg = mysqli_fetch_array($queryimg);
                       <?php $sqlstatus = "SELECT * FROM group_tb " ;
                             $querystatus = mysqli_query($conn,$sqlstatus);
                       ?>
-                      <option class="form-control" value="<?php echo $result['P_Group'] ?>">---
+                      <option class="form-control" value="<?php echo $result['P_Group'] ?>"><?php echo $result['P_Group'] ;?>
                         <?php while($rowstatus= mysqli_fetch_array($querystatus)) {?>
                       <option class="form-control" value="<?php echo $rowstatus['G_Name'];?>">
                         <?php echo $rowstatus['G_Name'];?>
@@ -355,7 +355,7 @@ $resultimg = mysqli_fetch_array($queryimg);
                       <?php } ?>
                     </select>
                     <div class="addStatus" style="position: absolute; margin-left:200px;margin-top:-30px;">
-                    <a href="">เพิ่ม</a>
+                    <a href="../MainProductGrop.php">เพิ่ม</a>
                     </div>
                     </div>
                 </div>

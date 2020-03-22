@@ -121,9 +121,9 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 </form>
                             </div>
                         </li>
-                   
+                      
                         <div class="topbar-divider d-none d-sm-block"></div>
-
+                        <a href="" class="nav-item dropdown no-arrow" style="margin-top:20px;list-style: none;">ติดต่อเรา</a>
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -163,11 +163,11 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     <div class="row">
                         <div class="main">
                             <?php
-                                $sql ="SELECT  * ,count(orders.O_ID) AS Unit,sum(orderdetail.OD_Unit) AS OUnit FROM orders
+                                $sql ="SELECT  * FROM orders
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='จัดส่งแล้ว' OR orders.O_Status ='ยืนยันการชำระเงิน'   group by C_ID";
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND (orders.O_Status ='จัดส่งแล้ว' OR orders.O_Status ='ยืนยันการชำระเงิน' OR orders.O_Status ='รอตรวจสอบ' or orders.O_Status ='ปฏิเสธการชำระเงิน' or orders.O_Status ='รับของแล้ว' )";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
@@ -184,11 +184,14 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                     <thead>
                                         <tr>
                                             <th scope="col"> No</th>
-                                            <th scope="col"> รายการ </th>
+                                            <th scope="col"> รหัสสั่งซื้อ </th>
+                                            <th scope="col"> ชื่อสินค้า </th>
                                             <th scope="col"> จำนวน </th>
                                             <th scope="col"> สถานะ </th>
                                             <th scope="col">หมายเลขพัสดุ</th>
-                                            <th scope="col">ตรวจสอบ</th>
+                                            <th scope="col">ตรวจสอบ/คืนสินค้า</th>
+                                            <th scope="col">หมายเหตุ</th>
+                                            <th scope="col">ลบ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -202,20 +205,36 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                     if($result['O_Status'] =='จัดส่งแล้ว'){
                                         $bg="#80ff80";
                                         }
+                                        if($result['O_Status'] =='รอตรวจสอบ'){
+                                            $bg="#2E75F0";
+                                            }
+                                            if($result['O_Status'] =='ปฏิเสธการชำระเงิน'){
+                                                $bg="#F7573C ";
+                                                }
+                                                if($result['O_Status'] =='รับของแล้ว'){
+                                                    $bg="";
+                                                    }
                                 ?>
                                             <td align="center"> <?php echo $num;?></td>
-                                            <td align="center"><a href="./listProduct.php?C_ID=<?php echo $result['C_ID']; ?>"> <?php echo $result['Unit'].' รายการ';?> </a> </td>
-                                            <td align="center"> <?php echo $result['OUnit'].' ชิ้น'; ?> </td>
-                                            <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?>
+                                            <td align="center"> <?php echo $result['O_ID'];?></td>
+                                            <td align="center"><a href="./listProduct.php?O_ID=<?php echo $result['O_ID']; ?>"> <?php echo $result['P_Name'];?> </a> </td>
+                                            <td align="center"> <?php echo $result['OD_Unit'].' ชิ้น'; ?> </td>
+                                            <td bgcolor="<?=$bg;?>" align="center" style="color:black"> <b><?php echo $result['O_Status'];?></b> </td>
                                             <td align="center"><?php echo $result['O_EMS']; ?> </td>
-                                            </td>
                                             <?php if($result['O_Status'] =='จัดส่งแล้ว'){ ?>
-                                            <td align="center"> <a href="./ConfGetProduct.php?C_ID=<?php echo $result['C_ID']; ?>">ตรวจสอบ</a> </td>
+                                            <td align="center"> <a href="./ConfGetProduct.php?O_ID=<?php echo $result['O_ID']; ?>">ตรวจสอบ/คืนสินค้า</a> </td>
                                             <?php  } else{
-                                               ?> <td></td> <?php
+                                               ?> <td> </td> <?php
                                             } ?>
+                                              <td align="center"> <?php echo $result['O_Detail'];?></td>
+                                            <?php  if($result['O_Status'] =='ปฏิเสธการชำระเงิน'){
+                                               ?>  <td align="center"> <a href="./FormSlip.php?C_ID=<?php echo $result['C_ID']; ?>">ติดต่อเรา</a> </td>
+                                            <?php  } else{
+                                               ?> <td> </td> <?php
+                                            } ?>
+                                           
                                         </tr>
-                                        <?php $num ++; } ?>
+                                        <?php $num++; } ?>
                                         </tbody>
                                 </table>
 
@@ -277,7 +296,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
     </div>
     <style>
         .main {
-            margin-left: 400px;
+            margin-left: 250px;
             width: auto;
 
         }

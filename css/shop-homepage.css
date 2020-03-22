@@ -1,8 +1,4 @@
-/*!
- * Start Bootstrap - Shop Homepage (https://startbootstrap.com/template-overviews/shop-homepage)
- * Copyright 2013-2019 Start Bootstrap
- * Licensed under MIT (https://github.com/BlackrockDigital/startbootstrap-shop-homepage/blob/master/LICENSE)
- */
+
 body {
   padding-top: 56px;
 }
@@ -42,6 +38,9 @@ body {
   text-decoration:none;
   color: #999;
 }
+.list-group{
+  height: 100vh;
+}
 .list-group p {
   margin-left: 15px;
   margin-top: -139px;
@@ -57,13 +56,17 @@ body {
 .row .col-lg-4 .card {
   border: solid 0.5px rgb(250, 247, 247);
   width: 100%;
-  margin: 2px;
-  margin-top: 30px;
+  height: 500px;
+  margin-top: 25px;
   overflow: hidden;
 }
 .product_code{
   width: 100%;
   opacity:0.7; 
+}
+.row .col-lg-4 .card .buttons{
+  position: absolute;
+
 }
 .row .col-lg-4 :hover .card {
   transform: scale(1.1);
@@ -95,6 +98,8 @@ body {
 }
 .buttons{
   margin-left: 50px;
+  position: relative;
+  top: 440px ;
 }
 .numpage {
   position: relative;
