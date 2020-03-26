@@ -19,18 +19,7 @@ session_start();
 
 <body>
     <div class="head_bar">
-        <div class="manu_login">
-            <ul>
-                <li> <?php if($_SESSION['login'] == ""){ ?>
-                    <a href="../login/login.php">Login</a>
-                    <?php }  if($_SESSION['login'] == 1){?>
-                <li><?php echo$resultU['U_Name'];?></li>
-                <li> <a href="">MY ACCOUNT </a></li>
-                <li><a href="../login/logout.php">Logout</a></li>
-                <?php } ?>
-                </li>
-            </ul>
-        </div>
+      
     </div>
     <div class="contriner">
         <div class="topmenu">
@@ -57,44 +46,43 @@ session_start();
                                         <label for="inputEmail4">ชื่อ</label>
                                         <input type="hidden" name="form" class="form-control" value="address">
                                         <input type="text" name="U_Name" class="form-control"
-                                            value="<?php echo $resultadd['U_Name'] ?>">
+                                            value="<?php echo $resultadd['U_Name'] ?>" disabled>
                                     </div>
                                     <div class="form-row col-md-4">
                                         <label for="inputPassword4">หมายเลขโทรศัพย์</label>
                                         <input type="text" name="U_LName" class="form-control"
-                                            value="<?php echo $resultadd['U_Phone'];?>">
+                                            value="<?php echo $resultadd['U_Phone'];?>" disabled>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12" style="margin-left:10px;">
                                     <label for="inputEmail4">ที่อยู่</label>
                                     <textarea id="U_add" name="Home" class="form-control" rows="5"
-                                        style=" width:700px;"> <?php echo $resultadd['Home']; ?></textarea>
+                                        style=" width:700px;" disabled> <?php echo $resultadd['Home']; ?></textarea>
                                 </div>
                                 <div class="form-row col-md-12">
                                     <div class="form-group col-md-2">
                                         <label for="inputCity">ตำบล</label>
                                         <input type="text" name="T_District" class="form-control" id="inputCity"
-                                            value="<?php echo $resultadd['T_District'];?>">
+                                            value="<?php echo $resultadd['T_District'];?>"disabled>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="inputZip">อำเภอ</label>
                                         <input type="text" name="A_District" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['A_District'];?>">
+                                            value="<?php echo $resultadd['A_District'];?>" disabled>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="inputZip">จังหวัด</label>
                                         <input type="text" name="Province" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['Province'];?>">
+                                            value="<?php echo $resultadd['Province'];?> " disabled>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="inputZip">ไปรษณีย์</label>
                                         <input type="text" name="zip" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['zip'];?>">
+                                            value="<?php echo $resultadd['zip'];?>"disabled>
                                     </div>
                                 </div>
                                 <div class="form-group col-md-12" style="padding-top:50px; margin-right:200px;">
-                                    <button type="submit" class="btn btn-primary"
-                                        style="float:right; margin-right:50px">[บันทึกที่อยู่]</button>
+                                   <a href="./EditUser.php" class="btn btn-primary" style="float:right; margin-right:50px">[แก้ไขที่อยู่]</a> 
                                 </div>
                             </div>
                     </form>

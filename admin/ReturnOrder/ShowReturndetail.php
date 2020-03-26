@@ -30,6 +30,30 @@ session_start();
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
     $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
     $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
+    // กดบันทึก ข้อมูล
+    if(isset($_POST['submit'])){
+        $image = $_FILES['image']['name'];
+        $target = "../../photo/ReProduct/slip/".basename($image);
+        $sqlReturnOrder = "UPDATE returnorder SET Re_Status='".$_POST['Re_Status']."',Re_Reply='".$_POST['Re_Reply']."',Re_Slip='$image' WHERE Re_ID='".$_POST['Re_ID']."'";
+        $queryReturnOrder= $conn->query($sqlReturnOrder);
+        $move = move_uploaded_file($_FILES['image']['tmp_name'], $target);
+        if($queryReturnOrder){
+            if($move){
+            echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
+            echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./MainReturn.php '>";
+            }
+            else{
+                echo '<script type="text/javascript">alert("อัพรูปภาพไม่สำเร็จ");</script>';
+                echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./MainReturn.php '>";
+            }
+            
+            
+        }
+        else{
+            echo '<script type="text/javascript">alert("ไม่สำเร็จ");</script>';
+            echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./MainReturn.php '>";
+        }
+    }
 
 ?>
 <!DOCTYPE html>
@@ -103,17 +127,17 @@ session_start();
                รายการPreOrder
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="../MainPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../MainNumPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainNumPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>รายการPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../MainsendsPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainsendsPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
                     <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
@@ -128,9 +152,9 @@ session_start();
             </div>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="./MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>การสินค้าคืน</span></a>
+                    <span>รายการสินค้าคืน</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="../ManageUser.php">
@@ -144,6 +168,19 @@ session_start();
                 <a class="nav-link" href="../MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>สถานะสินค้า</span></a>
+            </li>
+            <div class="sidebar-heading">
+               อื่นๆ
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainProductGrop.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ประเภทสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainBank.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ธนคาร</span></a>
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -179,7 +216,7 @@ session_start();
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
                                         <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for../..." aria-label="Search"
+                                            placeholder="Search for..." aria-label="Search"
                                             aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
@@ -204,12 +241,12 @@ session_start();
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="../../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID']; ?>">
+                                <a class="dropdown-item" href="../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID']; ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     จัดการข้อมูลส่วนตัว
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="../../login/logout.php" data-toggle="modal"
+                                <a class="dropdown-item" href="../login/logout.php" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     ออกจากระบบ
@@ -269,6 +306,46 @@ session_start();
                 <label for="" class="form-control"><?php echo $result['U_Name'] ?> </label>
                 </div>
               </div>
+              <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label" >เหตุผล</label>
+                <div class="col-sm-6">
+                <?php   if($result['Re_feedback'] ==1){
+                                                $feedback="ได้รับสินค้าไม่สมบูรณ์(สิ้นส่วนบางชิ้นหายไป)";
+                                                } 
+                                                if($result['Re_feedback'] ==2){
+                                                    $feedback="ได้รับสินค้าไม่ตรงตามที่สั่ง";
+                                                    } 
+                                                    if($result['Re_feedback'] ==3){
+                                                        $feedback="ได้รับสินค้าสภาพไม่ดี";
+                                                        } 
+                                                ?>
+                <label for="" class="form-control"><?php echo $feedback; ?> </label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">เหตุผลเพิ่มเติม</label>
+                <div class="col-sm-6">
+                <textarea  class="form-control" cols="20" rows="5" value="" disabled><?php echo $result['Re_Detail'] ?> </textarea>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">ธนคาร</label>
+                <div class="col-sm-6">
+                <label for="" class="form-control"><?php echo $result['Re_NameBank'] ?> </label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">เลขบัญชี</label>
+                <div class="col-sm-6">
+                <label for="" class="form-control"><?php echo $result['Re_NumberBank'] ?> </label>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">วันที่คืน</label>
+                <div class="col-sm-6">
+                <label for="" class="form-control"><?php echo $result['Re_Date'] ?> </label>
+                </div>
+              </div>
                       </div>
                       <div class="col-md-6">
                           <label for="">หลักฐานการคืนสินค้า</label>
@@ -279,8 +356,40 @@ session_start();
                                     height="300px"></a> 
                                     <a href=<?php echo '../../photo/ReProduct/'.$result['P3'] ;?> target="_blank"><img src="<?php echo '../../photo/ReProduct/'.$result['P3'] ;?>" width="300px"
                                     height="300px"></a> 
-                                    </div>          
+                                    </div>      
+                    <div class="detail">
+                      <form action="" method="post" enctype="multipart/form-data">
+                            <input type="hidden" name="Re_ID" value="<?php echo $result['Re_ID']; ?> ">
+                      <div class="form-group row">
+                            <label for="inputPassword3" class="col-sm-2 col-form-label">สถานะ</label>
+                            <div class="col-sm-6">
+                            <select name="Re_Status" class="form-control" required>
+                                <option value="โอนเงินคืนแล้ว" class="form-control">ยืนยันการคืนสินค้า/โอนเงินคืนแล้ว</option>
+                                <option value="อื่นๆ" class="form-control">อื่นๆ</option>
+                            </select>
+                            </div>
+                        </div>
+                    <div class="form-group row">
+                  <label for="inputtext" class="col-sm-2 col-form-label">รูปสลิป</label>
+                  <div class="col-sm-2">
+                    <input type="file" name="image" required>
+                  </div>
+                  </div>
+              <div class="form-group row">
+                <label for="inputPassword3" class="col-sm-2 col-form-label">รายระเอียด</label>
+                <div class="col-sm-6">
+                <textarea name="Re_Reply" cols="40" rows="5" class="form-control"></textarea>
+                </div>
+              </div>
+              <div class="form-group row" style="margin-left:200px;" >
+                <div class="col-sm-12">
+                <button type="submit" name="submit" class="btn btn-primary">ยืนยัน</button>
+                </div>
+              </div>
+                      </form>
+                      </div>    
                       </div>
+                     
                       </div>
                     </div>
                     <!-- Content Row -->
@@ -336,7 +445,7 @@ session_start();
             margin-top:100px;
             border: 1px solid black;
             width: auto;
-            height:1000px;
+            height:1200px;
             padding: 50px;
             margin:50px;
             background-color: white;

@@ -92,12 +92,12 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                       </div>
                         <div class="form-group col-md-12">
                             <div class="inputphoto">
-                                <label for="Name">รูปสริป</label>
+                                <label for="Name">รูปสลิป</label>
                                 <div class="">
                                     <input type="hidden" id="text" cols="40" rows="4" name="image_text"></input>
                                 </div>
                                 <div>
-                                    <input type="file" name="image" accept=".png, .jpg, .jpeg" required>
+                                    <input type="file" name="image" accept=".png, .jpg, .jpeg" required oninvalid="this.setCustomValidity('กรุณาเพิ่มรูปสลิปหลักฐาน')" oninput="this.setCustomValidity('')">
                                 </div>
                                 <p > *เพื่อความรวดเร็วในการตรวจสอบ</p>
                             </div>
@@ -106,13 +106,15 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="inputCity">จากธนคาร</label>
-                                    <select id="FormBank" name="FormBank" class="form-control" required>
+                                    <select id="FormBank" name="FormBank" class="form-control" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
                                         <option class="form-control" value="">
                                             <?php while($rowbk= mysqli_fetch_array($querybk)) {?>
                                         <option class="form-control" value="<?php echo $rowbk['Bk_Name'];?>">
                                             <?php echo $rowbk['Bk_Name'];?>
                                         </option>
                                         <?php } ?>
+                                        <option class="form-control" value="อื่นๆ"> อื่นๆ
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-8">
@@ -137,7 +139,7 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                         <div class="form-group col-md-12">
                             <div class="form-row col-md-4">
                                 <label for="inputEmail4">จำนวน</label>
-                                <input type="number" pattern="^\d*(\.\d{0,2})?$"name="Sp_Price" class="form-control" value="" required>
+                                <input type="number" pattern="^\d*(\.\d{0,2})?$"name="Sp_Price" class="form-control" value="" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
                             </div>
                         </div>
                         <div class="form-group col-md-12">
@@ -146,13 +148,13 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                             <div class="form-row col-md-4">
                                 <label for="inputEmail4">เวลาที่โอน</label>
                                 <input name="time" class="form-control" type="time" ng-model="time"
-                                    ng-change="ChangeTime()" required>
+                                    ng-change="ChangeTime()" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
                             </div>
                         </div>
                         <div class="form-group col-md-12">
                             <div class="form-row col-md-4">
                                 <label for="inputEmail4">วันที่โอน</label>
-                                <input type="date" name="date" class="form-control" value=""  required/>
+                                <input type="date" name="date" class="form-control" value=""  required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')"/>
                             </div>
                         </div>
                     </div>

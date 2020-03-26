@@ -4,6 +4,14 @@ session_start();
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
+// 
+$sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='ยืนยันการสั่งซื้อ'";
+$queryN = mysqli_query($conn, $sqlN);
+$rowN = mysqli_num_rows($queryN);
+//
+$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+ $queryorder = $conn->query($sqlOrder);
+ $resultorder = mysqli_num_rows($queryorder);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,17 +62,24 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
             <li class="nav-item">
                 <a class="nav-link" href="./Market.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตระกร้าสินค้า</span></a>
+                    <span>ตระกร้าสินค้า</span><?php if($rowN  >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $rowN ; ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./payment.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>แจ้งชำระเงิน</span></a>
+                    <span>แจ้งชำระเงิน</span><?php if($resultorder >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultorder; ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./status.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ตรวจสอบ/คืนสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./ReturnStatus.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>สถานะการคืนสินค้า</span></a>
             </li>
                   <li class="nav-item">
                 <a class="nav-link" href="./EditUser.php">
@@ -211,7 +226,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                                         src="../photo/edit.png" width="15px" hight="15px"></a>
                                             </td>
                                             <td align="center"> <a
-                                                    href="../order/Delete_Order.php?ID=<?php echo $result['O_ID'];?>"><img
+                                                    href="../order/Delete_Order.php?ID=<?php echo $result['O_ID'];?>" onclick="return confirm('คุณต้องการลบรายการนื้หรือไม่ ?')"><img
                                                         src="../photo/trash.png" width="15px" hight="15px"></a>
                                             </td>
                                         </tr>
@@ -329,12 +344,12 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 <script>
         $(document).ready(function () {
             $("#checked").click(function () {
-                var r = confirm('คุณต้องการชำระรายการสินค้าตามที่เลีือก?');
+                var r = confirm('คุณต้องการยืนยันการสั่งซื้อสินค้าตามที่เลีอก ?');
                 var radioValue = $("input[type='checkbox']:checked").val();
                 var txt;
                 if (r == true) {
                     if (!radioValue) {
-                        txt = "กรุณาเลีอกสินค้า";
+                        txt = "กรุณาเลีอกรายการสั่งซื้อสินค้า";
                         //ta
                         document.getElementById("alert").innerHTML = txt;
                     }

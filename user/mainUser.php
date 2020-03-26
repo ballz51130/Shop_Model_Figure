@@ -4,19 +4,25 @@ session_start();
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
+// 
+$sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='ยืนยันการสั่งซื้อ'";
+$queryN = mysqli_query($conn, $sqlN);
+$rowN = mysqli_num_rows($queryN);
+//
+$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+ $queryorder = $conn->query($sqlOrder);
+ $resultorder = mysqli_num_rows($queryorder);
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>User</title>
+    <title>Market</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
     <link
@@ -25,7 +31,6 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="./css/add.css">
 
 </head>
 
@@ -52,69 +57,32 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
             <div class="sidebar-heading">
                 จัดการสินค้า
             </div>
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
-                    aria-expanded="true" aria-controls="collapseTwo">
-                    <span>จัดการข้อมูลสินค้า</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">รายการ</h6>
-                        <a class="collapse-item" href="../admin/MainProduct.php">รายการสินค้าทั้งหมด</a>
-                        <a class="collapse-item" href="cards.html">เพื่มรายการสินค้า</a>
-                        <a class="collapse-item" href="cards.html">จัดการสินค้าPreOrder</a>
-                    </div>
-                </div>
-            </li>
-            <!-- Nav Item - Utilities Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities"
-                    aria-expanded="true" aria-controls="collapseUtilities">
-                    <span>รายการสินค้า</span>
-                </a>
-                <div id="collapseUtilities" class="collapse" aria-labelledby="headingUtilities"
-                    data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">รายการ</h6>
-                        <a class="collapse-item" href="utilities-color.html">ตรวจการชำระเงิน</a>
-                        <a class="collapse-item" href="utilities-border.html">สินค้าค้างส่ง</a>
-                        <a class="collapse-item" href="utilities-animation.html">รายการPreOrder</a>
-                        <a class="collapse-item" href="utilities-other.html">รายงานคืนสินค้า</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Divider -->
-            <hr class="sidebar-divider">
-
-            <!-- Heading -->
-            <div class="sidebar-heading">
-                รายงาน
-            </div>
-
-            <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-folder"></i>
-                    <span>รายงาน</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <h6 class="collapse-header">รายงาน</h6>
-                        <a class="collapse-item" href="register.html">รายงานการชำระเงิน</a>
-                        <a class="collapse-item" href="login.html">รายงานสินค้าค้างส่ง</a>
-                        <a class="collapse-item" href="forgot-password.html">รายงานการคืนสินค้า</a>
-                    </div>
-                </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-
+         
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="./Market.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ตระกร้าสินค้า</span><?php if($rowN  >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $rowN ; ?></span><?php } else{ } ?></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./payment.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>แจ้งชำระเงิน</span><?php if($resultorder >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultorder; ?></span><?php } else{ } ?></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./status.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ตรวจสอบ/คืนสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./ReturnStatus.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>สถานะการคืนสินค้า</span></a>
+            </li>
+                  <li class="nav-item">
+                <a class="nav-link" href="./EditUser.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ข้อมูลลูกค้า</span></a>
             </li>
@@ -138,21 +106,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
+                 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -179,15 +133,14 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 </form>
                             </div>
                         </li>
-
+                   
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span
-                                    class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultuser['U_Name']; ?></span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultuser['U_Name']; ?></span>
                                 <img class="img-profile rounded-circle"
                                     src="<?php echo '../photo/User/'.$resultuser['U_Photo']; ?>">
                             </a>

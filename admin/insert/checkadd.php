@@ -31,11 +31,11 @@ move_uploaded_file($_FILES['image3']['tmp_name'], $target3);
 mysqli_query($conn, $sql2);
 
 if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
-  echo" <center> <h1 color='green'> อัพโหลด สำเร็จ </h1> </center>";
+  echo "<script type='text/javascript'>alert('อัพโหลดสำเร็จ');</script>";
   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL= ./addProduct.php'>";
     
 }else{
-    $msg = "Failed to insert ";
+    echo "<script type='text/javascript'>alert('เกิดข้อผิดพลาดขึ้นกับระบบ');</script>";
     echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL= ./addProduct.php'>";
 }
 } // if P_Status 
@@ -63,12 +63,12 @@ move_uploaded_file($_FILES['image2']['tmp_name'], $target2);
 move_uploaded_file($_FILES['image3']['tmp_name'], $target3);
 mysqli_query($conn, $sql2);
 if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
-  echo" <center> <h1 color='green'> อัพโหลด สำเร็จ </h1> </center>";
+  echo "<script type='text/javascript'>alert('อัพโหลดสำเร็จ');</script>";
   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL= ./addPreProduct.php'>";
 
     
 }else{
-    $msg = "Failed to insert ";
+  echo "<script type='text/javascript'>alert('เกิดข้อผิดพลาดขึ้นกับระบบ');</script>";
     echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL= ./addPreProduct.php'>";
 }
 } // $_POST Status == 2

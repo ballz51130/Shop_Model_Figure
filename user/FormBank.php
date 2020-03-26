@@ -1,5 +1,4 @@
-
-    <?php 
+<?php 
 include '../conn/conn.php';
 session_start(); // คำสั่ง เปิดใช้งาน session 
 ?>
@@ -34,7 +33,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
             <div class="maimMenu">
                 <div class="rowmenu">
                     <div class="col-md-8">
-                        <form action="../order/UserConfSends.php" method="post" enctype="multipart/form-data">
+                        <form action="../order/UserConfSends.php" id="SendForm" method="post" enctype="multipart/form-data">
                             <H4>วิธีการชำระเงิน</H4>
                             <?php 
                             $sql = "SELECT * FROM bank_tb WHERE BK_Type ='1' ";  
@@ -86,6 +85,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                                 <label for="" style="margin-top:2px;"> X <?php echo $result['OD_Unit'] ;?></label>
                                 <br>
                                 <label for="" style="margin-top:2px;">THB <?php echo $result['P_Price'] ;?> </label>
+                                
                             </div>
                         </div>
                         <?php 
@@ -110,7 +110,8 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                             <h4>รวม&emsp;&emsp;&nbsp;:<span>&emsp;&emsp;<?php echo $price+$sumsend; ?></span></h4>
                         </div>
                         <div class="form-group col-md-12" style="padding-top:50px; margin-right:150px;">
-                            <button type="submit" class="btn btn-primary"
+                        <span id="alert" style="color: red;"></span>
+                            <button type="button" class="btn btn-primary"
                                 style="float:right; margin-right:50px">[บันทึก]</button>
                         </div>
                     </div>
@@ -122,7 +123,26 @@ session_start(); // คำสั่ง เปิดใช้งาน session
         <footer>
             <p> Power By Harumyx </p>
         </footer>
-
+        <script>
+        $(document).ready(function () {
+            $("button[type='button']").click(function () {
+                var r = confirm('คุณต้องการบันทึกรายการสินค้าตามนี้หรือไม่');
+                var radioValue = $("input[name='bank']:checked").val();
+                var txt;
+                if (r == true) {
+                    if (!radioValue) {
+                        txt = "กรุณาเลีอกวิธีการจัดส่ง";
+                        //ta
+                        document.getElementById("alert").innerHTML = txt;
+                    }
+                    if (radioValue) {
+                        //form id 
+                        document.getElementById("SendForm").submit();
+                    }
+                }
+            });
+        });
+    </script>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <!-- Popper.JS -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>

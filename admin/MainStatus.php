@@ -1,7 +1,6 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
-
     // แสดงข้อมูล ADMIN
     $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
     $queryUser = mysqli_query($conn,$sqlUser);
@@ -53,6 +52,7 @@ session_start();
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
 
 </head>
 
@@ -104,17 +104,17 @@ session_start();
                รายการPreOrder
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="./MainPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainNumPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainNumPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>รายการPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainsendsPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainsendsPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
                     <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
@@ -129,9 +129,9 @@ session_start();
             </div>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="./ReturnOrder/MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>การสินค้าคืน</span></a>
+                    <span>รายการสินค้าคืน</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./ManageUser.php">
@@ -145,6 +145,19 @@ session_start();
                 <a class="nav-link" href="./MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>สถานะสินค้า</span></a>
+            </li>
+            <div class="sidebar-heading">
+               อื่นๆ
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainProductGrop.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ประเภทสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainBank.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ธนคาร</span></a>
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -222,6 +235,7 @@ session_start();
 
                 </nav>
                 <!-- End of Topbar -->
+
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <!-- Page Heading -->
@@ -235,8 +249,8 @@ session_start();
                                 $sql ="SELECT  * FROM orders
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
-                                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE  orders.O_Status ='จัดส่งแล้ว' OR orders.O_Status ='ยืนยันการชำระเงิน' OR orders.O_Status ='รอตรวจสอบ' or orders.O_Status ='ปฏิเสธการชำระเงิน'  ";
+                                INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID  
+                                where NOT orders.O_Status='ยืนยันการสั่งซื้อ' order by orders. O_ID DESC ";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
@@ -249,10 +263,11 @@ session_start();
                                 <H2> สถานะสินค้า</H2>
                             </center>
                             <div class="table" align="center">
-                                <table class="table table-striped table-bordered">
+                                <table id="table_id" class="table table-striped table-bordered" style="width:100%">
                                     <thead>
                                         <tr>
                                             <th scope="col"> No</th>
+                                            <th scope="col"> รหัสสินค้า</th>
                                             <th scope="col"> รายการ </th>
                                             <th scope="col"> จำนวน </th>
                                             <th scope="col"> ผู้ชื้อ </th>
@@ -278,14 +293,23 @@ session_start();
                                             if($result['O_Status'] =='ปฏิเสธการชำระเงิน'){
                                                 $bg="#F7573C ";
                                                 }
+                                                if($result['O_Status'] =='รับของแล้ว'){
+                                                    $bg="";
+                                                    }
+                                                    else{
+                                                     
+                                                    }
+                                                    
                                 ?>
                                             <td align="center"> <?php echo $num;?></td>
+                                            <td align="center"> <?php echo $result['O_ID'];?></td>
                                             <td align="center"><a href="./listProduct.php?O_ID=<?php echo $result['O_ID']; ?>"> <?php echo $result['P_Name'];?> </a> </td>
                                             <td align="center"> <?php echo $result['OD_Unit'].' ชิ้น'; ?> </td>
                                             <td align="center"> <?php echo $result['U_Name'];?></td>
                                             <td bgcolor="<?=$bg;?>" align="center" style="color:black"> <b><?php echo $result['O_Status'];?></b> </td>
                                             <td align="center"><?php echo $result['O_EMS']; ?> </td>
-                                            <td align="center"><?php echo $result['O_EMS']; ?> </td>
+                                            <td align="center"><a href="./Showhistory.php?O_ID=<?php echo $result['O_ID'] ?>" target="_blank" class="btn btn-outline-dark">ตรวจสอบ</a> </td>
+                                            
                                             
                                             
                                         </tr>
@@ -351,19 +375,20 @@ session_start();
     </div>
     <style>
         .main {
-            margin-left: 400px;
+            margin-left: 250px;
             width: auto;
 
         }
         .table{
             background-color: white;
-            padding: 50px;
+            padding: 15px;
         }
     </style>
     
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -387,7 +412,9 @@ session_start();
     });
     $("#alert").text(total.toFixed(2));
   });
-
+  $(document).ready( function () {
+    $('#table_id').DataTable();
+} );
 </script>
 </body>
 

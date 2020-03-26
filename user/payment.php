@@ -1,15 +1,36 @@
-<?php 
+<?php
 include '../conn/conn.php';
 session_start(); 
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
+// 
+$sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='ยืนยันการสั่งซื้อ'";
+$queryN = mysqli_query($conn, $sqlN);
+$rowN = mysqli_num_rows($queryN);
+//
+$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+ $queryorder = $conn->query($sqlOrder);
+ $resultorder = mysqli_num_rows($queryorder);
+ //
+ if(isset($_POST['delete'])){
+     $sqldel="DELETE FROM orders WHERE C_ID='".$_POST['C_ID']."'";
+     $querydel = $conn->query($sqldel);
+     if($querydel){
+        echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
+        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./payment.php'>";
+        
+       } 
+       else{
+           echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
+           echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./payment.php'>";
+       }
+
+ }
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -56,20 +77,27 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
             <li class="nav-item">
                 <a class="nav-link" href="./Market.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตระกร้าสินค้า</span></a>
+                    <span>ตระกร้าสินค้า</span><?php if($rowN  >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $rowN ; ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./payment.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>แจ้งชำระเงิน</span></a>
+                    <span>แจ้งชำระเงิน</span><?php if($resultorder >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultorder; ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./status.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบสถานะสินค้า</span></a>
+                    <span>ตรวจสอบ/คืนสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./ReturnStatus.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>สถานะการคืนสินค้า</span></a>
             </li>
                   <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="./EditUser.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ข้อมูลลูกค้า</span></a>
             </li>
@@ -93,21 +121,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..."
-                                aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
+                 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -134,6 +148,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 </form>
                             </div>
                         </li>
+                   
                         <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
@@ -182,10 +197,10 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
                                 WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ' group by C_ID";
                                 $query = mysqli_query($conn,$sql);
-                                echo $sql ;
                                 $query2 = mysqli_query($conn,$sql);
                                 $SUM =0;
                                 $AllSum = 0;
+                                $num = 1;
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
                                 if($resultcheck>0){
                                 ?>
@@ -200,13 +215,13 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                             <th scope="col"> จำนวน </th>
                                             <th scope="col"> สถานะ </th>
                                             <th scope="col">รายระเอียด</th>
+                                            <th scope="col">ลบ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                             <?php
-                                            while($result = mysqli_fetch_array($query2,MYSQLI_ASSOC)) {
-                                                $num = 1;
+                                            while($result = mysqli_fetch_array($query2,MYSQLI_ASSOC)) { 
                                                 if($result['O_Status']=='รอการชำระ'){
                                                     $bg="#F9C26E";
                                                 }
@@ -219,6 +234,11 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                                     href="./FormSlip.php?C_ID=<?php echo $result['C_ID'] ?> "><button
                                                         type="button"
                                                         class="btn btn-outline-dark">แจ้งชำระเงิน</button></a> </td>
+                                            <td><form action="" method="post">
+                                                    <input type="hidden" name="C_ID" value=<?php echo $result['C_ID'] ?>>
+                                                        <button type="submit" class="btn btn-danger" name="delete" onclick="return confirm('คุณต้องการลบรายการนื้หรือไม่ ?')">ลบ</button>
+                                                </form>
+                                                        </td>
 
                                         </tr>
                                         <?php $num++; } ?>

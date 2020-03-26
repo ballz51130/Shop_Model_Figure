@@ -52,19 +52,19 @@
           <div class="form-row">
             <div class="form-group">
               <label for="inputEmail4">ชื่อผูใช้</label>
-              <input type="text" name="U_UserName" class="form-control" id="inputEmail4" required>
+              <input type="text" name="U_UserName" class="form-control"   required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
             </div>
             <div class="form-group">
               <label for="inputPassword4">รหัสผ่าน</label>
-              <input type="password" name="U_Password" class="form-control" id="inputPassword4" required>
+              <input type="password" name="U_Password" class="form-control" id="inputPassword4" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
             </div>
             <div class="form-group">
               <label for="inputEmail4">ชื่อ-นามสกุล</label>
-              <input type="text" name="U_Name" class="form-control" id="inputEmail4" required>
+              <input type="text" name="U_Name" class="form-control"  required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
             </div>
             <div class="form-group">
               <label for="inputEmail4">อีเมล์</label>
-              <input type="email" name="Email" class="form-control" id="inputEmail4" required>
+              <input type="email" name="Email" class="form-control" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
             </div>
             <div class="inputphoto">
               <label for="Name">รูป</label>
@@ -80,13 +80,13 @@
           
           <div class="form-group">
             <label for="inputEmail4">ที่อยู่</label>
-            <input type="text" name="Home" class="form-control" id="inputEmail4" required>
+            <input type="text" name="Home" class="form-control" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
           </div>
   
           <div class="form-group col-md-3">
               <label for="inputZip">จังหวัด</label>
               <span id="province">
-                    <select class="form-control" name="Province" required>
+                    <select class="form-control" name="Province" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')">
                         <option value="" >- เลือกจังหวัด -</option>
                     </select>
                 </span>
@@ -94,7 +94,7 @@
             <div class="form-group col-md-3">
               <label for="inputZip">อำเภอ</label>
               <span id="amphur" >
-                    <select class='form-control' name="A_District" required> 
+                    <select class='form-control' name="A_District" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')"> 
                         <option value="">- เลือกอำเภอ -</option>
                     </select>
                 </span>
@@ -103,19 +103,19 @@
               <div class="form-group col-md-3">
               <label for="inputCity">ตำบล</label>
               <span id="district">
-                    <select class='form-control' name="T_District" required>
+                    <select class='form-control' name="T_District" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')">
                         <option value="">- เลือกตำบล -</option>
                     </select>
                 </span>
             </div>
             <div class="form-group col-md-3">
               <label for="inputZip">ไปรษณีย์</label>
-              <input type="text" name="zip" class="form-control" id="inputZip" required>
+              <input type="text" name="zip" class="form-control" id="inputZip" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')">
             </div>
   
           <div class="form-group">
             <label for="inputEmail4">เบอร์โทรศัพย์</label>
-            <input type="text" name="U_Phone" class="form-control" id="inputEmail4" required>
+            <input type="text" name="U_Phone" class="form-control" id="inputEmail4" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')">
           </div>
           <br>
           <div align="right" style="padding-top:50px;">

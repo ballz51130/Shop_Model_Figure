@@ -10,10 +10,6 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
     header ("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
     header ("Cache-Control: no-cache, must-revalidate");
     header ("Pragma: no-cache");
-
-
- 
-
     $data = $_GET['data'];
     $val = $_GET['val'];
 

@@ -113,15 +113,17 @@ $resultU = mysqli_fetch_array($queryU);
   <div class="container">
     <div class="row">
 
-      <div class="col-lg-3">
+    <div class="col-lg-3">
       
-        <h1 class="my-4">Shop</h1>
+        <h3 class="my-4">ประเภทสินค้า</h3>
         <div class="list-group">
-               <a href="./Preorder.php?list=Vocaloid"><img src="./photo/model/Miku.jpg"><p>Hatsune Miku</p></a> 
-                <a href="./Preorder.php?list=Gundum"><img src="./photo/model/ms.jpg"><p>Gundum</p></a> 
-                <a href="./Preorder.php?list=sakura-wars"><img src="./photo/model/kh.jpg"><p>sakura-wars</p></a> 
-                <a href="./Preorder.php?list=Digimon"><img src="./photo/model/p7.jpg"><p>Digimon</p></a> 
-                <a href="./Preorder.php?list=Fullmetalpanic"><img src="./photo/model/rt.jpg"><p>Fullmetalpanic</p></a> 
+        <?php $sqllist="SELECT * FROM group_tb WHERE G_Status = 1 " ;
+        $querylist = $conn->query($sqllist);
+       while($resultlist = $querylist->fetch_array()){
+
+        ?>
+       <a href="./Preorder.php?list=<?php echo $resultlist['G_Name'];?>"><img src="<?php echo'./photo/model/'.$resultlist['G_Photo']; ?>"><p style="color:black;" ><?php echo $resultlist['G_Name']; ?></p></a> 
+       <?php } ?>
         </div>
 
       </div>
@@ -324,7 +326,7 @@ if ($numrow == "")
         <?php
 if ($list == "")
 {
-    $pr_query = "select * from Product where P_Status='2' ";
+    $pr_query = "select * from product where P_Status='2' ";
     $pr_reqult = mysqli_query($conn, $pr_query);
     $total = mysqli_num_rows($pr_reqult);
     $total_page = ceil($total / $num_per_page) + 1;
@@ -336,7 +338,7 @@ if ($list == "")
 }
 if ($list <> "")
 {
-    $pr_query = "select * from Product where P_Status='2 ' and P_Group = '$list' ";
+    $pr_query = "select * from product where P_Status='2 ' and P_Group = '$list' ";
     $pr_reqult = mysqli_query($conn, $pr_query);
     $total = mysqli_num_rows($pr_reqult);
     $total_page = ceil($total / $num_per_page) + 1;

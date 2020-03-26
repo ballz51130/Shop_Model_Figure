@@ -1,15 +1,21 @@
-<?php 
+<?php
 include '../conn/conn.php';
 session_start(); 
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
+// 
+$sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='ยืนยันการสั่งซื้อ'";
+$queryN = mysqli_query($conn, $sqlN);
+$rowN = mysqli_num_rows($queryN);
+//
+$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+ $queryorder = $conn->query($sqlOrder);
+ $resultorder = mysqli_num_rows($queryorder);
 ?>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -56,20 +62,27 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
             <li class="nav-item">
                 <a class="nav-link" href="./Market.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตระกร้าสินค้า</span></a>
+                    <span>ตระกร้าสินค้า</span><?php if($rowN  >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $rowN ; ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./payment.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>แจ้งชำระเงิน</span></a>
+                    <span>แจ้งชำระเงิน</span><?php if($resultorder >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultorder; ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./status.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบสถานะสินค้า</span></a>
+                    <span>ตรวจสอบ/คืนสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./ReturnStatus.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>สถานะการคืนสินค้า</span></a>
             </li>
                   <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="./EditUser.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ข้อมูลลูกค้า</span></a>
             </li>
@@ -93,8 +106,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
-
-            
+                 
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
@@ -121,9 +133,9 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 </form>
                             </div>
                         </li>
-                      
+                   
                         <div class="topbar-divider d-none d-sm-block"></div>
-                        <a href="" class="nav-item dropdown no-arrow" style="margin-top:20px;list-style: none;">ติดต่อเรา</a>
+
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -167,7 +179,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND (orders.O_Status ='จัดส่งแล้ว' OR orders.O_Status ='ยืนยันการชำระเงิน' OR orders.O_Status ='รอตรวจสอบ' or orders.O_Status ='ปฏิเสธการชำระเงิน' or orders.O_Status ='รับของแล้ว' )";
+                                WHERE user.U_ID = '".$_SESSION['User']."'";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
@@ -228,7 +240,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
                                             } ?>
                                               <td align="center"> <?php echo $result['O_Detail'];?></td>
                                             <?php  if($result['O_Status'] =='ปฏิเสธการชำระเงิน'){
-                                               ?>  <td align="center"> <a href="./FormSlip.php?C_ID=<?php echo $result['C_ID']; ?>">ติดต่อเรา</a> </td>
+                                               ?>  <td align="center"> <a href="https://www.facebook.com/ballz51130" target="_blank" rel="noopener noreferrer">ติดต่อเรา</a> </td>
                                             <?php  } else{
                                                ?> <td> </td> <?php
                                             } ?>

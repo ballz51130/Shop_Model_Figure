@@ -103,17 +103,17 @@ session_start();
                รายการPreOrder
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="./MainPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainNumPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainNumPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>รายการPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainsendsPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainsendsPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
                     <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
@@ -128,9 +128,9 @@ session_start();
             </div>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="./ReturnOrder/MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>การสินค้าคืน</span></a>
+                    <span>รายการสินค้าคืน</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./ManageUser.php">
@@ -144,6 +144,19 @@ session_start();
                 <a class="nav-link" href="./MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>สถานะสินค้า</span></a>
+            </li>
+            <div class="sidebar-heading">
+               อื่นๆ
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainProductGrop.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ประเภทสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainBank.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ธนคาร</span></a>
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -230,11 +243,12 @@ session_start();
                             
                         <div class="table">
                                 <?php 
-                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,orders.C_ID,product.P_Name,product.P_Status,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status 
+                                $sqlOrder = "SELECT orders.O_ID, orders.P_Number,orders.O_Status,orders.C_ID,product.P_Name,product.P_Status,user.U_ID,user.U_Name,orderdetail.OD_Unit,product.P_Price,orders.O_Status,Sn_Name
                                 ,count(orders.O_ID) AS Unit, sum(orderdetail.OD_Unit) AS OUnit FROM orders
                                 INNER JOIN product ON orders.P_Number = product.P_Number
                                 INNER JOIN user ON orders.U_ID = user.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
                                  WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status= '1' ";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);
                                 $check = mysqli_query($conn,$sqlOrder);
@@ -256,6 +270,7 @@ session_start();
                                             <th scope="col"> ชื่อ </th>
                                             <th scope="col"> จำนวน </th>
                                             <th scope="col"> สถานะ </th>
+                                            <th scope="col"> การจัดส่ง</th>
                                             <th scope="col"> รายงาน</th>
                                             <th scope="col"> จัดการ </th>
                                         </tr>
@@ -271,8 +286,9 @@ session_start();
                                             <td> <?php echo $resultOrder['U_Name']; ?> </td>
                                             <td> <?php echo $resultOrder['OUnit'].'ชิ้น'; ?> </td>
                                             <td> <?php echo $resultOrder['O_Status']; ?> </td>
-                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>">Report</a></td>
-                                            <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&C_ID=<?php echo $resultOrder['C_ID'] ;?>">edit</a></td>
+                                            <td> <?php echo $resultOrder['Sn_Name']; ?> </td>
+                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>"class="btn btn-outline-info">Report</a></td>
+                                            <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&C_ID=<?php echo $resultOrder['C_ID'] ;?>"><img src="../photo/edit.png" width="20px" hight="20px"></a></td>
                                         </tr>
                                         <?php $num++; }?>
                                     </tbody>

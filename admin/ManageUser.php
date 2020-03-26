@@ -3,6 +3,10 @@ include '../conn/conn.php';
 session_start(); 
 
 if ($_SESSION['User'] == 1){
+    // แสดงข้อมูล ADMIN
+    $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
+    $queryUser = mysqli_query($conn,$sqlUser);
+    $resultUser = mysqli_fetch_array($queryUser);
     //แจ้งเตือนสินค้ารอตรวจสอบ
     $sqlalertorder =$sqlOrder = "SELECT * FROM orders
     INNER JOIN product ON orders.P_Number = product.P_Number
@@ -50,6 +54,7 @@ if ($_SESSION['User'] == 1){
 
     <!-- Custom styles for this template-->
     <link href="../css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
 
 </head>
 
@@ -101,17 +106,17 @@ if ($_SESSION['User'] == 1){
                รายการPreOrder
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="./MainPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainNumPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainNumPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>รายการPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainsendsPreOrder.php">
+                <a class="nav-link" href="./Preorder/MainsendsPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
                     <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
@@ -126,12 +131,12 @@ if ($_SESSION['User'] == 1){
             </div>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="./ReturnOrder/MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>การสินค้าคืน</span></a>
+                    <span>รายการสินค้าคืน</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./insert/addProduct.php">
+                <a class="nav-link" href="./ManageUser.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
@@ -139,9 +144,22 @@ if ($_SESSION['User'] == 1){
                ยีนยันการรับของ
             </div>
             <li class="nav-item">
-                <a class="nav-link" href=" ">
+                <a class="nav-link" href="./MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>สถานะสินค้า</span></a>
+            </li>
+            <div class="sidebar-heading">
+               อื่นๆ
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainProductGrop.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ประเภทสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainBank.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ธนคาร</span></a>
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -194,14 +212,15 @@ if ($_SESSION['User'] == 1){
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultUser['U_Name'] ;?></span>
                                 <img class="img-profile rounded-circle"
-                                    src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                                src="<?php echo '../photo/User/' . $resultUser['U_Photo']; ?>">
+                            
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID']; ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     จัดการข้อมูลส่วนตัว
                                 </a>
@@ -231,8 +250,8 @@ if ($_SESSION['User'] == 1){
                                 $check = mysqli_query($conn,$sqlUser);
                                 $num = 1;
                                 ?>
-                                <H3>สินค้ารอตรวจสอบการชำระเงิน</H3>
-                                <table  class="table table-hover">
+                                <H3>สมาชิก</H3>
+                                <table id="table_id"  class="table table-hover">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th scope="col"> No</th>
@@ -248,15 +267,15 @@ if ($_SESSION['User'] == 1){
                                         <tr>
                                             <?php 
                                             
-                                            while($resultUser = mysqli_fetch_array($queryUser,MYSQLI_ASSOC))
+                                            while($resultUsers = mysqli_fetch_array($queryUser,MYSQLI_ASSOC))
                                             {?>
                                             <td> <?php echo $num ?> </td>
-                                            <td> <?php echo $resultUser['U_ID']; ?> </td>
-                                            <td> <?php echo $resultUser['U_Name']; ?> </td>
-                                            <td>  <img src="<?php echo '../photo/User/'.$result['U_Photo'];?>" width="50px" height="50px"> </td>
-                                            <td> <?php echo $resultUser['U_Status']; ?> </td>
-                                            <td> <a href="../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID'];?>">edit</a></td>
-                                            <td> <a href="./FormConfSlip.php?C_ID=<?php echo $resultUser['C_ID'];?>">del</a></td>
+                                            <td> <?php echo $resultUsers['U_ID']; ?> </td>
+                                            <td> <?php echo $resultUsers['U_Name']; ?> </td>
+                                            <td>   <img class="img-profile rounded-circle" src="<?php echo '../photo/User/' . $resultUsers['U_Photo']; ?> " width="30px" hight="50px"></td>
+                                            <td> <?php echo $resultUsers['U_Status']; ?> </td>
+                                            <td> <a href="./edit/EditUser.php?U_ID=<?php echo $resultUsers['U_ID'];?>"><img src="../photo/edit.png" width="20px" hight="20px"></a></td>
+                                            <td> <a href="./del/delUser.php?ID=<?php echo $resultUsers['U_ID'];?>"onclick="return confirm('คุณต้องการลบบัญชีผู้ใช้นี้หรื่อไม่ ?')"><img src="../photo/trash.png" width="20px" hight="20px"></a></td>
                                         </tr>
                                         <?php $num++; }?>
                                     </tbody>
@@ -318,17 +337,16 @@ if ($_SESSION['User'] == 1){
 <style>
     .product {
             margin-top:10px;
-            margin-left: 300px;
-            width: 1000px;
-            padding: 50px;
+            margin-left: 500px;
+            width: auto;
+            padding: 30px;
         }
-        .table{
-            padding: 50px;
-        }
+
 </style>
     <!-- Bootstrap core JavaScript-->
     <script src="../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="../vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -342,6 +360,11 @@ if ($_SESSION['User'] == 1){
     <!-- Page level custom scripts -->
     <script src="../js/demo/chart-area-demo.js"></script>
     <script src="../js/demo/chart-pie-demo.js"></script>
+    <script>
+  $(document).ready( function () {
+    $('#table_id').DataTable();
+} );
+</script>
 
 <?php 
 }

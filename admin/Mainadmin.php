@@ -44,7 +44,7 @@ if ($_SESSION['User'] == 1){
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <link href="/your-path-to-fontawesome/css/all.css" rel="stylesheet"> <!--load all styles -->
     <title>Admin</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -146,6 +146,24 @@ if ($_SESSION['User'] == 1){
                 <a class="nav-link" href="./MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>สถานะสินค้า</span></a>
+            </li>
+            <div class="sidebar-heading">
+               อื่นๆ
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainProductGrop.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ประเภทสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainBank.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ธนคาร</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainEMS.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>การจัดส่ง</span></a>
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -265,13 +283,14 @@ if ($_SESSION['User'] == 1){
                                             <td> <?php echo $resultOrder['U_Name']; ?> </td>
                                             <td> <?php echo $resultOrder['Unit'].'รายการ'; ?> </td>
                                             <td> <?php echo $resultOrder['O_Status']; ?> </td>
-                                            <td> <a href="./FormConfSlip.php?C_ID=<?php echo $resultOrder['C_ID'];?>">edit</a></td>
+                                            <td > <a href="./FormConfSlip.php?C_ID=<?php echo $resultOrder['C_ID'];?>"><img src="../photo/edit.png" width="30px" hight="30px"></a></td>
+                                            
                                         </tr>
                                         <?php $num++; }?>
                                     </tbody>
                                 </table>
                                             <?php }else{ 
-                                    echo "<span style='font-size:30px;margin-left:250px;margin-top:-150px;position: absolute;'>ไม่พบรายการสินค้า</span>";}?>
+                                    echo "<span style='font-size:30px;margin-left:250px;margin-top:-50px;position: absolute;'>ไม่พบรายการสินค้า</span>";}?>
                                     
                             </div>
                            
@@ -328,10 +347,9 @@ if ($_SESSION['User'] == 1){
     </div>
 <style>
     .product {
-            margin-top:50px;
-            margin-left: 500px;
-            width: auto;
-            padding: 50px;
+            margin-left: 200px;
+            width:800px;
+
         }
         .table{
             padding: 50px;

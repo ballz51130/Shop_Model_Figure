@@ -88,10 +88,10 @@ else
 									<?php } ?>
 									<label for="">จำนวน</label>
 									<?php if($result["P_Status"]==1){ ?>
-									<input type="number" name="quantity" class="form-control" value="1" min="0"
+									<input type="number" name="quantity" class="form-control" value="1" min="1"
 										max="<?php echo $result['P_Unit']; ?>" style="width:80px">
 									<?php } if($result["P_Status"]==2){ ?>
-									<input type="number" name="quantity" class="form-control" value="1" min="0"
+									<input type="number" name="quantity" class="form-control" value="1" min="1"
 										style="width:80px">
 									<?php  }?>
 									<hr>

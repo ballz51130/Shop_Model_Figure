@@ -329,7 +329,7 @@ if ($numrow == "")
         <?php
 if ($list == "")
 {
-    $pr_query = "select * from Product ";
+    $pr_query = "select * from product ";
     $pr_reqult = mysqli_query($conn, $pr_query);
     $total = mysqli_num_rows($pr_reqult);
     $total_page = ceil($total / $num_per_page) + 1;
@@ -341,7 +341,7 @@ if ($list == "")
 }
 if ($list <> "")
 {
-    $pr_query = "select * from Product where P_Group = '$list' ";
+    $pr_query = "select * from product where P_Group = '$list' ";
     $pr_reqult = mysqli_query($conn, $pr_query);
     $total = mysqli_num_rows($pr_reqult);
     $total_page = ceil($total / $num_per_page) + 1;

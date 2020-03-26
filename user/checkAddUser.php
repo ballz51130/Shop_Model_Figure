@@ -2,7 +2,14 @@
 include '../conn/conn.php';
 $image = $_FILES['image']['name'];
 $pass = md5($_POST['U_Password']."harumyx");
-
+$sqlCheckUser="SELECT U_UserName FROM user WHERE U_UserName='".$_POST['U_UserName']."'";
+$queryCheckUser = $conn->query($sqlCheckUser);
+$resultCheckUser = mysqli_fetch_array($queryCheckUser,MYSQLI_ASSOC);
+if($resultCheckUser > 0){
+    echo "<script type='text/javascript'>alert('ชื่อผู้ใช้บัญชีมีการใช้งานแล้ว กรุณาใช้ชื่ออื่น');</script>";
+    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=../index.php'>";
+}
+else{
 // แปลงตัวเลข ตำบล อำเภอ จังหวัด ให้เป็น ชื่อ ค่าที่ POST มาเป็นตัวเลข
 $sqlHome = "SELECT * FROM district 
 INNER JOIN amphur ON amphur.AMPHUR_ID = district.AMPHUR_ID
@@ -21,13 +28,14 @@ move_uploaded_file($_FILES['image']['tmp_name'], $target);
 $query = mysqli_query($conn,$sql);
 
 if ($query){
-  echo "<script type='text/javascript'>alert('สำเร็จ');</script>";
-    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ../login/login.php'>";
+  echo "<script type='text/javascript'>alert('สมัครสมาชิกสำเร็จ');</script>";
+    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ../login/login.phpp'>";
     
-      
   }else{
-    echo "<script type='text/javascript'>alert('ERROR');</script>";
+    echo "<script type='text/javascript'>alert('เกิดข้อผิดพลาด ไม่สามารถเพอ่มข้อมูลได้ ');</script>";
     echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ../login/login.php'>";
   }
-  $mysqli->close();
+}
+
+
 ?>

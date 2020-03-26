@@ -6,7 +6,7 @@ $query = mysqli_query($conn, $sql);
 $result = mysqli_fetch_array($query,MYSQLI_ASSOC);
 
 if($result > 0){
-    echo "<script type='text/javascript'>alert('สินค้ามีอยู่ในกระกร้าอยู่แล้ว กรุณาไปตรวจสอบที่ตระกร้าสินค้า');</script>";
+    echo "<script type='text/javascript'>alert('สินค้ามีอยู่ในกระกร้าแล้ว กรุณาตรวจสอบ');</script>";
     echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=../index.php'>";
 }
 else{
@@ -37,9 +37,6 @@ if($_POST['P_Status'] ==2){
         $queryinsert = "INSERT INTO orders(P_Number,U_ID,O_Status) VALUES ('".$_POST['P_Number']."','".$_SESSION['User']."','ยืนยันการสั่งซื้อ')";
         $resuktinsert = mysqli_query($conn,$queryinsert);
         $lest = $conn -> insert_id;
-        // $sqlc = "SELECT O_ID FROM orders WHERE U_ID='".$_SESSION['User']."' AND P_Number = '".$_POST['P_Number']."' AND  ";
-        // $queryc = mysqli_query($conn, $sqlc);
-        // $resultc = mysqli_fetch_array($queryc,MYSQLI_ASSOC);
         $sql3 = "INSERT INTO orderdetail(O_ID,OD_Unit,P_Status) VALUE ('$lest','".$_POST['quantity']."','".$_POST['P_Status']."') "; 
         $query3 = mysqli_query($conn, $sql3);
         if($queryinsert == TRUE){
@@ -65,5 +62,4 @@ else
 }
 }
 mysqli_close($conn);
-
 ?>

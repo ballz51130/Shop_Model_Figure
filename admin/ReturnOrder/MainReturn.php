@@ -103,17 +103,17 @@ session_start();
                รายการPreOrder
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="../MainPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../MainNumPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainNumPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>รายการPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../MainsendsPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainsendsPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
                     <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
@@ -128,9 +128,9 @@ session_start();
             </div>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="./MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>การสินค้าคืน</span></a>
+                    <span>รายการสินค้าคืน</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="../ManageUser.php">
@@ -144,6 +144,19 @@ session_start();
                 <a class="nav-link" href="../MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>สถานะสินค้า</span></a>
+            </li>
+            <div class="sidebar-heading">
+               อื่นๆ
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainProductGrop.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ประเภทสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainBank.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ธนคาร</span></a>
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -179,7 +192,7 @@ session_start();
                                 <form class="form-inline mr-auto w-100 navbar-search">
                                     <div class="input-group">
                                         <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for../..." aria-label="Search"
+                                            placeholder="Search for..." aria-label="Search"
                                             aria-describedby="basic-addon2">
                                         <div class="input-group-append">
                                             <button class="btn btn-primary" type="button">
@@ -204,12 +217,12 @@ session_start();
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="../../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID']; ?>">
+                                <a class="dropdown-item" href="../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID']; ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     จัดการข้อมูลส่วนตัว
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="../../login/logout.php" data-toggle="modal"
+                                <a class="dropdown-item" href="../login/logout.php" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     ออกจากระบบ
@@ -234,7 +247,7 @@ session_start();
                                 INNER JOIN returnorderdetail ON returnorderdetail.O_ID = returnorder.O_ID
                                     INNER JOIN user ON user.U_ID = returnorder.U_ID
                                     INNER JOIN orders ON orders.O_ID = returnorder.O_ID
-                                    INNER JOIN product ON product.P_Number = orders.P_Number
+                                    INNER JOIN product ON product.P_Number = orders.P_Number order by Re_Status asc
                                 ";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);
                                 $check = mysqli_query($conn,$sqlOrder);
@@ -242,7 +255,7 @@ session_start();
                                 $num = 1;
                                 if($resultcheck>0){
                                 ?>
-                                <H3>สินค้าค้างส่ง</H3>
+                                <H3>รายการคืนสินค้า</H3>
                                 <table  class="table table-hover">
                                     <thead class="thead-dark">
                                         <tr>
@@ -259,12 +272,22 @@ session_start();
                                         <tr>
                                             <?php  
                                             while($resultOrder = mysqli_fetch_array($queryOrder,MYSQLI_ASSOC))
+
                                             {?>
                                             <td> <?php echo $num ?> </td>
                                             <td> <?php echo $resultOrder['O_ID']; ?> </td>
                                             <td>  <a href="../../product/ShowProduct.php?P_Number=<?php echo $resultOrder['P_Number']; ?>" target="_blank"><?php echo $resultOrder['P_Name']; ?> </a></td>
                                             <td> <?php echo $resultOrder['U_Name']; ?> </td>
-                                            <td> <?php echo $resultOrder['Re_Status']; ?> </td>
+                                            <?php  if($resultOrder['Re_Status'] =='รอตรวจสอบ(สินค้า)'){
+                                                $bg="#66b3ff";
+                                                }
+                                                if($resultOrder['Re_Status'] =='โอนเงินคืนแล้ว'){
+                                                    $bg="#80ff80";
+                                                    }
+                                                   else{
+                                                        $bg="#2E75F0";
+                                                        } ?>
+                                            <td bgcolor="<?=$bg;?>" style="color:black"> <?php echo $resultOrder['Re_Status']; ?> </td>
                                              <?php   
                                              $status = "";
                                              if($resultOrder['Re_feedback']==1){
@@ -278,7 +301,7 @@ session_start();
                                                 }
                                                 ?>
                                             <td> <?php echo $status; ?> </td>
-                                            <td> <a href="../ReturnOrder/ShowReturndetail.php?Re_ID=<?php echo $resultOrder['Re_ID'] ;?>">ตรวจสอบ</a></td>
+                                            <td> <a href="../ReturnOrder/ShowReturndetail.php?Re_ID=<?php echo $resultOrder['Re_ID'] ;?>"class="btn btn-outline-dark">ตรวจสอบ</a></td>
                                         </tr>
                                         <?php $num++; }?>
                                     </tbody>

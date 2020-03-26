@@ -1,6 +1,35 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
+    // แสดงข้อมูล ADMIN
+    $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
+    $queryUser = mysqli_query($conn,$sqlUser);
+    $resultUser = mysqli_fetch_array($queryUser);
+    //แจ้งเตือนสินค้ารอตรวจสอบ
+    $sqlalertorder =$sqlOrder = "SELECT * FROM orders
+    INNER JOIN product ON orders.P_Number = product.P_Number
+    INNER JOIN user ON orders.U_ID = user.U_ID
+    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
+     WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
+    $queryalertorder = mysqli_query($conn,$sqlalertorder);
+    $resultalertorder = mysqli_num_rows($queryalertorder);
+     //แจ้งเตือนสินค้าค้างส่ง
+     $sqlalertsend = "SELECT * FROM orders
+    INNER JOIN product ON orders.P_Number = product.P_Number
+    INNER JOIN user ON orders.U_ID = user.U_ID
+    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='1' Group by C_ID  ";
+    $queryalertsend = mysqli_query($conn,$sqlalertsend);
+    $resultalertsend = mysqli_num_rows($queryalertsend);
+    // แจ้เตือนรายการสินค้า PREORDER
+    $sqlalertPreOrder = "SELECT * FROM orders
+    INNER JOIN product ON orders.P_Number = product.P_Number
+    INNER JOIN user ON orders.U_ID = user.U_ID
+    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
+    $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
+    $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
 
 ?>
 <!DOCTYPE html>
@@ -23,6 +52,7 @@ session_start();
 
     <!-- Custom styles for this template-->
     <link href="../../css/sb-admin-2.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.css"/>
 
 </head>
 
@@ -35,7 +65,7 @@ session_start();
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="./Mainadmin.php">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../Mainadmin.php">
                 <div class="sidebar-brand-icon rotate-n-15">
                 </div>
                 <div class="sidebar-brand-text mx-3">Admin</div>
@@ -47,23 +77,28 @@ session_start();
 
             <!-- Heading -->
             <div class="sidebar-heading">
-                รายการสินค้า
+                รายการตรวจสอบ
             </div>
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
-                <a class="nav-link" href="../MainProduct.php">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>จัดการคลังสินค้า</span></a>
-            </li>
-            <li class="nav-item">
                 <a class="nav-link" href="../Mainadmin.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สินค้ารอตรวจสอบ</span></a>
+                    <span>รายการสั่งซื้อ </span><?php if($resultalertorder >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertorder  ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="../Mainsends.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สินค้าค้างส่ง</span></a>
+                    <span>สินค้าค้างส่ง</span><?php if($resultalertsend >0 ){ ?>
+                    <span style="margin-right:50px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertsend  ?></span><?php } else{ } ?></a></a>
+            </li>
+            <div class="sidebar-heading">
+               รายการสินค้า
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainProduct.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>จัดการคลังสินค้า</span></a>
             </li>
             <div class="sidebar-heading">
                รายการPreOrder
@@ -73,6 +108,18 @@ session_start();
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดสินค้าPreOrder</span></a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainNumPreOrder.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>รายการPreOrder</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainsendsPreOrder.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
+                    <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
+            </li>
+           
             <!-- Divider -->
             <hr class="sidebar-divider">
 
@@ -82,16 +129,36 @@ session_start();
             </div>
             <!-- Nav Item - Tables -->
             <li class="nav-item">
-                <a class="nav-link" href="tables.html">
+                <a class="nav-link" href="../ReturnOrder/MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>การสินค้าคืน</span></a>
+                    <span>รายการสินค้าคืน</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../insert/addProduct.php">
+                <a class="nav-link" href="../ManageUser.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
-
+            <div class="sidebar-heading">
+               ยีนยันการรับของ
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainStatus.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>สถานะสินค้า</span></a>
+            </li>
+            <div class="sidebar-heading">
+               อื่นๆ
+            </div>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainProductGrop.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ประเภทสินค้า</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../MainBank.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>ธนคาร</span></a>
+            </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
 
@@ -143,19 +210,20 @@ session_start();
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">Valerie Luna</span>
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?php echo $resultUser['U_Name'] ;?></span>
                                 <img class="img-profile rounded-circle"
-                                    src="https://source.unsplash.com/QAB-WJcbgJk/60x60">
+                                src="<?php echo '../../photo/User/' . $resultUser['U_Photo']; ?>">
+                            
                             </a>
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="#">
+                                <a class="dropdown-item" href="../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID']; ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     จัดการข้อมูลส่วนตัว
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="../../login/logout.php" data-toggle="modal"
+                                <a class="dropdown-item" href="../login/logout.php" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     ออกจากระบบ
@@ -175,12 +243,13 @@ session_start();
                     <div class="row">
                         <div class="maimMenu">
                                 <a class="btn btn-primary" style="float:left; margin-left:50px;margin:10px"
-                                href="../insert/addPreProduct.php">เพิ่มสินค้าPreOrder</a>
+                                href="../insert/addPreProduct.php">เพิ่มสินค้าPreOrder</a> <br> <br> 
                                 <br>
-                            <table class="table table-bordered-md">
+                            <table id="table_id" class="table table-bordered-md">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
+                                        <th scope="col">รหัสสินค้า </th>
                                         <th scope="col">ชื่อสินค้า </th>
                                         <th scope="col ">รูป</th>
                                         <th scope="col">จำนวน </th>
@@ -198,15 +267,16 @@ session_start();
                     ?>
                                     <tr>
                                         <td scope="col"><?php echo $count;?></td>
+                                        <td scope="col"><?php echo $result['P_Number'];?></td>
                                         <td scope="col"><?php echo $result['P_Name'];?></td>
                                         <td scope="col"><img src="<?php echo '../../photo/Order/'.$result['P_Photo'] ;?>"
                                                 width="50px" height="50px"></td>
                                         <td scope="col"><?php echo $result['P_Unit'];?></td>
                                         <td scope="col"><?php echo $result['P_Price'];?> </td>
                                         <td scope="col"> <a
-                                                href="../edit/editProduct.php?ID=<?php echo $result['P_ID'];?>">Edit</a></td>
+                                                href="../edit/editProduct.php?ID=<?php echo $result['P_ID'];?>"><img src="../../photo/edit.png" width="20px" hight="20px"></a></td>
                                         <td scope="col"><a
-                                                href="../delProduct.php?ID=<?php echo $result['P_ID'] ;?>">Del</a></td>
+                                                href="../del/delProduct.php?ID=<?php echo $result['P_ID'] ;?>"onclick="return confirm('คุณต้องการลบรายการนื้หรือไม่ ?')"><img src="../../photo/trash.png" width="20px" hight="20px"></a></td>
                                     </tr>
                                     <?php 
                     $count++;
@@ -267,7 +337,7 @@ session_start();
     <style>
         .maimMenu {
             margin-left: 350px;
-            width: 850px;
+            width:auto;
             padding: 50px;
             margin-bottom: 50px;
             background-color: #d2dfdfa8;
@@ -277,6 +347,7 @@ session_start();
     <!-- Bootstrap core JavaScript-->
     <script src="../../vendor/jquery/jquery.min.js"></script>
     <script src="../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs4/dt-1.10.20/datatables.min.js"></script>
 
     <!-- Core plugin JavaScript-->
     <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
@@ -290,6 +361,11 @@ session_start();
     <!-- Page level custom scripts -->
     <script src="../../js/demo/chart-area-demo.js"></script>
     <script src="../../js/demo/chart-pie-demo.js"></script>
+    <script>
+  $(document).ready( function () {
+    $('#table_id').DataTable();
+} );
+</script>
 
 </body>
 

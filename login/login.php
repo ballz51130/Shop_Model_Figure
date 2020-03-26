@@ -25,7 +25,7 @@
                         ชื่อผู้ใช้งาน
                     </div>
                     <div class="wrap-inputuser" data-validate="Username is required" >
-                        <input class="input100" type="text" name="username" required>
+                        <input class="input100" type="text" name="username" required oninvalid="this.setCustomValidity('กรุณากรอกชื่อผู้ใช้')" oninput="this.setCustomValidity('')">
                         <div class="focus-input"></div>
                     </div>
                     <div class="txtpass">
@@ -35,7 +35,7 @@
                         <div class="btn-show-pass">
                             <i class="fa fa-eye"></i>
                         </div>
-                        <input class="input100" type="password" name="pass" required>
+                        <input class="input100" type="password" name="pass" required oninvalid="this.setCustomValidity('กรุณากรอกรหัสผ่าน')" oninput="this.setCustomValidity('')">
                         <div class="focus-input100"></div>
                     </div>
                     <div class="flex-forgot">
