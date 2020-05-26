@@ -2,38 +2,38 @@
 include '../conn/conn.php';
 session_start(); 
 $sqladd ="SELECT * FROM orders 
-INNER JOIN product ON product.P_Number = orders.P_Number
 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
- WHERE U_ID= '".$_GET['U_ID']."' AND C_ID = '".$_GET['C_ID']."'";
+INNER JOIN product ON product.P_Number = orderdetail.P_Number
+INNER JOIN send_tb ON orders.Sn_id = send_tb.Sn_id
+INNER JOIN user ON orders.U_ID = user.U_ID
+ WHERE orders.U_ID= '".$_GET['U_ID']."' AND orders.O_ID = '".$_GET['O_ID']."'";
 $queryadd = mysqli_query($conn,$sqladd);
-
-
     // แสดงข้อมูล ADMIN
     $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
     $queryUser = mysqli_query($conn,$sqlUser);
     $resultUser = mysqli_fetch_array($queryUser);
     //แจ้งเตือนสินค้ารอตรวจสอบ
     $sqlalertorder =$sqlOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
-     WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
+    WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
     $queryalertorder = mysqli_query($conn,$sqlalertorder);
     $resultalertorder = mysqli_num_rows($queryalertorder);
      //แจ้งเตือนสินค้าค้างส่ง
      $sqlalertsend = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='1' Group by C_ID  ";
     $queryalertsend = mysqli_query($conn,$sqlalertsend);
     $resultalertsend = mysqli_num_rows($queryalertsend);
     // แจ้เตือนรายการสินค้า PREORDER
     $sqlalertPreOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
     $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
     $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
@@ -49,7 +49,7 @@ $queryadd = mysqli_query($conn,$sqladd);
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    <link href="/your-path-to-fontawesome/css/all.css" rel="stylesheet"> <!--load all styles -->
     <title>Admin</title>
     <!-- Custom fonts for this template-->
     <link href="../vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -102,9 +102,14 @@ $queryadd = mysqli_query($conn,$sqladd);
                รายการสินค้า
             </div>
             <li class="nav-item">
+                <a class="nav-link" href="./MainAddProduct.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>คลังสืนค้า</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="./MainProduct.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดการคลังสินค้า</span></a>
+                    <span>รายการสินค้า</span></a>
             </li>
             <div class="sidebar-heading">
                รายการPreOrder
@@ -112,7 +117,7 @@ $queryadd = mysqli_query($conn,$sqladd);
             <li class="nav-item">
                 <a class="nav-link" href="./Preorder/MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดสินค้าPreOrder</span></a>
+                    <span>รายการสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./Preorder/MainNumPreOrder.php">
@@ -137,7 +142,8 @@ $queryadd = mysqli_query($conn,$sqladd);
             <li class="nav-item">
                 <a class="nav-link" href="./ReturnOrder/MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>รายการสินค้าคืน</span></a>
+                    <span>รายการคืนสินค้า</span><?php if($resultalertreturn >0 ){ ?>
+                    <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertreturn  ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./ManageUser.php">
@@ -164,6 +170,11 @@ $queryadd = mysqli_query($conn,$sqladd);
                 <a class="nav-link" href="./MainBank.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ธนคาร</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="./MainEMS.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>การจัดส่ง</span></a>
             </li>
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
@@ -243,16 +254,9 @@ $queryadd = mysqli_query($conn,$sqladd);
                 <!-- End of Topbar -->
 
 
-
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-                    <!-- Page Heading -->
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">การส่งของ</h1>
-                        <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                                class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
-                    </div>
                     <!-- Content Row -->
                     <div class="row">
                         <!-- เนื้อหา -->
@@ -268,7 +272,18 @@ $queryadd = mysqli_query($conn,$sqladd);
                                 <label for="inputEmail4">ชื่อสินค้า : <?php echo $resultadd['P_Name']; ?></label>
                                 </div>
                                 <div class="form-row col-md-12">
-                                <label for="inputEmail4"> จำนวน <?php echo $resultadd['OD_Unit']; ?></label>
+                                <label for="inputEmail4">สั่งซื้อโดย : <?php echo $resultadd['U_Name']; ?></label>
+                                </div>
+                                <div class="form-row col-md-12">
+                                <label for="inputEmail4"> จัดส่งแบบ : <?php echo $resultadd['Sn_Name']; ?></label>
+                                </div>
+                                <br>
+                                <div class="col-md-3">
+                                <img src="<?php echo '../photo/Order/'.$resultadd['P_Photo'] ;?>" width="150px"
+                                    height="150px">
+                            </div> <br>
+                                <div class="form-row col-md-12">
+                                <label for="inputEmail4"> จำนวน <?php echo $resultadd['OD_Unit'].'ชิ้น'; ?></label>
                                 </div>
                                 </div>
                                 <div class="form-row col-md-12">
@@ -279,10 +294,6 @@ $queryadd = mysqli_query($conn,$sqladd);
                                     <br>
                                      
                         <?php } ?>
-                                   
-                                <div class="form-group col-md-12" style="padding-top:50px; margin-right:500px;">
-                                    <a href="./reportSend.php?U_ID=<?php echo  $resultadd['U_ID'];?>">Report</a>
-                                </div>
                                 <div class="form-group col-md-12">
                                     <button type="submit" class="btn btn-primary"
                                     style="margin-left:170px;posision:absolute;">ยืนยันการส่ง</button>

@@ -181,10 +181,6 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                         <label for="inputEmail4">UserName</label>
                                         <input type="text" name="U_UserName" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_UserName'] ;?>">
                                     </div>
-                                    <div class="form-group" style="margin-left:50px">
-                                        <label for="inputPassword4">Password</label>
-                                        <input type="password" name="U_Password" class="form-control" id="inputPassword4" value="">
-                                    </div>
                                     <div class="photo">
                                      <img src="<?php echo '../photo/User/'.$resultuser['U_Photo'] ;?>" alt="" style="margin-left:200px; margin-top:-30px; position: absolute;width: 120px;height: 120px;-moz-border-radius: 70px; -webkit-border-radius: 70px; ">
                                     </div>
@@ -233,7 +229,7 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label for="inputEmail4">เบอร์โทรศัพย์</label>
+                                    <label for="inputEmail4">เบอร์โทรศัพท์</label>
                                     <input type="text" name="U_Phone" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Phone'] ;?>">
                                 </div>
                                 <br>
@@ -300,6 +296,9 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
             padding: 50px;
             background-color: white;
 
+        }
+        .photo{
+            margin-left:200px;
         }
     </style>
     <!-- Bootstrap core JavaScript-->

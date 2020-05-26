@@ -1,35 +1,40 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
-    // แสดงข้อมูล ADMIN
-    $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
-    $queryUser = mysqli_query($conn,$sqlUser);
-    $resultUser = mysqli_fetch_array($queryUser);
-    //แจ้งเตือนสินค้ารอตรวจสอบ
-    $sqlalertorder =$sqlOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
-    INNER JOIN user ON orders.U_ID = user.U_ID
-    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-    INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
-     WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
-    $queryalertorder = mysqli_query($conn,$sqlalertorder);
-    $resultalertorder = mysqli_num_rows($queryalertorder);
-     //แจ้งเตือนสินค้าค้างส่ง
-     $sqlalertsend = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
-    INNER JOIN user ON orders.U_ID = user.U_ID
-    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-    WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='1' Group by C_ID  ";
-    $queryalertsend = mysqli_query($conn,$sqlalertsend);
-    $resultalertsend = mysqli_num_rows($queryalertsend);
-    // แจ้เตือนรายการสินค้า PREORDER
-    $sqlalertPreOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
-    INNER JOIN user ON orders.U_ID = user.U_ID
-    INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-    WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
-    $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
+        // แสดงข้อมูล ADMIN
+        $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
+        $queryUser = mysqli_query($conn,$sqlUser);
+        $resultUser = mysqli_fetch_array($queryUser);
+        //แจ้งเตือนสินค้ารอตรวจสอบ
+        $sqlalertorder =$sqlOrder = "SELECT * FROM orders
+        INNER JOIN user ON orders.U_ID = user.U_ID
+        INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+        INNER JOIN product ON orderdetail.P_Number = product.P_Number
+        INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
+         WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
+        $queryalertorder = mysqli_query($conn,$sqlalertorder);
+        $resultalertorder = mysqli_num_rows($queryalertorder);
+         //แจ้งเตือนสินค้าค้างส่ง
+         $sqlalertsend = "SELECT * FROM orders
+        INNER JOIN user ON orders.U_ID = user.U_ID
+        INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+        INNER JOIN product ON orderdetail.P_Number = product.P_Number
+        WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='1' Group by C_ID  ";
+        $queryalertsend = mysqli_query($conn,$sqlalertsend);
+        $resultalertsend = mysqli_num_rows($queryalertsend);
+        // แจ้เตือนรายการสินค้า PREORDER
+        $sqlalertPreOrder = "SELECT * FROM orders
+        INNER JOIN user ON orders.U_ID = user.U_ID
+        INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+        INNER JOIN product ON orderdetail.P_Number = product.P_Number
+        WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
+        $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
+        $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
     $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
+    // แจ้งเตือนการคืนสินค้า
+  $sqlalertreturn = "SELECT * FROM `returnorder` WHERE Re_Status ='รอตรวจสอบ(สินค้า)' ";
+  $queryalertreturn = mysqli_query($conn,$sqlalertreturn);
+  $resultalertreturn = mysqli_num_rows($queryalertreturn);
 
 ?>
 <!DOCTYPE html>
@@ -95,25 +100,30 @@ session_start();
                รายการสินค้า
             </div>
             <li class="nav-item">
+                <a class="nav-link" href="../MainAddProduct.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>คลังสืนค้า</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="../MainProduct.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดการคลังสินค้า</span></a>
+                    <span>รายการสินค้า</span></a>
             </li>
             <div class="sidebar-heading">
                รายการPreOrder
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="./MainPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดสินค้าPreOrder</span></a>
+                    <span>รายการสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainNumPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainNumPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>รายการPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainsendsPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainsendsPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
                     <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
@@ -130,7 +140,8 @@ session_start();
             <li class="nav-item">
                 <a class="nav-link" href="../ReturnOrder/MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>รายการสินค้าคืน</span></a>
+                    <span>รายการคืนสินค้า</span><?php if($resultalertreturn >0 ){ ?>
+                    <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertreturn  ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="../ManageUser.php">
@@ -239,7 +250,7 @@ session_start();
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">เพิ่มรายการสินค้า</h1>
+            <h1 class="h3 mb-0 text-gray-800">เพิ่มรายการสินค้าPreOrder</h1>
           </div>
 
           <!-- Content Row -->
@@ -251,81 +262,81 @@ session_start();
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">รหัสสินค้า</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputtext" name="P_Number" value="" required>
+                    <input type="text" class="form-control" id="inputtext" name="P_Number" value="" pattern="[A-Za-z0-9\s]{5,11}" required oninvalid="this.setCustomValidity('รหัสต้องมีมากว่า 5 ตัวอักษรและไม่เกิน 11 ตัวอักษร ประกอบไปด้วย A-Z,0-9 ')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputPassword3" class="col-sm-2 col-form-label">ชื่อสินค้า</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputPassword3" name="P_Name" value="" required> 
+                    <input type="text" class="form-control" id="inputPassword3" name="P_Name" value="" pattern="[A-Za-z0-9ก-๑\s]{1,}" required oninvalid="this.setCustomValidity('ชื่อสินค้าไม่ถูกต้อง')" oninput="this.setCustomValidity('')"> 
                   </div>
                 </div>
                 <div class="inputphoto">
                   <label for="Name">รายระเอียดสินค้า</label>
                   <div>
-                    <textarea id="text" cols="30" rows="4" name="image_text"></textarea>
+                    <textarea id="text" cols="30" rows="4" name="image_text" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')"></textarea>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">รูปหลักสินค้า</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image" required>
+                    <input type="file" name="image" accept=".jpg, .jpeg, .png" required oninvalid="this.setCustomValidity('กรุณาใส่รูปภาพ')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">รูปรายระเอียด1</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image1">
+                    <input type="file" name="image1" accept=".jpg, .jpeg, .png" required oninvalid="this.setCustomValidity('กรุณาใส่รูปภาพ')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">รูปรายระเอียด2</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image2">
+                    <input type="file" name="image2" accept=".jpg, .jpeg, .png" required oninvalid="this.setCustomValidity('กรุณาใส่รูปภาพ')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">รูปรายระเอียด3</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image3">
+                    <input type="file" name="image3" accept=".jpg, .jpeg, .png" required oninvalid="this.setCustomValidity('กรุณาใส่รูปภาพ')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">น้ำหนัก</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputtext" name="P_weight" value="">
+                    <input type="number" class="form-control" id="inputtext" name="P_weight" value="" min="1" pattern="[0-9]{1,4}" required oninvalid="this.setCustomValidity('ข้อมูลน้ำหนักไม่เกิน 4 หลัก')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">แบรนด์สินค้า</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputtext" name="P_Brand" value="">
+                    <input type="text" class="form-control" id="inputtext" name="P_Brand" value="" pattern="[A-Za-z0-9ก-๑-\s]{1,}"  required oninvalid="this.setCustomValidity('กรุณาใส่แบรนด์สินค้า')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">ราคาสินค้า</label>
                   <div class="col-sm-4">
-                    <input type="text" class="form-control" id="inputtext" name="P_Price" value="">
+                    <input type="number" class="form-control" id="inputtext" name="P_Price" value="" min="1" pattern="[0-9]{1,7}" required oninvalid="this.setCustomValidity('ราคาสินค้าไม่ถูกต้อง')" oninput="this.setCustomValidity('')"> 
                   </div>
                 </div>
                 <input type="hidden" name="P_Status" value="2">
                 <div class="form-group row">
-                  <label for="inputtext" class="col-sm-2 col-form-label">เปิดถึงวันที่</label>
+                  <label for="inputtext" class="col-sm-2 col-form-label">เปิดรับถึงวันที่</label>
                   <div class="col-sm-4">
-                    <input type="date" class="form-control" id="inputtext" name="Pre_Month" value="">
+                    <input type="date" class="form-control" id="inputtext" name="Pre_Month" value="" required>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">ได้รับของประมาณ</label>
                   <div class="col-sm-4">
-                    <input type="date" class="form-control" id="inputtext" name="Pre_Comin" value="">
+                    <input type="date" class="form-control" id="inputtext" name="Pre_Comin" value=""required>
                   </div>
                 </div>
                 <input type="hidden" name="P_Status" value="2">
                 <div class="form-group row">
                 <label for="inputtext" class="col-sm-2 col-form-label">ประเภท</label>
                 <div class="col-sm-4">
-                <select id="P_Group" name="P_Group" class="form-control">
+                <select id="P_Group" name="P_Group" class="form-control" required>
                       <?php $sqlstatus = "SELECT * FROM group_tb " ;
                             $querystatus = mysqli_query($conn,$sqlstatus);
                       ?>
@@ -337,7 +348,7 @@ session_start();
                       <?php } ?>
                     </select>
                     <div class="addStatus" style="position: absolute; margin-left:200px;margin-top:-30px;">
-                    <a href="../insert/addProduct.php">เพิ่ม</a>
+                    <a href="./addGroup.php">เพิ่ม</a>
                     </div>
                     </div>
                 </div>

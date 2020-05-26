@@ -2,42 +2,45 @@
 include '../../conn/conn.php';
 session_start();
 $b = $_GET['ID'];
-$sql = "SELECT * FROM product WHERE P_ID=".$b;
+$sql = "SELECT * FROM product INNER JOIN status_tb ON status_tb.St_Number = product.P_Status WHERE P_ID=".$b;
 $query = mysqli_query($conn,$sql);
 $result = mysqli_fetch_array($query);
 $sqlimg="SELECT * FROM productdetail where P_Number='".$result['P_Number']."' ";
 $queryimg = mysqli_query($conn,$sqlimg);
 $resultimg = mysqli_fetch_array($queryimg);
-
     // แสดงข้อมูล ADMIN
     $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
     $queryUser = mysqli_query($conn,$sqlUser);
     $resultUser = mysqli_fetch_array($queryUser);
     //แจ้งเตือนสินค้ารอตรวจสอบ
     $sqlalertorder =$sqlOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
      WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
     $queryalertorder = mysqli_query($conn,$sqlalertorder);
     $resultalertorder = mysqli_num_rows($queryalertorder);
      //แจ้งเตือนสินค้าค้างส่ง
      $sqlalertsend = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='1' Group by C_ID  ";
     $queryalertsend = mysqli_query($conn,$sqlalertsend);
     $resultalertsend = mysqli_num_rows($queryalertsend);
     // แจ้เตือนรายการสินค้า PREORDER
     $sqlalertPreOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
     $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
     $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
+    // แจ้งเตือนการคืนสินค้า
+  $sqlalertreturn = "SELECT * FROM `returnorder` WHERE Re_Status ='รอตรวจสอบ(สินค้า)' ";
+  $queryalertreturn = mysqli_query($conn,$sqlalertreturn);
+  $resultalertreturn = mysqli_num_rows($queryalertreturn);
 
 ?>
 <!DOCTYPE html>
@@ -103,25 +106,30 @@ $resultimg = mysqli_fetch_array($queryimg);
                รายการสินค้า
             </div>
             <li class="nav-item">
+                <a class="nav-link" href="../MainAddProduct.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>คลังสืนค้า</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="../MainProduct.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดการคลังสินค้า</span></a>
+                    <span>รายการสินค้า</span></a>
             </li>
             <div class="sidebar-heading">
                รายการPreOrder
             </div>
             <li class="nav-item">
-                <a class="nav-link" href="./MainPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>จัดสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainNumPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainNumPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>รายการPreOrder</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="./MainsendsPreOrder.php">
+                <a class="nav-link" href="../Preorder/MainsendsPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
                     <span>ค้างส่ง(PreOrder)</span><?php if($resultalertPreOrder >0 ){ ?>
                     <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertPreOrder  ?></span><?php } else{ } ?></a></a>
@@ -225,7 +233,7 @@ $resultimg = mysqli_fetch_array($queryimg);
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID']; ?>">
+                                <a class="dropdown-item" href="../../user/EditUser.php?U_ID=<?php echo $resultUser['U_ID']; ?>">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     จัดการข้อมูลส่วนตัว
                                 </a>
@@ -295,11 +303,17 @@ $resultimg = mysqli_fetch_array($queryimg);
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">จำนวน</label>
                   <div class="col-sm-8">
-                    <input type="text" class="form-control" id="inputtext" name="P_Unit" value="<?php echo $result['P_Unit'] ?>">
+                    <input type="text" class="form-control" id="inputtext" name="P_Unit" value="<?php echo $result['P_Unit'] ?>" >
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="inputtext" class="col-sm-2 col-form-label">ราคาสินค้า</label>
+                  <label for="inputtext" class="col-sm-2 col-form-label">ราคาต้นทุน</label>
+                  <div class="col-sm-8">
+                    <input type="text" class="form-control" id="inputtext" name="P_Pricebye" value="<?php echo $result['P_Purchaseprice'] ?>">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputtext" class="col-sm-2 col-form-label">ราคาขาย</label>
                   <div class="col-sm-8">
                     <input type="text" class="form-control" id="inputtext" name="P_Price" value="<?php echo $result['P_Price'] ?>">
                   </div>
@@ -307,11 +321,11 @@ $resultimg = mysqli_fetch_array($queryimg);
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-2 col-form-label">สถานะสินค้า</label>
                   <div class="col-sm-8">
-                    <select id="P_Status" name="P_Status" class="form-control">
+                    <select id="P_Status" name="P_Status" class="form-control" >
+                    <option value="<?php echo $result['P_Status'] ?>"><?php echo $result['St_Name'] ?></option>
                       <?php $sqlstatus = "SELECT * FROM status_tb " ;
                             $querystatus = mysqli_query($conn,$sqlstatus);
                       ?>
-                      <option class="form-control" value="<?php echo $result['P_Status'] ?>">
                         <?php while($rowstatus= mysqli_fetch_array($querystatus)) {?>
                       <option class="form-control" value="<?php echo $rowstatus['St_Number'];?>">
                         <?php echo $rowstatus['St_Name'];?>
@@ -388,7 +402,7 @@ $resultimg = mysqli_fetch_array($queryimg);
         <div class="modal-body">คุณต้องการออกจากระบบ ?</div>
         <div class="modal-footer">
           <button class="btn btn-secondary" type="button" data-dismiss="modal">ยกเลิก</button>
-          <a class="btn btn-primary" href="login.html">ออกจากระบบ</a>
+          <a class="btn btn-primary" href="../../login/logout.php">ออกจากระบบ</a>
         </div>
       </div>
     </div>

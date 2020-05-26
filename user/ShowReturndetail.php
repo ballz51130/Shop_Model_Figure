@@ -9,7 +9,7 @@ $sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
 //
-$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+$sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID INNER JOIN product ON product.P_Number = orderdetail.P_Number WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
  $queryorder = $conn->query($sqlOrder);
  $resultorder = mysqli_num_rows($queryorder);
 ?>
@@ -174,10 +174,10 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                     <?php 
                                 $sqlOrder = "SELECT  * FROM returnorder 
                                 INNER JOIN returnorderdetail ON returnorderdetail.O_ID = returnorder.O_ID
-                                INNER JOIN user ON user.U_ID = returnorder.U_ID
                                 INNER JOIN orders ON orders.O_ID = returnorder.O_ID
-                                INNER JOIN product ON product.P_Number = orders.P_Number
+                                INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orderdetail.O_ID = orders.O_ID
+                                INNER JOIN product ON product.P_Number = orderdetail.P_Number
                                 where Re_ID= '".$_GET['Re_ID']."'
                                 ";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);

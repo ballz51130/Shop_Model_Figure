@@ -181,9 +181,9 @@ if(isset($_POST['submit'])){
                              <form action="" method="post">
                             <?php
                                 $sql ="SELECT  * FROM orders
-                                INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                INNER JOIN product ON product.P_Number = orderdetail.P_Number
                                 WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_ID = '".$_GET['O_ID']."'";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);

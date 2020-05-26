@@ -7,29 +7,33 @@ session_start();
     $resultUser = mysqli_fetch_array($queryUser);
     //แจ้งเตือนสินค้ารอตรวจสอบ
     $sqlalertorder =$sqlOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
      WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
     $queryalertorder = mysqli_query($conn,$sqlalertorder);
     $resultalertorder = mysqli_num_rows($queryalertorder);
      //แจ้งเตือนสินค้าค้างส่ง
      $sqlalertsend = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='1' Group by C_ID  ";
     $queryalertsend = mysqli_query($conn,$sqlalertsend);
     $resultalertsend = mysqli_num_rows($queryalertsend);
     // แจ้เตือนรายการสินค้า PREORDER
     $sqlalertPreOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
     $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
     $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
+    // แจ้งเตือนการคืนสินค้า
+  $sqlalertreturn = "SELECT * FROM `returnorder` WHERE Re_Status ='รอตรวจสอบ(สินค้า)' ";
+  $queryalertreturn = mysqli_query($conn,$sqlalertreturn);
+  $resultalertreturn = mysqli_num_rows($queryalertreturn);
 
 ?>
 <!DOCTYPE html>
@@ -95,9 +99,14 @@ session_start();
                รายการสินค้า
             </div>
             <li class="nav-item">
+                <a class="nav-link" href="../MainAddProduct.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>คลังสืนค้า</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="../MainProduct.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดการคลังสินค้า</span></a>
+                    <span>รายการสินค้า</span></a>
             </li>
             <div class="sidebar-heading">
                รายการPreOrder
@@ -105,7 +114,7 @@ session_start();
             <li class="nav-item">
                 <a class="nav-link" href="./MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดสินค้าPreOrder</span></a>
+                    <span>รายการสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./MainNumPreOrder.php">
@@ -130,7 +139,8 @@ session_start();
             <li class="nav-item">
                 <a class="nav-link" href="../ReturnOrder/MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>รายการสินค้าคืน</span></a>
+                    <span>รายการคืนสินค้า</span><?php if($resultalertreturn >0 ){ ?>
+                    <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertreturn  ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="../ManageUser.php">
@@ -252,13 +262,13 @@ session_start();
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-3 col-form-label">รหัสสินค้า</label>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control" id="inputtext" name="P_Number" value="" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')"> 
+                    <input type="text" class="form-control" id="inputtext" name="P_Number" value="" pattern="[A-Za-z0-9]{5,11}"  title="กรุณาใส่มากว่า5ตัวอักษร" required oninvalid="this.setCustomValidity('กรุณาใส่ข้อมูลเฉพาะ a-z 0-9 และต้องมากว่า5ตัวอัพษร')" oninput="this.setCustomValidity('')"> 
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputPassword3" class="col-sm-3 col-form-label">ชื่อสินค้า</label>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control" id="inputPassword3" name="P_Name" value="" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
+                    <input type="text" class="form-control" id="inputPassword3" name="P_Name" value="" pattern="[A-Za-z0-9ก-๑\s]{5,}" title="กรุณาใส่มากว่า5ตัวอักษร"  required oninvalid="this.setCustomValidity('กรุณาใส่ข้อความมากว่า5ตัวอัพษร')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                 <div class="inputphoto">
@@ -294,25 +304,31 @@ session_start();
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-3 col-form-label">น้ำหนัก(กรัม)</label>
                   <div class="col-sm-6">
-                    <input type="number" class="form-control" id="inputtext" name="P_weight" value="" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
+                    <input type="number" class="form-control" id="inputtext" name="P_weight" value="" min="1"  max="9999" title="ตัวเลขต้องมากกว่า 0 น้อยกว่า 11 หลัก"   required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-3 col-form-label">แบรนด์สินค้า</label>
                   <div class="col-sm-6">
-                    <input type="text" class="form-control" id="inputtext" name="P_Brand" value="" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
+                    <input type="text" class="form-control" id="inputtext" name="P_Brand" value=""  required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
                   </div>
                   </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-3 col-form-label">จำนวน</label>
                   <div class="col-sm-6">
-                    <input type="number" class="form-control" id="inputtext" name="P_Unit" value="" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
+                    <input type="number" class="form-control" id="inputtext" name="P_Unit" value="" min="1" max="99" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="inputtext" class="col-sm-3 col-form-label">ราคาสินค้า</label>
+                  <label for="inputtext" class="col-sm-3 col-form-label">ราคาต้นทุน</label>
                   <div class="col-sm-6">
-                    <input type="number" min="0" class="form-control" id="inputtext" name="P_Price" value="" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
+                    <input type="number"  class="form-control" id="inputtext" name="P_Pricebye" value="" min="1" max="9999999" required oninvalid="this.setCustomValidity('ราคาสินค้าไม่ถูกต้อง')" oninput="this.setCustomValidity('')">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="inputtext" class="col-sm-3 col-form-label">ราคาขาย</label>
+                  <div class="col-sm-6">
+                    <input type="number"  class="form-control" id="inputtext" name="P_Price" value="" min="1" max="9999999" required oninvalid="this.setCustomValidity('ราคาสินค้าไม่ถูกต้อง')" oninput="this.setCustomValidity('')">
                   </div>
                 </div>
                <input type="hidden" name="P_Status" value="1">

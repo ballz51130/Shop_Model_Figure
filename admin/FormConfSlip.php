@@ -2,15 +2,15 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
-$sqlre = "SELECT orders.O_ID,user.U_UserName,product.P_Name,P_ID,orderdetail.OD_Unit,product.P_Price,product.P_Photo,send_tb.Sn_Price,bank_tb.Bk_Name,Bk_Number,orders.C_ID,
- slip_tb.Sp_Price,slip_tb.Sp_Frombank,Sp_LastNum,slip_tb.Sp_Tobank,slip_tb.Sp_Time,slip_tb.Sp_Date,slip_tb.Sp_Img,send_tb.Sn_id
- FROM orders
- INNER JOIN user ON user.U_ID = orders.U_ID
- INNER JOIN product ON product.P_Number = orders.P_Number
- INNER JOIN orderdetail ON orderdetail.O_ID = orders.O_ID
- INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
- INNER JOIN bank_tb ON bank_tb.Bk_id = orders.Bk_id 
- INNER JOIN slip_tb ON slip_tb.O_ID = orders.O_ID
+$sqlre = "SELECT orders.O_ID,user.U_UserName,product.P_Name,P_ID,orderdetail.OD_Unit,orderdetail.P_Number,product.P_Price,product.P_Photo,send_tb.Sn_Price,bank_tb.Bk_Name,Bk_Number,orders.C_ID,
+payment_tb.Pay_Price,payment_tb.Pay_Frombank,Pay_LastNum,payment_tb.Pay_Time,payment_tb.Pay_Date,payment_tb.Pay_Img,send_tb.Sn_id
+FROM orders
+INNER JOIN user ON user.U_ID = orders.U_ID
+INNER JOIN orderdetail ON orderdetail.O_ID = orders.O_ID
+INNER JOIN product ON product.P_Number = orderdetail.P_Number
+INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
+INNER JOIN bank_tb ON bank_tb.Bk_id = orders.Bk_id 
+INNER JOIN payment_tb ON payment_tb.O_ID = orders.O_ID
  WHERE orders.C_ID = ".$_GET['C_ID'];
  $query = mysqli_query($conn,$sqlre);
  $queryproduct = mysqli_query($conn,$sqlre); 
@@ -23,29 +23,34 @@ $sqlre = "SELECT orders.O_ID,user.U_UserName,product.P_Name,P_ID,orderdetail.OD_
     $resultUser = mysqli_fetch_array($queryUser);
     //แจ้งเตือนสินค้ารอตรวจสอบ
     $sqlalertorder =$sqlOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
      WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
     $queryalertorder = mysqli_query($conn,$sqlalertorder);
     $resultalertorder = mysqli_num_rows($queryalertorder);
      //แจ้งเตือนสินค้าค้างส่ง
      $sqlalertsend = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='1' Group by C_ID  ";
     $queryalertsend = mysqli_query($conn,$sqlalertsend);
     $resultalertsend = mysqli_num_rows($queryalertsend);
     // แจ้เตือนรายการสินค้า PREORDER
     $sqlalertPreOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
     $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
     $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
+    
+    $sqlalertreturn = "SELECT * FROM `returnorder` WHERE Re_Status ='รอตรวจสอบ(สินค้า)' ";
+    $queryalertreturn = mysqli_query($conn,$sqlalertreturn);
+    $resultalertreturn = mysqli_num_rows($queryalertreturn);
+
 
 ?>
 <!DOCTYPE html>
@@ -112,17 +117,23 @@ $sqlre = "SELECT orders.O_ID,user.U_UserName,product.P_Name,P_ID,orderdetail.OD_
                รายการสินค้า
             </div>
             <li class="nav-item">
+                <a class="nav-link" href="./MainAddProduct.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>คลังสืนค้า</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="./MainProduct.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดการคลังสินค้า</span></a>
+                    <span>รายการสินค้า</span></a>
             </li>
+            
             <div class="sidebar-heading">
                รายการPreOrder
             </div>
             <li class="nav-item">
                 <a class="nav-link" href="./Preorder/MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดสินค้าPreOrder</span></a>
+                    <span>รายการสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./Preorder/MainNumPreOrder.php">
@@ -147,7 +158,8 @@ $sqlre = "SELECT orders.O_ID,user.U_UserName,product.P_Name,P_ID,orderdetail.OD_
             <li class="nav-item">
                 <a class="nav-link" href="./ReturnOrder/MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>รายการสินค้าคืน</span></a>
+                    <span>รายการคืนสินค้า</span><?php if($resultalertreturn >0 ){ ?>
+                    <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertreturn  ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./ManageUser.php">
@@ -254,7 +266,9 @@ $sqlre = "SELECT orders.O_ID,user.U_UserName,product.P_Name,P_ID,orderdetail.OD_
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">ตรวจสอบการชำระเงิน</h1>
+                    </div>
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
                       
@@ -314,33 +328,34 @@ $sqlre = "SELECT orders.O_ID,user.U_UserName,product.P_Name,P_ID,orderdetail.OD_
               <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">โอนจากธนคาร</label>
                 <div class="col-sm-6">
-                <label for="" class="form-control"><?php echo $result['Sp_Frombank'].' xxx-x-xx '.$result['Sp_LastNum']; ?> </label>
+                <label for="" class="form-control"><?php echo $result['Pay_Frombank'].' xxx-x-xx '.$result['Pay_LastNum']; ?> </label>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">ไปยัง</label>
                 <div class="col-sm-6">
-                <label for="" class="form-control"> <?php echo $result['Sp_Tobank'].' '.$result['Bk_Number'] ;?></label> 
+                <?php $sqlbank="SELECT * FROM bank_tb" ?>
+                <label for="" class="form-control"> <?php echo $result['Bk_Name'].' '.$result['Bk_Number'] ;?></label> 
                 </div>
               </div>
               <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">จำนวน</label>
                 <div class="col-sm-3">
-                <label for="" class="form-control"><?php echo $result['Sp_Price'];?> บาท</label>
+                <label for="" class="form-control"><?php echo $result['Pay_Price'];?> บาท</label>
                   
                 </div>
               </div>
               <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">เวลที่โอน</label>
                 <div class="col-sm-4">
-                <label for="" class="form-control"><?php echo $result['Sp_Time']; ?></label>
+                <label for="" class="form-control"><?php echo $result['Pay_Time']; ?></label>
                   
                 </div>
               </div>
               <div class="form-group row">
                 <label for="inputPassword3" class="col-sm-4 col-form-label">วันที่โอน</label>
                 <div class="col-sm-4">
-                    <?php $newDate = date("d-m-Y", strtotime($result['Sp_Date'])); ?>
+                    <?php $newDate = date("d-m-Y", strtotime($result['Pay_Date'])); ?>
                     <!-- กำหนด เรียง วัน/เดือน/ปี -->
                 <label for="" class="form-control"><?php echo $newDate;?>
             
@@ -352,7 +367,7 @@ $sqlre = "SELECT orders.O_ID,user.U_UserName,product.P_Name,P_ID,orderdetail.OD_
         </div>
         <div class="col-md-5">
           <div class="photo-img">
-            <img src="<?php echo '../photo/Slip/'.$result['Sp_Img'];?>">
+            <img src="<?php echo '../photo/Slip/'.$result['Pay_Img'];?>">
           </div>
           <div class="lable">
             <select id="cars" name="cars">	                                        

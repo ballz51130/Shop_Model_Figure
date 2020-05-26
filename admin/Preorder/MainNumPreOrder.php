@@ -7,29 +7,33 @@ session_start();
     $resultUser = mysqli_fetch_array($queryUser);
     //แจ้งเตือนสินค้ารอตรวจสอบ
     $sqlalertorder =$sqlOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
      WHERE  orders.O_Status ='รอตรวจสอบ' group by orders.C_ID ";;
     $queryalertorder = mysqli_query($conn,$sqlalertorder);
     $resultalertorder = mysqli_num_rows($queryalertorder);
      //แจ้งเตือนสินค้าค้างส่ง
      $sqlalertsend = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='1' Group by C_ID  ";
     $queryalertsend = mysqli_query($conn,$sqlalertsend);
     $resultalertsend = mysqli_num_rows($queryalertsend);
     // แจ้เตือนรายการสินค้า PREORDER
     $sqlalertPreOrder = "SELECT * FROM orders
-    INNER JOIN product ON orders.P_Number = product.P_Number
     INNER JOIN user ON orders.U_ID = user.U_ID
     INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+    INNER JOIN product ON orderdetail.P_Number = product.P_Number
     WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' Group by C_ID  ";
     $queryalertPreOrder = mysqli_query($conn,$sqlalertPreOrder);
     $resultalertPreOrder = mysqli_num_rows($queryalertPreOrder);
+    // แจ้งเตือนการคืนสินค้า
+  $sqlalertreturn = "SELECT * FROM `returnorder` WHERE Re_Status ='รอตรวจสอบ(สินค้า)' ";
+  $queryalertreturn = mysqli_query($conn,$sqlalertreturn);
+  $resultalertreturn = mysqli_num_rows($queryalertreturn);
 
 ?>
 <!DOCTYPE html>
@@ -95,9 +99,14 @@ session_start();
                รายการสินค้า
             </div>
             <li class="nav-item">
+                <a class="nav-link" href="../MainAddProduct.php">
+                    <i class="fas fa-fw fa-table"></i>
+                    <span>คลังสืนค้า</span></a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link" href="../MainProduct.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดการคลังสินค้า</span></a>
+                    <span>รายการสินค้า</span></a>
             </li>
             <div class="sidebar-heading">
                รายการPreOrder
@@ -105,7 +114,7 @@ session_start();
             <li class="nav-item">
                 <a class="nav-link" href="./MainPreOrder.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>จัดสินค้าPreOrder</span></a>
+                    <span>รายการสินค้าPreOrder</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./MainNumPreOrder.php">
@@ -130,7 +139,8 @@ session_start();
             <li class="nav-item">
                 <a class="nav-link" href="../ReturnOrder/MainReturn.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>รายการสินค้าคืน</span></a>
+                    <span>รายการคืนสินค้า</span><?php if($resultalertreturn >0 ){ ?>
+                    <span style="margin-right:20px;margin-top:5px;" class="badge badge-danger badge-counter"><?php echo $resultalertreturn  ?></span><?php } else{ } ?></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="../ManageUser.php">
@@ -237,23 +247,29 @@ session_start();
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                        <h1 class="h3 mb-0 text-gray-800">รายการPreOrder</h1>
+                    </div>
                     <!-- Content Row -->
                     <div class="row">
                         <div class="product">
-                            
                         <div class="table">
                                 <?php 
                                 $sqlOrder = "SELECT *
                                 ,SUM(orderdetail.OD_Unit) AS OUnit,MONTH(product.P_Date) as PreMonth FROM orders
-                                 INNER JOIN product ON orders.P_Number = product.P_Number
                                  INNER JOIN user ON orders.U_ID = user.U_ID
                                  INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                 INNER JOIN product ON orderdetail.P_Number = product.P_Number
                                   WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' GROUP BY  PreMonth";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);
                                 $check = mysqli_query($conn,$sqlOrder);
-                                $resultcheck = mysqli_num_rows($check);
+                                $resultcheck =  mysqli_fetch_array($check);
                                 $num = 1;
-                                if($resultcheck>0){
+                                if($resultcheck == ""){
+                                    echo "<span style='font-size:30px;margin-left:250px;margin-top:-50px;position: absolute;'>ไม่พบรายการสินค้าค้างส่ง</span>";
+                                }
+                                if($resultcheck > 0){
+                                   
                                 ?>
                                 <H3>สรุปPreOrder </H3>
                                 <table  class="table table-hover">

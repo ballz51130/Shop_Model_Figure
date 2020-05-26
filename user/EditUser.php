@@ -1,20 +1,21 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
-
-
-$sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
+$sqluser="SELECT * FROM user
+INNER JOIN district ON district.DISTRICT_ID = user.T_District
+INNER JOIN amphur ON amphur.AMPHUR_ID = user.A_District
+INNER JOIN province ON province.PROVINCE_ID = user.Province
+ WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
-
+// 
 $sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='ยืนยันการสั่งซื้อ'";
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
 //
-$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+$sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID INNER JOIN product ON product.P_Number = orderdetail.P_Number WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
  $queryorder = $conn->query($sqlOrder);
  $resultorder = mysqli_num_rows($queryorder);
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,12 +78,12 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
             <li class="nav-item">
                 <a class="nav-link" href="./status.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบ/คืนสินค้า</span></a>
+                    <span>สถานะสินค้า</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./ReturnStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะการคืนสินค้า</span></a>
+                    <span>คืนสินค้า</span></a>
             </li>
                   <li class="nav-item">
                 <a class="nav-link" href="./EditUser.php">
@@ -209,33 +210,40 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
     <div class="form">
       <div class="note">
         <p>ข้อมูลส่วนตัว</p>
+        
       </div>
       <div class="form-content">
+      
         <form action="./Checkeditprofile.php" method="POST" enctype="multipart/form-data">
         <input type="hidden" name="U_ID" value="<?php echo $resultuser['U_ID'];?>">
           <div class="form-row">
-          <div class="col-md-12">
+          <div class="col-md-6">
             <div class="form-group">
               <label for="inputEmail4">ชื่อผูใช้</label>
-              
-              <input type="text" name="U_UserName" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_UserName']; ?>" required>
+              <input type="text" name="U_UserName" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_UserName']; ?>" pattern="[A-Za-z0-9_]{1,}"   required oninvalid="this.setCustomValidity('ชื่อผู้ใช้ ประกอบไปด้วย A-Z,0-9')" oninput="this.setCustomValidity('')">
+            
             </div>
             </div>
+            <div class="col-md-6">
+         
+         <img src="<?php echo '../photo/User/'.$resultuser['U_Photo'] ;?>" alt="" style="margin-left:150px; margin-top:-30px; position: absolute;width: 120px;height: 120px;-moz-border-radius: 70px; -webkit-border-radius: 70px; ">
+        
+        </div>
             <div class="col-md-12">
             <div class="form-group">
               <label for="inputPassword4">รหัสผ่าน</label>
-              <input type="password" name="U_Password" class="form-control" id="inputPassword4" value="" >
+              <input type="password" name="U_Password" class="form-control" id="inputPassword4" value="" pattern="[A-Za-z0-9\s]{8,}" oninvalid="this.setCustomValidity('รหัสต้องมีมากว่า 8 ตัวอักษร ประกอบไปด้วย A-Z,0-9 ')" oninput="this.setCustomValidity('')" >
             </div>
             </div>
             <div class="col-md-12">
             <div class="form-group">
               <label for="inputEmail4">ชื่อ-นามสกุล</label>
-              <input type="text" name="U_Name" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Name']; ?>" required>
+              <input type="text" name="U_Name" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Name']; ?>" pattern="[A-Za-z0-9ก-๑\s]{1,}" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
             </div>
             <div class="col-md-12">
             <div class="form-group">
               <label for="inputEmail4">อีเมล์</label>
-              <input type="email" name="Email" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Email']; ?>" required>
+              <input type="email" name="Email" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Email']; ?>" required oninvalid="this.setCustomValidity('รูปแบบไม่ถูกต้อง')" oninput="this.setCustomValidity('')">
             </div>
             </div>
             <div class="col-md-12">
@@ -253,7 +261,7 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
           <div class="col-md-12">
           <div class="form-group">
             <label for="inputEmail4">ที่อยู่</label>
-            <input type="text" name="Home" class="form-control" id="inputEmail4" value="<?php echo $resultuser['Home']; ?>" required>
+            <input type="text" name="Home" class="form-control" id="inputEmail4" value="<?php echo $resultuser['Home']; ?>" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
           </div>
           </div>
           <div class="form-row">
@@ -261,7 +269,7 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
               <label for="inputZip">จังหวัด</label>
               <span id="province">
                     <select class="form-control" name="Province" >
-                        <option value="0" ><?php echo $resultuser['Province']; ?></option>
+                        <option value="0" ><?php echo $resultuser['PROVINCE_NAME']; ?></option>
                     </select>
                 </span>
             </div>
@@ -269,7 +277,7 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
               <label for="inputZip">อำเภอ</label>
               <span id="amphur" >
                     <select class='form-control' name="A_District" > 
-                        <option value="0"><?php echo $resultuser['A_District']; ?></option>
+                        <option value="0"><?php echo $resultuser['AMPHUR_NAME']; ?></option>
                     </select>
                 </span>
             </div>
@@ -278,18 +286,18 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
               <label for="inputCity">ตำบล</label>
               <span id="district">
                     <select class='form-control' name="T_District" >
-                        <option value="0"><?php echo $resultuser['T_District']; ?></option>
+                        <option value="0"><?php echo $resultuser['DISTRICT_NAME']; ?></option>
                     </select>
                 </span>
             </div>
             <div class="form-group col-md-3">
               <label for="inputZip">ไปรษณีย์</label>
-              <input type="text" name="zip" class="form-control" id="inputZip" value="<?php echo $resultuser['zip']; ?>" required>
+              <input type="text" name="zip" class="form-control" id="inputZip" value="<?php echo $resultuser['zip']; ?>" pattern="[0-9]{5}" required oninvalid="this.setCustomValidity('เลขรหัสไปรษณีย์เป็นตัวเลข 0-9 และไม่เกิน 5 ตัว')" oninput="this.setCustomValidity('')">
             </div>
             </div>
           <div class="form-group">
-            <label for="inputEmail4">เบอร์โทรศัพย์</label>
-            <input type="text" name="U_Phone" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Phone']; ?>" required>
+            <label for="inputEmail4">เบอร์โทรศัพท์</label>
+            <input type="text" name="U_Phone" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Phone']; ?>" pattern="^[0]{1}[689]{1}[0-9]{8}" required oninvalid="this.setCustomValidity('เบอร์โทรศัพท์ ต้องขึ้นต้นต้ว 06,08,09 และไม่เกิน 10 ตัว')" oninput="this.setCustomValidity('')">
           </div>
           <div align="right" style="padding-top:50px;">
             <button type="submit" class="btn btn-primary">บันทึก</button> 

@@ -1,10 +1,14 @@
 <?php
     include "../conn/conn.php";
 session_start();
-$sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
+$sqluser="SELECT * FROM user
+INNER JOIN district ON district.DISTRICT_ID = user.T_District
+INNER JOIN amphur ON amphur.AMPHUR_ID = user.A_District
+INNER JOIN province ON province.PROVINCE_ID = user.Province 
+WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
-
+     
     header("content-type: text/html; charset=utf-8");
     header ("Expires: Wed, 21 Aug 2013 13:13:13 GMT");
     header ("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
@@ -19,8 +23,9 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
               if(!$_SESSION['User']){
                echo "<option value='1'>- เลือกจังหวัด -</option>\n";
               }
+
               else{
-              echo "<option value='0'>" ?> <?php echo $resultuser['Province']; ?> <?php echo "</option>\n";
+              echo "<option value='0'>" ?> <?php echo $resultuser['PROVINCE_NAME']; ?> <?php echo "</option>\n";
               }
               $result=mysqli_query($conn,"select * from province order by PROVINCE_NAME");
               while($row = mysqli_fetch_array($result)){

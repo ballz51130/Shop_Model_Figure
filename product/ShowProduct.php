@@ -192,22 +192,6 @@ else
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"
 		integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous">
 	</script>
-
-	<script>
-		var mysrc = "";
-
-		function changeImage() {
-			if (mysrc == "mars.jpg") {
-				document.images["pic"].src = "http://www.fluidoweb.com/images/SoloLearn/mars.jpg";
-				document.images["pic"].alt = "Mars";
-				mysrc = "earth.jpg";
-			} else {
-				document.images["pic"].src = "http://www.fluidoweb.com/images/SoloLearn/earth.jpg";
-				document.images["pic"].alt = "Earth";
-				mysrc = "mars.jpg";
-			}
-		}
-	</script>
 </body>
 
 </html>

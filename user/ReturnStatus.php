@@ -1,4 +1,4 @@
-<?php
+<?php 
 include '../conn/conn.php';
 session_start(); 
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
@@ -9,7 +9,7 @@ $sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
 //
-$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+$sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID INNER JOIN product ON product.P_Number = orderdetail.P_Number WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
  $queryorder = $conn->query($sqlOrder);
  $resultorder = mysqli_num_rows($queryorder);
 ?>
@@ -74,12 +74,12 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
             <li class="nav-item">
                 <a class="nav-link" href="./status.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบ/คืนสินค้า</span></a>
+                    <span>สถานะสินค้า</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./ReturnStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะการคืนสินค้า</span></a>
+                    <span>คืนสินค้า</span></a>
             </li>
                   <li class="nav-item">
                 <a class="nav-link" href="./EditUser.php">
@@ -169,7 +169,7 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">รายระเอียด</h1>
+                        <h1 class="h3 mb-0 text-gray-800">คืนสินค้า</h1>
                     </div>
                     <!-- Content Row -->
                     <div class="row">
@@ -177,10 +177,10 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                             <?php
                                 $sql ="SELECT  * FROM returnorder 
                                 INNER JOIN returnorderdetail ON returnorderdetail.O_ID = returnorder.O_ID
-                                INNER JOIN user ON user.U_ID = returnorder.U_ID
-                                INNER JOIN orders ON orders.O_ID = returnorder.O_ID
-                                INNER JOIN product ON product.P_Number = orders.P_Number
+                                INNER JOIN orders ON orders.O_ID = returnorder.O_ID 
+                                INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orderdetail.O_ID = orders.O_ID
+                                INNER JOIN product ON product.P_Number = orderdetail.P_Number
                                 WHERE user.U_ID = '".$_SESSION['User']."'";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
@@ -191,7 +191,7 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                 if($resultcheck>0){
                                 ?>
                             <center>
-                                <H2> สถานะสินค้า</H2>
+                                <H2> สถานะการคืนสินค้า</H2>
                             </center>
                             <div class="table" align="center">
                                 <table class="table table-striped table-bordered">
@@ -205,7 +205,6 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                             <th scope="col">หมายเหตุ</th>
                                             <th scope="col">รายระเอียด</th>
                                             <th scope="col">ตรวจสอบ</th>
-                                            <th scope="col">ตอบกลับ</th>
                                             <th scope="col">สลิป</th>
                                         </tr>
                                     </thead>
@@ -214,19 +213,19 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                             <?php
                                     while($result = mysqli_fetch_array($query2,MYSQLI_ASSOC)) {
    
-                                    if($result['O_Status'] =='ยืนยันการชำระเงิน'){
+                                    if($result['Re_Status'] =='รอตรวจสอบ(สินค้า)'){
                                     $bg="#66b3ff";
                                     }
-                                    if($result['O_Status'] =='จัดส่งแล้ว'){
-                                        $bg="#80ff80";
+                                    if($result['Re_Status'] =='ไม่ตรงเงื่อนไข'){
+                                        $bg="#F7573C ";
                                         }
-                                        if($result['O_Status'] =='รอตรวจสอบ'){
+                                        if($result['Re_Status'] =='รอตรวจสอบ'){
                                             $bg="#2E75F0";
                                             }
-                                            if($result['O_Status'] =='ปฏิเสธการชำระเงิน'){
+                                            if($result['Re_Status'] =='ปฏิเสธการชำระเงิน'){
                                                 $bg="#F7573C ";
                                                 }
-                                                if($result['O_Status'] =='รับของแล้ว'){
+                                                if($result['Re_Status'] =='รับของแล้ว'){
                                                     $bg="";
                                                     }
                                 ?>
@@ -246,9 +245,9 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                                         } 
                                                 ?>
                                             <td align="center"> <?php echo $feedback;?></td>
-                                            <td align="center"> <?php echo $result['Re_Detail'];?></td>
+                                            <td align="center"> <?php echo $result['Re_Reply'];?></td>
                                             <td align="center"> <a href="./ShowReturndetail.php?Re_ID=<?php echo $result['Re_ID'] ?>" target="_blank" rel="noopener noreferrer">ตรวจสอบ</a></td>
-                                            <td align="center"> <?php ?></td>
+                                           
                                             <?php if($result['Re_Slip'] != ""){ ?>
                                             <td align="center"> <a href=<?php echo'../photo/ReProduct/slip/'.$result['Re_Slip'] ;?> target="_blank" rel="noopener noreferrer">สลิป</a></td>
                                             <?php }else{ ?>

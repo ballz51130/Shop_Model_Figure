@@ -95,7 +95,7 @@ $resultU = mysqli_fetch_array($queryU);
             </a>
           </li>
             <li class="nav-item">
-            <a class="nav-link" href="./user/mainUser.php">ข้อมูลส่วนตัว</a>
+            <a class="nav-link" href="./user/EditUser.php">ข้อมูลส่วนตัว</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="https://web.facebook.com/ballz51130">ติดต่อเรา</a>

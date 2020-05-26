@@ -1,4 +1,4 @@
-<?php
+<?php 
 include '../conn/conn.php';
 session_start(); 
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
@@ -9,7 +9,7 @@ $sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
 //
-$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+$sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID INNER JOIN product ON product.P_Number = orderdetail.P_Number WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
  $queryorder = $conn->query($sqlOrder);
  $resultorder = mysqli_num_rows($queryorder);
 ?>
@@ -74,12 +74,12 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
             <li class="nav-item">
                 <a class="nav-link" href="./status.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบ/คืนสินค้า</span></a>
+                    <span>สถานะสินค้า</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./ReturnStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะการคืนสินค้า</span></a>
+                    <span>คืนสินค้า</span></a>
             </li>
                   <li class="nav-item">
                 <a class="nav-link" href="./EditUser.php">
@@ -169,17 +169,17 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">รายระเอียด</h1>
+                        <h1 class="h3 mb-0 text-gray-800">สถานะสินค้า</h1>
                     </div>
                     <!-- Content Row -->
                     <div class="row">
                         <div class="main">
                             <?php
                                 $sql ="SELECT  * FROM orders
-                                INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."'";
+                                INNER JOIN product ON product.P_Number = orderdetail.P_Number
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND NOT O_Status ='ยืนยันการสั่งซื้อ' AND NOT O_Status ='รอตรวจสอบ(สินค้า)' AND NOT O_Status ='ไม่ตรงเงื่อนไข' order by O_Status asc ";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
@@ -203,7 +203,7 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                             <th scope="col">หมายเลขพัสดุ</th>
                                             <th scope="col">ตรวจสอบ/คืนสินค้า</th>
                                             <th scope="col">หมายเหตุ</th>
-                                            <th scope="col">ลบ</th>
+                                            <th scope="col">อื่นๆ</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -221,10 +221,13 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                             $bg="#2E75F0";
                                             }
                                             if($result['O_Status'] =='ปฏิเสธการชำระเงิน'){
-                                                $bg="#F7573C ";
+                                                $bg="#F7573C";
                                                 }
+                                                if($result['O_Status'] =='รอการชำระ'){
+                                                    $bg="#B33CF7";
+                                                    }
                                                 if($result['O_Status'] =='รับของแล้ว'){
-                                                    $bg="";
+                                                    $bg="#B2FAA4";
                                                     }
                                 ?>
                                             <td align="center"> <?php echo $num;?></td>

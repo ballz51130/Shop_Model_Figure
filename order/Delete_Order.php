@@ -7,17 +7,18 @@ $sql2 = "DELETE FROM orderdetail WHERE O_ID=".$ID;
 $query2 = mysqli_query($conn,$sql);
 if($query=TRUE){
     if($query2=TRUE){
-        echo "<h1>สำเร็จ</h1>";
-        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../user/user.php'>";
+        echo '<script type="text/javascript">alert("สำเร็จ");</script>';
+        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL= ../user/Market.php'>";
+        
     }
     else{
         echo "<h1>Error</h1>";
-        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL=../index.php'>";
+        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL=../user/Market.php'>";
         }
 }
 else{
     echo "<h1>Error</h1>";
-    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL=../index.php'>";
+    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL=../user/Market.php'>";
 }
 
 ?>

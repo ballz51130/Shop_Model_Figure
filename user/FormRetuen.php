@@ -9,7 +9,7 @@ $sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
 //
-$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+$sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID INNER JOIN product ON product.P_Number = orderdetail.P_Number WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
  $queryorder = $conn->query($sqlOrder);
  $resultorder = mysqli_num_rows($queryorder);
 ?>
@@ -179,9 +179,9 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                 <form action="./CheckReturnProduct.php" method="post" enctype="multipart/form-data">
                                     <?php
                                 $sql ="SELECT  * FROM orders
-                                INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                INNER JOIN product ON product.P_Number = orderdetail.P_Number
                                 WHERE user.U_ID = '".$_SESSION['User']."' AND  orders.O_ID = '".$_POST['O_ID']."'";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
@@ -266,19 +266,19 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                         <div class="form-group row">
                   <label for="inputtext" class="col-sm-3 col-form-label">รูปที่ 1</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image1" required>
+                    <input type="file"  accept=".png, .jpg, .jpeg"  name="image1" required>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-3 col-form-label">รูปที่ 2</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image2" required>
+                    <input type="file"  accept=".png, .jpg, .jpeg"  name="image2" required>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="inputtext" class="col-sm-3 col-form-label">รูปที่ 3</label>
                   <div class="col-sm-2">
-                    <input type="file" name="image3" required>
+                    <input type="file"  accept=".png, .jpg, .jpeg"  name="image3" required>
                   </div>
                 </div>
                             </div>

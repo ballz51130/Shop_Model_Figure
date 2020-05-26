@@ -1,4 +1,4 @@
-<?php
+<?php 
 include '../conn/conn.php';
 session_start(); 
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
@@ -9,23 +9,17 @@ $sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
 //
-$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+$sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID INNER JOIN product ON product.P_Number = orderdetail.P_Number WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
  $queryorder = $conn->query($sqlOrder);
  $resultorder = mysqli_num_rows($queryorder);
- //
  if(isset($_POST['delete'])){
-     $sqldel="DELETE FROM orders WHERE C_ID='".$_POST['C_ID']."'";
-     $querydel = $conn->query($sqldel);
-     if($querydel){
-        echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./payment.php'>";
-        
-       } 
-       else{
-           echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-           echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=./payment.php'>";
-       }
-
+    $sqldel="DELETE FROM orders WHERE C_ID =  '".$_POST['C_ID']."'";
+    $query = $conn->query($sqldel);
+    if($query){
+        echo "<script type='text/javascript'>alert('สำเร็จ');</script>";
+    }else{
+        echo "<script type='text/javascript'>alert('เกิดข้อผิดพลาดขึ้น');</script>";
+    }
  }
 ?>
 <!DOCTYPE html>
@@ -89,12 +83,12 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
             <li class="nav-item">
                 <a class="nav-link" href="./status.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบ/คืนสินค้า</span></a>
+                    <span>สถานะสินค้า</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./ReturnStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะการคืนสินค้า</span></a>
+                    <span>คืนสินค้า</span></a>
             </li>
                   <li class="nav-item">
                 <a class="nav-link" href="./EditUser.php">
@@ -185,16 +179,16 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">รายระเอียด</h1>
+                        <h1 class="h3 mb-0 text-gray-800">แจ้งชำระเงิน</h1>
                     </div>
                     <!-- Content Row -->
                     <div class="row">
                         <div class="main">
                             <?php
                                 $sql ="SELECT  * ,count(orders.O_ID) AS Unit FROM orders
-                                INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                INNER JOIN product ON product.P_Number = orderdetail.P_Number
                                 WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ' group by C_ID";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);

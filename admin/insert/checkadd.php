@@ -17,8 +17,8 @@ $image3 = $_FILES['image3']['name'];
 $image_text = mysqli_real_escape_string($conn, $_POST['image_text']); //ฟังก์ชันสำหรับเลี่ยงการใช้ตัวอักขระพิเศษ
 // image file directory 
 $target = "../../photo/Order/".basename($image);
-$sql ="INSERT INTO product(P_ID,P_Number, P_Name, P_Price, P_Detel,P_weight,P_Photo, P_Unit, P_Status, P_Group,P_Brand) 
-VALUES ('".$_POST['P_ID']."','".$_POST['P_Number']."','".$_POST['P_Name']."','".$_POST['P_Price']."','$image_text','".$_POST['P_weight']."','$image','".$_POST['P_Unit']."','".$_POST['P_Status']."','".$_POST['P_Group']."','".$_POST['P_Brand']."')";
+$sql ="INSERT INTO product(P_ID,P_Number, P_Name, P_Price,P_Purchaseprice,P_Detel,P_weight,P_Photo, P_Unit, P_Status, P_Group,P_Brand) 
+VALUES ('".$_POST['P_ID']."','".$_POST['P_Number']."','".$_POST['P_Name']."','".$_POST['P_Price']."','".$_POST['P_Pricebye']."','$image_text','".$_POST['P_weight']."','$image','".$_POST['P_Unit']."','".$_POST['P_Status']."','".$_POST['P_Group']."','".$_POST['P_Brand']."')";
 //execute query
 mysqli_query($conn, $sql);
 $target1 = "../../photo/Order/orderdetail/".basename($image1);

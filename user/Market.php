@@ -9,7 +9,7 @@ $sqlN = "SELECT * FROM orders WHERE U_ID= '".$_SESSION['User']."' AND O_Status='
 $queryN = mysqli_query($conn, $sqlN);
 $rowN = mysqli_num_rows($queryN);
 //
-$sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.P_Number INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
+$sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID INNER JOIN product ON product.P_Number = orderdetail.P_Number WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='รอการชำระ'";
  $queryorder = $conn->query($sqlOrder);
  $resultorder = mysqli_num_rows($queryorder);
 ?>
@@ -74,12 +74,12 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
             <li class="nav-item">
                 <a class="nav-link" href="./status.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>ตรวจสอบ/คืนสินค้า</span></a>
+                    <span>สถานะสินค้า</span></a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" href="./ReturnStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะการคืนสินค้า</span></a>
+                    <span>คืนสินค้า</span></a>
             </li>
                   <li class="nav-item">
                 <a class="nav-link" href="./EditUser.php">
@@ -170,16 +170,16 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">รายระเอียด</h1>
+                        <h1 class="h3 mb-0 text-gray-800">ตะกร้าสินค้า</h1>
                     </div>
                     <!-- Content Row -->
                     <div class="row">
                         <div class="main">
                             <?php 
                                 $sql ="SELECT  * FROM orders
-                                INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                                INNER JOIN product ON product.P_Number = orderdetail.P_Number
                                 WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_Status ='ยืนยันการสั่งซื้อ'";
                                 $query = mysqli_query($conn,$sql); // ใช้ $resultcheck
                                 $query2 = mysqli_query($conn,$sql); // while $result    
@@ -203,7 +203,7 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                             <th scope="col"> ราคา </th>
                                             <th scope="col"> ยอดชำระ </th>
                                             <th scope="col"> สถานะ </th>
-                                            <th scope="col"> จัดการ </th>
+                                         
                                             <th scope="col"> ลบรายการ </th>
                                         </tr>
                                     </thead>
@@ -221,9 +221,6 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                             <?php $SUM = $result['P_Price'] * $result['OD_Unit']; $AllSum = $AllSum + $SUM ;?>
                                             <td align="center"><span class="price"><?php echo $SUM ;?></span></td>
                                             <td bgcolor="<?=$bg;?>" align="center"> <?php echo $result['O_Status'];?>
-                                            </td>
-                                            <td align="center"> <a href="./editOrder.php?P_Number=<?php echo $result['P_Number'] ?>&O_ID=<?php echo $result['O_ID'] ?>"><img
-                                                        src="../photo/edit.png" width="15px" hight="15px"></a>
                                             </td>
                                             <td align="center"> <a
                                                     href="../order/Delete_Order.php?ID=<?php echo $result['O_ID'];?>" onclick="return confirm('คุณต้องการลบรายการนื้หรือไม่ ?')"><img
@@ -349,7 +346,7 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                 var txt;
                 if (r == true) {
                     if (!radioValue) {
-                        txt = "กรุณาเลีอกรายการสั่งซื้อสินค้า";
+                        txt = "กรุณาเลีอกรายการที่ต้งการชำระ";
                         //ta
                         document.getElementById("alert").innerHTML = txt;
                     }

@@ -1,8 +1,8 @@
 <?php
 include '../conn/conn.php';
 $sqlproduct="SELECT *  FROM orders 
-INNER JOIN product ON product.P_Number = orders.P_Number
 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+INNER JOIN product ON product.P_Number = orderdetail.P_Number
 INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
 INNER JOIN bank_tb ON bank_tb.Bk_id = orders.Bk_id
 WHERE orders.C_ID='".$_GET['C_ID']."'";
@@ -40,8 +40,7 @@ $resultbk = mysqli_fetch_array($queryproduct2);
         </div> <!-- topmenu -->
         <div class="maimMenu">
             <div class="menu">
-                <form action="./CheckSlip.php" method="post"
-                    enctype="multipart/form-data">
+                <form action="./CheckSlip.php" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="ID" value="<?php echo $_GET['O_ID']?>">
                     <div class="form-group">
                         <div class="row">
@@ -133,13 +132,13 @@ $resultbk = mysqli_fetch_array($queryproduct2);
                             <h5 style="margin-top:35px;position: absolute;margin-left:200px">*เพื่อใช้ในการตรวจสอบ</h5>
                             <div class="form-row col-md-6">
                                 <label for="inputEmail4">เลขท้ายบัญชี4ตัวสุดท้าย</label>
-                                <input type="text" pattern="\d*" maxlength="4" name="Sp_LastNum" class="form-control" value="" style="width:150px">
+                                <input type="text" pattern="[0-9]{4}" maxlength="4" name="Pay_LastNum" class="form-control" value="" style="width:150px" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมลูให้ถูกต้อง')" oninput="this.setCustomValidity('')">
                             </div>
                         </div>
                         <div class="form-group col-md-12">
                             <div class="form-row col-md-4">
                                 <label for="inputEmail4">จำนวน</label>
-                                <input type="number" pattern="^\d*(\.\d{0,2})?$"name="Sp_Price" class="form-control" value="" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
+                                <input type="text" pattern="[0-9]+(\.[0-9]{1,2})?%?" name="Pay_Price" class="form-control" value="" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
                             </div>
                         </div>
                         <div class="form-group col-md-12">

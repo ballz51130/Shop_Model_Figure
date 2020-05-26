@@ -34,7 +34,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 <div class="rowmenu">
                     <div class="col-md-8">
                         <form action="../order/UserConfSends.php" id="SendForm" method="post" enctype="multipart/form-data">
-                            <H4>วิธีการชำระเงิน</H4>
+                            <H4>ช่องทางการชำระเงิน</H4>
                             <?php 
                             $sql = "SELECT * FROM bank_tb WHERE BK_Type ='1' ";  
                             $result = mysqli_query($conn, $sql);   
@@ -63,8 +63,8 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 for($i = 0; $i < count($_POST['check']); $i++){
                 $num = $_POST['check'][$i];
                 $sql = "SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
-                INNER JOIN product ON product.P_Number = orders.P_Number
                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                INNER JOIN product ON product.P_Number = orderdetail.P_Number
                 WHERE orders.O_ID='$num'";
                 $query = mysqli_query($conn,$sql);
                 $result = mysqli_fetch_array($query);
@@ -131,7 +131,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 var txt;
                 if (r == true) {
                     if (!radioValue) {
-                        txt = "กรุณาเลีอกวิธีการจัดส่ง";
+                        txt = "กรุณาเลีอกช่องทางการชำระเงิน";
                         //ta
                         document.getElementById("alert").innerHTML = txt;
                     }

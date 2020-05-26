@@ -26,7 +26,7 @@ session_start();
             <div class="row">
                 <!-- โลโก้ -->
                 <div class="col-md-3" id="homeicon" style="margin-left:px5;">
-                    <a href="./user.php"><img src="../photo/home.png" alt="" width="40px" hight="40px"></a>
+                    <a href="./Market.php"><img src="../photo/home.png" alt="" width="40px" hight="40px"></a>
                 </div>
 
             </div>
@@ -35,7 +35,11 @@ session_start();
             <div class="rowmenu">
                 <div class="col-md-8">
                 <?php 
-                            $sqladd ="SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
+                            $sqladd ="SELECT * FROM user 
+                            INNER JOIN district ON district.DISTRICT_ID = user.T_District
+                            INNER JOIN amphur ON amphur.AMPHUR_ID = user.A_District
+                            INNER JOIN province ON province.PROVINCE_ID = user.Province  
+                            WHERE U_ID= '".$_SESSION['User']."'";
                             $queryadd = mysqli_query($conn,$sqladd);
                             $resultadd = mysqli_fetch_array($queryadd)
                                 ?>
@@ -49,7 +53,7 @@ session_start();
                                             value="<?php echo $resultadd['U_Name'] ?>" disabled>
                                     </div>
                                     <div class="form-row col-md-4">
-                                        <label for="inputPassword4">หมายเลขโทรศัพย์</label>
+                                        <label for="inputPassword4">หมายเลขโทรศัพท์</label>
                                         <input type="text" name="U_LName" class="form-control"
                                             value="<?php echo $resultadd['U_Phone'];?>" disabled>
                                     </div>
@@ -63,23 +67,24 @@ session_start();
                                     <div class="form-group col-md-2">
                                         <label for="inputCity">ตำบล</label>
                                         <input type="text" name="T_District" class="form-control" id="inputCity"
-                                            value="<?php echo $resultadd['T_District'];?>"disabled>
+                                            value="<?php echo $resultadd['DISTRICT_NAME'];?>"disabled>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="inputZip">อำเภอ</label>
                                         <input type="text" name="A_District" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['A_District'];?>" disabled>
+                                            value="<?php echo $resultadd['AMPHUR_NAME'];?>" disabled>
                                     </div>
                                     <div class="form-group col-md-2">
                                         <label for="inputZip">จังหวัด</label>
                                         <input type="text" name="Province" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['Province'];?> " disabled>
+                                            value="<?php echo $resultadd['PROVINCE_NAME'];?> " disabled>
                                     </div>
                                     <div class="form-group col-md-2">
-                                        <label for="inputZip">ไปรษณีย์</label>
+                                        <label for="inputZip">รหัสไปรษณีย์</label>
                                         <input type="text" name="zip" class="form-control" id="inputZip"
-                                            value="<?php echo $resultadd['zip'];?>"disabled>
+                                            value="<?php echo $resultadd['zip'];?> " disabled>
                                     </div>
+                                    
                                 </div>
                                 <div class="form-group col-md-12" style="padding-top:50px; margin-right:200px;">
                                    <a href="./EditUser.php" class="btn btn-primary" style="float:right; margin-right:50px">[แก้ไขที่อยู่]</a> 
@@ -96,8 +101,8 @@ session_start();
                for($i = 0; $i < count($_POST['check']); $i++){
                 $num = $_POST['check'][$i];
                 $sql = "SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
-                INNER JOIN product ON product.P_Number = orders.P_Number
                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
+                INNER JOIN product ON product.P_Number = orderdetail.P_Number
                 WHERE orders.O_ID='$num'";
                 $query = mysqli_query($conn,$sql);
                 $result = mysqli_fetch_array($query);
