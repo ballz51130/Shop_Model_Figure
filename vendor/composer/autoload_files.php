@@ -7,4 +7,5 @@ $baseDir = dirname($vendorDir);
 
 return array(
     '6124b4c8570aa390c21fafd04a26c69f' => $vendorDir . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+    '8d737a76de7bfa8561ad4b6717b0eb86' => $vendorDir . '/rundiz/thai-date/Rundiz/Thaidate/thaidate-functions.php',
 );

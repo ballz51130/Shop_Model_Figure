@@ -239,7 +239,7 @@ $sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNE
                             </div>
                             <br>
                             <?php } else{
-                                    echo "<span style=' padding:300px; width:100px'>---- ไม่พบข้อมูล ----</span>" ;                                                                                                                                                           
+                                    echo "<span style=' padding:200px; width:100px'>---- ไม่พบรายการการสั่งซื้อ ----</span>" ;                                                                                                                                                           
                                 } ?>
                                 
                             

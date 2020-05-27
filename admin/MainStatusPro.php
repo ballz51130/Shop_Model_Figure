@@ -255,7 +255,7 @@ session_start();
                 <div class="container-fluid">
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                       
+                       <a href="./MainStatus.php" class="btn btn-primary">ย้อนกลับ</a>
                     </div>
                     <!-- Content Row -->
                     <div class="row">
@@ -263,30 +263,16 @@ session_start();
                             <center>
                                 <H2> สรุปยอดขายสินค้า </H2>
                             </center>
-                           
-<form action="" method="get">
-<label for="cars">เดือน :</label>
-<select name="q" >
-<option value="<?php echo isset ($_GET['q']) ? $_GET['q'] : '' ?>"><?php echo isset ($_GET['q']) ? $_GET['q'] : 'เลือกเดือน'  ?></option>
-  <option value="มกราคม">มกราคม</option>
-  <option value="กุมภาพันธ์">กุมภาพันธ์</option>
-  <option value="มีนาคม">มีนาคม</option>
-  <option value="เมษายน">เมษายน</option>
-  <option value="พฤษภาคม">พฤษภาคม</option>
-  <option value="มิถุนายน">มิถุนายน</option>
-  <option value="กรกฏาคม">กรกฏาคม</option>
-  <option value="สิงหาคม">สิงหาคม</option>
-  <option value="กันยายน">กันยายน</option>
-  <option value="ตุลาคม">ตุลาคม</option>
-  <option value="พฤศจิกายน">พฤศจิกายน</option>
-  <option value="ธันวาคม">ธันวาคม</option>
-</select>
+                            <form action="" method="get">
+<input type="hidden" name="P_Number" value="<?php echo $_GET['P_Number'];?>">
 <label for="cars"> ปี :</label>
 <select name="y" >
 <option value="<?php echo isset ($_GET['y']) ? $_GET['y'] : '' ?>"><?php echo isset ($_GET['y']) ? $_GET['y'] : 'เลือกปี' ?></option>
 <?php
- $sql ="SELECT  DATE_FORMAT(O_Date, '%Y') AS Years
+ $sql ="SELECT P_Number, DATE_FORMAT(O_Date, '%Y') AS Years
  FROM orders 
+ INNER JOIN orderdetail ON orderdetail.O_ID = orders.O_ID
+ WHERE P_Number = '".$_GET['P_Number']."'
  GROUP BY Years
  ";
  $resultss = mysqli_query($conn, $sql);
@@ -295,123 +281,62 @@ session_start();
   <option value="<?php echo $resulty['Years'] ?>"><?php echo $resulty['Years'] ?></option>
  <?php } ?>
 </select>
- <button type="submit" class="btn btn-success" >ค้นหา</button>&nbsp;<a  class="btn btn-primary" href="./MainStatus.php">ล้างค่า</a>
+ <button type="submit" class="btn btn-success" >ค้นหา</button>&nbsp;<a  class="btn btn-primary" href="./MainStatusPro.php?P_Number=<?php echo $_GET['P_Number'];?>">ล้างค่า</a>
 </form>
-
                             <?php
-  if (isset($_GET['q']))
-  {
-      $q = $_GET['q'];
-  }
-  else
-  {
-      $q = "";
-  }
-  if (isset($_GET['y']))
-  {
-      $y = $_GET['y'];
-  }
-  else
-  {
-      $y = "";
-  }
-if($q == ""){
-$query ="
-SELECT *, SUM(OD_Unit) AS unit, DATE_FORMAT(O_Date, '%M') AS datesave
-FROM orders
-inner join orderdetail on orders.O_ID = orderdetail.O_ID
-INNER JOIN product ON orderdetail.P_Number = product.P_Number
-WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') 
-GROUP BY orderdetail.P_Number";
-$resulttable = mysqli_query($conn, $query);
-$resultchart = mysqli_query($conn, $query);
-$resultcheck = mysqli_query($conn, $query);
-$rk = mysqli_fetch_array($resultcheck ) ;
-$a = 1;
+if (isset($_GET['y']))
+{
+    $y = $_GET['y'];
 }
-else{
-    if($q == 'มกราคม'){
-        $q = 1;
-    }
-    if($q == 'กุมภาพันธ์'){
-        $q = 2;
-    }
-    if($q == 'มีนาคม'){
-        $q = 3;
-    }
-    if($q == 'เมษายน'){
-        $q = 4;
-    }
-    if($q == 'พฤษภาคม'){
-        $q = 5;
-    }
-    if($q == 'มิถุนายน'){
-        $q = 6;
-    }
-    if($q == 'กรกฏาคม'){
-        $q = 7;
-    }
-    if($q == 'สิงหาคม'){
-        $q = 8;
-    }
-    if($q == 'กันยายน'){
-        $q = 9;
-    }
-    if($q == 'ตุลาคม'){
-        $q = 10;
-    }
-    if($q == 'พฤศจิกายน'){
-        $q = 11;
-    }
-    if($q == 'ธันวาคม'){
-        $q = 12;
-    }
+else
+{
+    $y = "";
+}
     if($y == ""){
     $query ="
-    SELECT *, SUM(OD_Unit) AS unit, DATE_FORMAT(O_Date, '%M') AS datesave 
+    SELECT *, SUM(OD_Unit) AS unit, DATE_FORMAT(O_Date, '%M') AS datesave
     FROM orders
     inner join orderdetail on orders.O_ID = orderdetail.O_ID
     INNER JOIN product ON orderdetail.P_Number = product.P_Number
-    WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') AND MONTH(O_Date) = $q
+    WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') AND orderdetail.P_Number='".$_GET['P_Number']."'
     GROUP BY orderdetail.P_Number ,datesave ";
     $resulttable = mysqli_query($conn, $query);
     $resultchart = mysqli_query($conn, $query); 
     $resultcheck = mysqli_query($conn, $query);
     $rk = mysqli_fetch_array($resultcheck) ;
-    $a = 2;
     }
     else{
         $query ="
-        SELECT *, SUM(OD_Unit) AS unit, DATE_FORMAT(O_Date, '%M') AS datesave 
+        SELECT *, SUM(OD_Unit) AS unit, DATE_FORMAT(O_Date, '%M') AS datesave
         FROM orders
         inner join orderdetail on orders.O_ID = orderdetail.O_ID
         INNER JOIN product ON orderdetail.P_Number = product.P_Number
-        WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') AND MONTH(O_Date) = $q AND YEAR(O_Date) = '".$_GET['y']."'
+        WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') AND orderdetail.P_Number='".$_GET['P_Number']."' AND YEAR(O_Date) = '".$_GET['y']."'
         GROUP BY orderdetail.P_Number ,datesave ";
         $resulttable = mysqli_query($conn, $query);
         $resultchart = mysqli_query($conn, $query); 
         $resultcheck = mysqli_query($conn, $query);
-        $rk = mysqli_fetch_array($resultcheck) ;
-        $a = 2;
+        $rk = mysqli_fetch_array($resultcheck) ;  
     }
-}
+    
  if($rk > 0 ){
-
  //for chart
 $datesave = array();
 $totol = array();
-$product = array();
+$date = array();
+$strdates = array();
 while($rs = mysqli_fetch_array($resultchart)){ 
   $datesave[] = "\"".$rs['datesave']."\""; 
-  $product[] = "\"".$rs['P_Number']."\""; 
+  $date[] = "\"".$rs['O_Date']."\""; 
   $totol[] = "\"".$rs['unit']."\""; 
   $price[] = "\"".$rs['P_Price']*$rs['unit']."\""; 
 }
 $datesave = implode(",", $datesave); 
 $totol = implode(",", $totol); 
-$product = implode(",", $product); 
+$date = implode(",", $date); 
 $price = implode(",", $price); 
 $alltotal = 0;
+  $sumtotal = 0;
 function DateThai($strDate)
 	{
 		$strYear = date("Y",strtotime($strDate))+543;
@@ -426,25 +351,14 @@ function DateThai($strDate)
 	}
 
 ?>
-<table border="1" cellpadding="0"  cellspacing="0" align="center" style="margin-top:50px;" >
+<table border="1" cellpadding="0"  cellspacing="0" align="center" style=" margin-top:80px;">
   <thead>
   <tr>
   <th width="10%">รหัสสินค้า</th>
   <th width="30%">ชื่อสินค้า</th>
-  <?php  if($a==1){?>
-      <?php } ?>
-      <?php  if($a==2){?>
-        <th width="10%">เดือน</th>
-      <?php } ?>
-   
+    <th width="10%">เดือน</th>
     <th width="10%">จำนวน</th>
     <th width="10%">ยอดขาย</th>
-    <?php  if($a==1){?>
-        <th width="10%">รายระเอียด</th>
-      <?php } ?>
-      <?php  if($a==2){?>
-   
-      <?php } ?>
     
   </tr>
   </thead>
@@ -452,38 +366,21 @@ function DateThai($strDate)
   <?php while($row = mysqli_fetch_array($resulttable)) { 
     $strDate = $row['O_Date'];
       ?>
-      <?php  if($a==1){?>
-    <div style="top:180px;left:970px;position:absolute;width:300px"> <h3> รายงานยอดขายทั้งหมด </h3> </div>
-      <?php } ?>
-      <?php  if($a==2){?>
-    <div style="top:180px;left:900px;position:absolute;width:1000px"><h3> รายงานยอดขายประจำเดือน <?php echo DateThai($strDate);?> </h3> </div>
-      <?php } ?>
-
+    <div style="top:220px;left:45%;position:absolute;width:1000px"><h3> รายงานยอดขายสินค้าชื่อ <?php echo $row['P_Name'];?> </h3> </div>
     <tr>
     <td align="center"><?php echo $row['P_Number'];?></td>
     <td align="center"><?php echo $row['P_Name'];?></td>
-    <?php  if($a==1){?>
-      <?php } ?>
-      <?php  if($a==2){?>
-        <td align="center"><?php echo DateThai($strDate);?></td>
-      <?php } ?>
-      
+      <td align="center"><?php echo DateThai($strDate);?></td>
       <td align="center"><?php echo $row['unit'];?></td>
       <td align="right"><?php $sumtotal =  $row['unit']*$row['P_Price'] ; echo number_format($sumtotal,2) ;?></td> 
-      <?php  if($a==1){?>
-        <td align="center"><a href="./MainStatusPro.php?P_Number=<?php echo $row['P_Number'] ?>">ดูรายระเอียด</a></td>
-      <?php } ?>
-      <?php  if($a==2){?>
-    
-      <?php } ?>
-     
     </tr>
     <?php 
-    $alltotal = $alltotal + $sumtotal;
+    $alltotal = $sumtotal+$sumtotal;
+    
 } ?>
- 
+   
 </table>
-<div style="margin-top:20px;margin-left:970px;width:1000px">รวม : <?php echo number_format($alltotal,2)." บาท";?>  </div>
+
 <?php 
 }
 else{
@@ -582,15 +479,17 @@ mysqli_close($conn);?>
     <script src="../js/demo/chart-pie-demo.js"></script>
     <script>
 var ctx = document.getElementById("myChart").getContext('2d');
+
 var myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: [<?php echo $product;?>
+        labels: [<?php 
+            echo ($datesave) ;?>
     
         ],
         
         datasets: [{
-            label: 'รายงานภาพรวม แยกตามรหัสสินค้า ',
+            label: 'รายงานภาพรวม แยกตามเดือน ',
             data: [<?php echo $totol;?>
             ],
             backgroundColor: [

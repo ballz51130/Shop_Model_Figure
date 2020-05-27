@@ -159,7 +159,7 @@ $resultimg = mysqli_fetch_array($queryimg);
             <li class="nav-item">
                 <a class="nav-link" href="../MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะสินค้า</span></a>
+                    <span>รายงานสถิติการขาย</span></a>
             </li>
             <div class="sidebar-heading">
                อื่นๆ
@@ -257,7 +257,7 @@ $resultimg = mysqli_fetch_array($queryimg);
 
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">เพิ่มรายการสินค้า</h1>
+            <h1 class="h3 mb-0 text-gray-800">จัดการคลังสินค้า</h1>
           </div>
 
           <!-- Content Row -->
@@ -342,9 +342,9 @@ $resultimg = mysqli_fetch_array($queryimg);
                       </option>
                       <?php } ?>
                     </select>
-                    <div class="addStatus" style="position: absolute; margin-left:400px;margin-top:-35px;">
+                    <!-- <div class="addStatus" style="position: absolute; margin-left:400px;margin-top:-35px;">
                     <a href="../MainProductGrop.php" class="btn btn-primary">เพิ่ม</a>
-                    </div>
+                    </div> -->
                     </div>
                 </div>
                 <div class="col-sm-12">

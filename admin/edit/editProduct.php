@@ -159,7 +159,7 @@ $resultimg = mysqli_fetch_array($queryimg);
             <li class="nav-item">
                 <a class="nav-link" href="../MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะสินค้า</span></a>
+                    <span>รายงานสถิติการขาย</span></a>
             </li>
             <div class="sidebar-heading">
                อื่นๆ

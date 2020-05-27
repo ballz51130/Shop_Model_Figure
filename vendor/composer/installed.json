@@ -217,6 +217,57 @@
         ]
     },
     {
+        "name": "rundiz/thai-date",
+        "version": "v2.0.5",
+        "version_normalized": "2.0.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Rundiz/thai-date.git",
+            "reference": "624d8057fc442825c1b9788cd6255e793f29969c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Rundiz/thai-date/zipball/624d8057fc442825c1b9788cd6255e793f29969c",
+            "reference": "624d8057fc442825c1b9788cd6255e793f29969c",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.3.0"
+        },
+        "time": "2020-01-06T10:23:27+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Rundiz\\Thaidate\\": "Rundiz/Thaidate"
+            },
+            "files": [
+                "Rundiz/Thaidate/thaidate-functions.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "MIT"
+        ],
+        "authors": [
+            {
+                "name": "Vee W.",
+                "email": "kawewong@gmail.com",
+                "homepage": "http://rundiz.com",
+                "role": "Developer"
+            }
+        ],
+        "description": "Display date in Thai language use PHP date() and strftime()",
+        "keywords": [
+            "Thai date",
+            "date",
+            "date thai",
+            "date translation",
+            "datethai",
+            "thaidate"
+        ]
+    },
+    {
         "name": "setasign/fpdi",
         "version": "v2.3.0",
         "version_normalized": "2.3.0.0",

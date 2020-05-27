@@ -150,12 +150,12 @@ session_start();
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
             <div class="sidebar-heading">
-               ยีนยันการรับของ
+            สถิติ
             </div>
             <li class="nav-item">
                 <a class="nav-link" href="./MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะสินค้า</span></a>
+                    <span>รายงานสถิติการขาย</span></a>
             </li>
             <div class="sidebar-heading">
                อื่นๆ
@@ -291,7 +291,7 @@ session_start();
                                             <th scope="col"> จำนวน </th>
                                             <th scope="col"> สถานะ </th>
                                             <th scope="col"> การจัดส่ง</th>
-                                            <th scope="col"> รายงาน</th>
+                                            <th scope="col"> ปริ้นที่อยู่</th>
                                             <th scope="col"> จัดการ </th>
                                         </tr>
                                     </thead>
@@ -307,7 +307,7 @@ session_start();
                                             <td> <?php echo $resultOrder['OUnit'].'ชิ้น'; ?> </td>
                                             <td> <?php echo $resultOrder['O_Status']; ?> </td>
                                             <td> <?php echo $resultOrder['Sn_Name']; ?> </td>
-                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>"class="btn btn-outline-info">Report</a></td>
+                                            <td> <a href="./reportSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>"class="btn btn-outline-info">ปริ้น</a></td>
                                             <td> <a href="./FormSend.php?U_ID=<?php echo $resultOrder['U_ID'];?>&O_ID=<?php echo $resultOrder['O_ID'] ;?>"><img src="../photo/edit.png" width="20px" hight="20px"></a></td>
                                         </tr>
                                         <?php $num++; }?>

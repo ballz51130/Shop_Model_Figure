@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4eb8b6908db5ba53816b92c15345ed52",
+    "content-hash": "5edd42016b624b0ad7848e86e1dab3ef",
     "packages": [
         {
             "name": "mpdf/mpdf",
@@ -216,6 +216,55 @@
             "time": "2019-11-01T11:05:21+00:00"
         },
         {
+            "name": "rundiz/thai-date",
+            "version": "v2.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Rundiz/thai-date.git",
+                "reference": "624d8057fc442825c1b9788cd6255e793f29969c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Rundiz/thai-date/zipball/624d8057fc442825c1b9788cd6255e793f29969c",
+                "reference": "624d8057fc442825c1b9788cd6255e793f29969c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Rundiz\\Thaidate\\": "Rundiz/Thaidate"
+                },
+                "files": [
+                    "Rundiz/Thaidate/thaidate-functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Vee W.",
+                    "email": "kawewong@gmail.com",
+                    "homepage": "http://rundiz.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Display date in Thai language use PHP date() and strftime()",
+            "keywords": [
+                "Thai date",
+                "date",
+                "date thai",
+                "date translation",
+                "datethai",
+                "thaidate"
+            ],
+            "time": "2020-01-06T10:23:27+00:00"
+        },
+        {
             "name": "setasign/fpdi",
             "version": "v2.3.0",
             "source": {
@@ -287,5 +336,6 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

@@ -8,12 +8,17 @@ class ComposerStaticInit7b684f90caf1da0dbf9f7edc2ae85b2d
 {
     public static $files = array (
         '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
+        '8d737a76de7bfa8561ad4b6717b0eb86' => __DIR__ . '/..' . '/rundiz/thai-date/Rundiz/Thaidate/thaidate-functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         's' => 
         array (
             'setasign\\Fpdi\\' => 14,
+        ),
+        'R' => 
+        array (
+            'Rundiz\\Thaidate\\' => 16,
         ),
         'P' => 
         array (
@@ -33,6 +38,10 @@ class ComposerStaticInit7b684f90caf1da0dbf9f7edc2ae85b2d
         'setasign\\Fpdi\\' => 
         array (
             0 => __DIR__ . '/..' . '/setasign/fpdi/src',
+        ),
+        'Rundiz\\Thaidate\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/rundiz/thai-date/Rundiz/Thaidate',
         ),
         'Psr\\Log\\' => 
         array (

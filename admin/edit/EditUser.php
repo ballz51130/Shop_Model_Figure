@@ -2,7 +2,11 @@
 include '../../conn/conn.php';
 session_start(); 
 
-    $sqluser="SELECT * FROM user WHERE U_ID='".$_GET['U_ID']."'";
+    $sqluser="SELECT * FROM user
+    INNER JOIN district ON district.DISTRICT_ID = user.T_District
+    INNER JOIN amphur ON amphur.AMPHUR_ID = user.A_District
+    INNER JOIN province ON province.PROVINCE_ID = user.Province
+     WHERE U_ID='".$_GET['U_ID']."'";
     $queryuser = mysqli_query($conn,$sqluser);
     $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 
@@ -148,12 +152,12 @@ session_start();
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
             <div class="sidebar-heading">
-               ยีนยันการรับของ
+            สถิติ
             </div>
             <li class="nav-item">
                 <a class="nav-link" href="../MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะสินค้า</span></a>
+                    <span>รายงานสถิติการขาย</span></a>
             </li>
             <div class="sidebar-heading">
                อื่นๆ
@@ -338,16 +342,16 @@ session_start();
           <div class="form-group col-md-3">
               <label for="inputZip">จังหวัด</label>
               <span id="province">
-                    <select class="form-control" name="Province" >
-                        <option value="0" ><?php echo $resultuser['Province']; ?></option>
+                    <select class="form-control" name="Province" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')">
+                        <option value="0" ><?php echo $resultuser['PROVINCE_NAME']; ?></option>
                     </select>
                 </span>
             </div>
             <div class="form-group col-md-3">
               <label for="inputZip">อำเภอ</label>
               <span id="amphur" >
-                    <select class='form-control' name="A_District" > 
-                        <option value="0"><?php echo $resultuser['A_District']; ?></option>
+                    <select class='form-control' name="A_District" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')"> 
+                        <option value="0"><?php echo $resultuser['AMPHUR_NAME']; ?></option>
                     </select>
                 </span>
             </div>
@@ -355,19 +359,21 @@ session_start();
               <div class="form-group col-md-3">
               <label for="inputCity">ตำบล</label>
               <span id="district">
-                    <select class='form-control' name="T_District" >
-                        <option value="0"><?php echo $resultuser['T_District']; ?></option>
+                    <select class='form-control' name="T_District" required oninvalid="this.setCustomValidity('กรุณากรอกข้อมูลในช่องนี้')" oninput="this.setCustomValidity('')" >
+                        <option value="0"><?php echo $resultuser['DISTRICT_NAME']; ?></option>
                     </select>
                 </span>
             </div>
             <div class="form-group col-md-3">
               <label for="inputZip">ไปรษณีย์</label>
-              <input type="text" name="zip" class="form-control" id="inputZip" value="<?php echo $resultuser['zip']; ?>" required>
+              <input type="text" name="zip" class="form-control" id="inputZip" value="<?php echo $resultuser['zip']; ?>"pattern="[0-9]{5}" required oninvalid="this.setCustomValidity('รูปแบบการใส่รหัสไปรษณีย์ไม่ถูกต้อง')" oninput="this.setCustomValidity('')">
+              <span>*ตัวอย่างการรหัสไปรษณีย์ 52000</span>
             </div>
             </div>
-          <div class="form-group">
-            <label for="inputEmail4">เบอร์โทรศัพย์</label>
-            <input type="text" name="U_Phone" class="form-control" id="inputEmail4" value="<?php echo $resultuser['U_Phone']; ?>" required>
+            <div class="form-group col-md-12">
+            <label for="inputEmail4">เบอร์โทรศัพท์(มือถือ)</label>
+            <input type="text" name="U_Phone" class="form-control" value="<?php echo $resultuser['U_Phone']; ?>"  pattern="^[0]{1}[689]{1}[0-9]{8}" required oninvalid="this.setCustomValidity('เบอร์โทรศัพท์ ต้องขึ้นต้นต้ว 06,08,09 และไม่เกิน 10 ตัว')" oninput="this.setCustomValidity('')"> 
+              <span>*ตัวอย่างการใส่เบอร์โทรศัพท์ 0855555555</span>
           </div>
           <div align="right" style="padding-top:50px;">
             <button type="submit" class="btn btn-primary">บันทึก</button> 

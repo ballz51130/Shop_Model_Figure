@@ -148,12 +148,12 @@ session_start();
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
             <div class="sidebar-heading">
-               ยีนยันการรับของ
+            สถิติ
             </div>
             <li class="nav-item">
                 <a class="nav-link" href="../MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะสินค้า</span></a>
+                    <span>รายงานสถิติการขาย</span></a>
             </li>
             <div class="sidebar-heading">
                อื่นๆ
@@ -291,7 +291,7 @@ session_start();
                                             
                                             <td> <?php echo $num ?> </td>
                                             <td> <?php echo $resultOrder['OUnit'].'ชิ้น'; ?> </td>
-                                            <td align="center"> <?php echo 'เดือน'.'&nbsp;'.$resultOrder['PreMonth'] ; ?> </td>
+                                            <td >  <?php $Date = date("d-m-Y", strtotime($resultOrder['P_Date'])); echo $Date ;?> </td>
                                             <td> <?php $DateComin = date("d-m-Y", strtotime($resultOrder['P_Comin'])); echo $DateComin ;?> </td>
                                             <td> <a href="./PreDetailMonth.php?PreMonth=<?php echo $resultOrder['PreMonth'];?>" class="btn btn-outline-dark">รายระเอียด</a></td>
                                         </tr>

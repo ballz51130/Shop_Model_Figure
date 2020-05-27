@@ -162,12 +162,12 @@ if(isset($_GET['Sn_id']))  {
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
             <div class="sidebar-heading">
-               ยีนยันการรับของ
+            สถิติ
             </div>
             <li class="nav-item">
                 <a class="nav-link" href="./MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะสินค้า</span></a>
+                    <span>รายงานสถิติการขาย</span></a>
             </li>
             <div class="sidebar-heading">
                อื่นๆ

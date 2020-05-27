@@ -148,12 +148,12 @@ session_start();
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
             <div class="sidebar-heading">
-               ยีนยันการรับของ
+            สถิติ
             </div>
             <li class="nav-item">
                 <a class="nav-link" href="./MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะสินค้า</span></a>
+                    <span>รายงานสถิติการขาย</span></a>
             </li>
             <div class="sidebar-heading">
                อื่นๆ
@@ -254,14 +254,11 @@ session_start();
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">รายการสินค้า</h1>
+                        <h1 class="h3 mb-0 text-gray-800">คลังสินค้า</h1>
                     </div>
                     <!-- Content Row -->
                     <div class="row">
                         <div class="maimMenu">
-                            <a class="btn btn-primary" style="float:left; margin-left:50px;margin:10px"
-                                href="./insert/addProduct.php">เพิ่มสินค้า</a><br><br><br><br>
-                    
                             <table  id="table_id" class="table table-bordered-md">
                                 <thead>
                                     <tr>

@@ -1,7 +1,23 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
-
+if (isset($_SESSION['login']))
+{
+    $_SESSION['login'] = $_SESSION['login'];
+}
+else
+{
+    $_SESSION['login'] = 0;
+    $_SESSION['User'] = 0;
+}
+if (isset($_SESSION['User']))
+{
+    $_SESSION['User'] = $_SESSION['User'];
+}
+else
+{
+    $_SESSION['User'] = 0;
+}
 if ($_SESSION['User'] == 1){
     // แสดงข้อมูล ADMIN
     $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
@@ -151,12 +167,12 @@ if ($_SESSION['User'] == 1){
                     <span>จัดการข้อมูลสมาชิก</span></a>
             </li>
             <div class="sidebar-heading">
-               ยีนยันการรับของ
+            สถิติ
             </div>
             <li class="nav-item">
                 <a class="nav-link" href="./MainStatus.php">
                     <i class="fas fa-fw fa-table"></i>
-                    <span>สถานะสินค้า</span></a>
+                    <span>รายงานสถิติการขาย</span></a>
             </li>
             <div class="sidebar-heading">
                อื่นๆ
