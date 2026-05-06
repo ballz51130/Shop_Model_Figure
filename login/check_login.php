@@ -3,7 +3,8 @@ session_start();
 include '../conn/conn.php';
 $str_passMd5 = mysqli_real_escape_string($conn,$_POST['pass']);
 $str_passMd5 =md5($str_passMd5.'harumyx');
-$sql= " SELECT * FROM user WHERE U_UserName = '".$_POST['username']."' AND U_Password = '$str_passMd5'";
+$str_username = mysqli_real_escape_string($conn,$_POST['username']);
+$sql= " SELECT * FROM user WHERE U_UserName = '$str_username' AND U_Password = '$str_passMd5'";
 $query = mysqli_query($conn,$sql);
 $result = mysqli_fetch_array($query,MYSQLI_ASSOC);
 if( $_POST['username'] == "" || $_POST['pass'] == ""){

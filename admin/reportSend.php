@@ -19,7 +19,7 @@ WHERE U_ID= '7'";
 $queryshop = mysqli_query($conn,$sqlshop);
 $resultshop = mysqli_fetch_array($queryshop);
 // QUERY ORDER
-$sqlorder ="SELECT * FROM orders WHERE O_ID='".$_GET['O_ID']."'";
+$sqlorder ="SELECT * FROM orders WHERE O_ID='".(int)$_GET['O_ID']."'";
 $queryorder = mysqli_query($conn,$sqlorder);
 $resultorder = mysqli_fetch_array($queryorder);
 // Admin ADDRESS

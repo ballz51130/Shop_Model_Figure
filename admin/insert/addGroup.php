@@ -4,7 +4,9 @@ session_start();
 if(isset($_POST['submit'])){
         $image = $_FILES['image']['name'];
         $target = "../../photo/model/".basename($image);
-        $sql = "INSERT INTO group_tb(G_Name, G_Photo, G_Status) VALUES ('".$_POST['G_Name']."','$image','".$_POST['G_Status']."')";
+        $g_name = mysqli_real_escape_string($conn, $_POST['G_Name']);
+        $g_status = mysqli_real_escape_string($conn, $_POST['G_Status']);
+        $sql = "INSERT INTO group_tb(G_Name, G_Photo, G_Status) VALUES ('$g_name','$image','$g_status')";
         $query= $conn->query($sql);
         $move = move_uploaded_file($_FILES['image']['tmp_name'], $target);
         if($query||$move){

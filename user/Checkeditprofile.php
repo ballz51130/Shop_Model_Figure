@@ -5,10 +5,21 @@ $image = $_FILES['image']['name'];
 $pass = md5($_POST['U_Password']."harumyx");
 $target = "../photo/User/".basename($image);
 
+$u_username = mysqli_real_escape_string($conn, $_POST['U_UserName']);
+$u_name = mysqli_real_escape_string($conn, $_POST['U_Name']);
+$u_home = mysqli_real_escape_string($conn, $_POST['Home']);
+$u_tdistrict = mysqli_real_escape_string($conn, $_POST['T_District']);
+$u_adistrict = mysqli_real_escape_string($conn, $_POST['A_District']);
+$u_province = mysqli_real_escape_string($conn, $_POST['Province']);
+$u_zip = mysqli_real_escape_string($conn, $_POST['zip']);
+$u_phone = mysqli_real_escape_string($conn, $_POST['U_Phone']);
+$u_email = mysqli_real_escape_string($conn, $_POST['Email']);
+$u_id = mysqli_real_escape_string($conn, $_POST['U_ID']);
+
 if($_FILES['image']['name']!=""){
 if($_POST['U_Password']==""){ // pass no change 
     if ($_POST['Province'] == 0 ){
-        $sqledit = "UPDATE user SET U_UserName='".$_POST['U_UserName']."',U_Name='".$_POST['U_Name']."',Home='".$_POST['Home']."',zip='".$_POST['zip']."',U_Phone='".$_POST['U_Phone']."',U_Photo='$image',U_Email='".$_POST['Email']."' WHERE U_ID='".$_POST['U_ID']."'";   
+        $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";   
         $query = mysqli_query($conn,$sqledit);
         move_uploaded_file($_FILES['image']['tmp_name'], $target);
         if($_SESSION['User'] == '1'){
@@ -42,7 +53,7 @@ if($_POST['U_Password']==""){ // pass no change
     // WHERE district.AMPHUR_ID='".$_POST['A_District']."' AND district.DISTRICT_ID = '".$_POST['T_District']."' AND district.PROVINCE_ID = '".$_POST['Province']."',zip='".$_POST['zip']."'";
     // $queryHone = mysqli_query($conn,$sqlHome);
     // $row = mysqli_fetch_array($queryHone);
-    $sqledit = "UPDATE user SET U_UserName='".$_POST['U_UserName']."',U_Name='".$_POST['U_Name']."',Home='".$_POST['Home']."',T_District='".$_POST['T_District']."',A_District='".$_POST['A_District']."',Province='".$_POST['Province']."',zip='".$_POST['zip']."',U_Phone='".$_POST['U_Phone']."',U_Photo='$image',U_Email='".$_POST['Email']."' WHERE U_ID='".$_POST['U_ID']."'";
+    $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',T_District='$u_tdistrict',A_District='$u_adistrict',Province='$u_province',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";
      $query = mysqli_query($conn,$sqledit);
      move_uploaded_file($_FILES['image']['tmp_name'], $target);
      if($_SESSION['User'] == '1'){
@@ -73,7 +84,7 @@ if($_POST['U_Password']==""){ // pass no change
 else{ //pass change
 
     if ($_POST['Province' ]== 0 ){
-        $sqledit = "UPDATE user SET U_UserName='".$_POST['U_UserName']."',U_Password='$pass',U_Name='".$_POST['U_Name']."',Home='".$_POST['Home']."',zip='".$_POST['zip']."',U_Phone='".$_POST['U_Phone']."',U_Photo='$image',U_Email='".$_POST['Email']."' WHERE U_ID='".$_POST['U_ID']."'";   
+        $sqledit = "UPDATE user SET U_UserName='$u_username',U_Password='$pass',U_Name='$u_name',Home='$u_home',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";   
         $query = mysqli_query($conn,$sqledit);
         move_uploaded_file($_FILES['image']['tmp_name'], $target);
         if($_SESSION['User'] == '1'){
@@ -106,7 +117,7 @@ else{ //pass change
     // WHERE district.AMPHUR_ID='".$_POST['A_District']."' AND district.DISTRICT_ID = '".$_POST['T_District']."' AND district.PROVINCE_ID = '".$_POST['Province']."',zip='".$_POST['zip']."'";
     // $queryHone = mysqli_query($conn,$sqlHome);
     // $row = mysqli_fetch_array($queryHone);
-    $sqledit = "UPDATE user SET U_UserName='".$_POST['U_UserName']."',U_Name='".$_POST['U_Name']."',Home='".$_POST['Home']."',T_District='".$_POST['T_District']."',A_District='".$_POST['A_District']."',Province='".$_POST['Province']."',zip='".$_POST['zip']."',U_Phone='".$_POST['U_Phone']."',U_Photo='$image',U_Email='".$_POST['Email']."' WHERE U_ID='".$_POST['U_ID']."'";
+    $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',T_District='$u_tdistrict',A_District='$u_adistrict',Province='$u_province',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";
     $query = mysqli_query($conn,$sqledit);
      move_uploaded_file($_FILES['image']['tmp_name'], $target);
      $query = mysqli_query($conn,$sqledit);
@@ -140,7 +151,7 @@ else{ // image = ""
     if($_POST['U_Password']==""){ // pass no change 
         
         if ($_POST['Province']== 0 ){
-            $sqledit = "UPDATE user SET U_UserName='".$_POST['U_UserName']."',U_Name='".$_POST['U_Name']."',Home='".$_POST['Home']."',zip='".$_POST['zip']."',U_Phone='".$_POST['U_Phone']."',U_Email='".$_POST['Email']."' WHERE U_ID='".$_POST['U_ID']."'";   
+            $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',zip='$u_zip',U_Phone='$u_phone',U_Email='$u_email' WHERE U_ID='$u_id'";   
             $query = mysqli_query($conn,$sqledit);
             if($_SESSION['User'] == '1'){
             if($query){
@@ -173,7 +184,7 @@ else{ // image = ""
         // WHERE district.AMPHUR_ID='".$_POST['A_District']."' AND district.DISTRICT_ID = '".$_POST['T_District']."' AND district.PROVINCE_ID = '".$_POST['Province']."',zip='".$_POST['zip']."'";
         // $queryHone = mysqli_query($conn,$sqlHome);
         // $row = mysqli_fetch_array($queryHone);
-        $sqledit = "UPDATE user SET U_UserName='".$_POST['U_UserName']."',U_Name='".$_POST['U_Name']."',Home='".$_POST['Home']."',T_District='".$_POST['T_District']."',A_District='".$_POST['A_District']."',Province='".$_POST['Province']."',zip='".$_POST['zip']."',U_Phone='".$_POST['U_Phone']."',U_Photo='$image',U_Email='".$_POST['Email']."' WHERE U_ID='".$_POST['U_ID']."'";
+        $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',T_District='$u_tdistrict',A_District='$u_adistrict',Province='$u_province',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";
          $query = mysqli_query($conn,$sqledit);
          if($_SESSION['User'] == '1'){
             if($query){
@@ -202,7 +213,7 @@ else{ // image = ""
     }
     else{ //pass change
         if ($_POST['Province']== 0 ){
-            $sqledit = "UPDATE user SET U_UserName='".$_POST['U_UserName']."',U_Password='$pass',U_Name='".$_POST['U_Name']."',Home='".$_POST['Home']."',zip='".$_POST['zip']."',U_Phone='".$_POST['U_Phone']."',U_Email='".$_POST['Email']."' WHERE U_ID='".$_POST['U_ID']."'";   
+            $sqledit = "UPDATE user SET U_UserName='$u_username',U_Password='$pass',U_Name='$u_name',Home='$u_home',zip='$u_zip',U_Phone='$u_phone',U_Email='$u_email' WHERE U_ID='$u_id'";
             $query = mysqli_query($conn,$sqledit);
             if($_SESSION['User'] == '1'){
                 if($query){
@@ -234,7 +245,7 @@ else{ // image = ""
         // WHERE district.AMPHUR_ID='".$_POST['A_District']."' AND district.DISTRICT_ID = '".$_POST['T_District']."' AND district.PROVINCE_ID = '".$_POST['Province']."',zip='".$_POST['zip']."'";
         // $queryHone = mysqli_query($conn,$sqlHome);
         // $row = mysqli_fetch_array($queryHone);
-        $sqledit = "UPDATE user SET U_UserName='".$_POST['U_UserName']."',U_Name='".$_POST['U_Name']."',Home='".$_POST['Home']."',T_District='".$_POST['T_District']."',A_District='".$_POST['A_District']."',Province='".$_POST['Province']."',zip='".$_POST['zip']."',U_Phone='".$_POST['U_Phone']."',U_Photo='$image',U_Email='".$_POST['Email']."' WHERE U_ID='".$_POST['U_ID']."'";
+        $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',T_District='$u_tdistrict',A_District='$u_adistrict',Province='$u_province',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";
          $query = mysqli_query($conn,$sqledit);
          if($_SESSION['User'] == '1'){
             if($query){

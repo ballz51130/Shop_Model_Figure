@@ -93,7 +93,8 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                         } // for loop 
                     ?>
                     <?php 
-                     $sqlsn = "SELECT * from send_tb where sn_id = '".$_POST['gender']."' ";
+                     $gender_esc = (int)$_POST['gender'];
+                     $sqlsn = "SELECT * from send_tb where sn_id = '$gender_esc' ";
                      $querysn = mysqli_query($conn,$sqlsn);
                      $resultsn = mysqli_fetch_array($querysn);
                     ?>

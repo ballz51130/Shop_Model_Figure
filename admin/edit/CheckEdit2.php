@@ -1,6 +1,8 @@
 <?php 
 include '../../conn/conn.php';
-$sql = "UPDATE `product` SET `P_Unit`='".$_POST['P_Unit']."' WHERE P_ID='".$_POST['P_ID']."'";
+$p_unit = (int)$_POST['P_Unit'];
+$p_id = (int)$_POST['P_ID'];
+$sql = "UPDATE `product` SET `P_Unit`='$p_unit' WHERE P_ID='$p_id'";
 
 $query = mysqli_query($conn,$sql);
 if($query){

@@ -1,8 +1,11 @@
 <?php 
 include '../conn/conn.php';
 session_start();
+$p_number = mysqli_real_escape_string($conn, $_POST['P_Number']);
+$quantity = (int)$_POST['quantity'];
+$p_status = (int)$_POST['P_Status'];
 $sql = "SELECT P_Number,U_ID,OD_Unit,orderdetail.O_ID  FROM orders INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID 
- WHERE U_ID='".$_SESSION['User']."' AND P_Number = '".$_POST['P_Number']."' AND O_Status='ยืนยันการสั่งซื้อ'";
+ WHERE U_ID='".$_SESSION['User']."' AND P_Number = '$p_number' AND O_Status='ยืนยันการสั่งซื้อ'";
 $query = mysqli_query($conn, $sql);
 $result = mysqli_fetch_array($query,MYSQLI_ASSOC);
 if($result == 0){
@@ -10,7 +13,7 @@ if($result == 0){
         $sql2 = "INSERT INTO orders(U_ID,O_Status) VALUES ('".$_SESSION['User']."','ยืนยันการสั่งซื้อ')";
         $query2 = mysqli_query($conn, $sql2);
         $lest = $conn -> insert_id;
-        $sql3 = "INSERT INTO orderdetail(P_Number,O_ID,OD_Unit,P_Status) VALUE ('".$_POST['P_Number']."','$lest','".$_POST['quantity']."','".$_POST['P_Status']."') ";
+        $sql3 = "INSERT INTO orderdetail(P_Number,O_ID,OD_Unit,P_Status) VALUE ('$p_number','$lest','$quantity','$p_status') ";
         $query3 = mysqli_query($conn, $sql3);
         if($query2&&$query3)
         {
@@ -25,14 +28,14 @@ if($result == 0){
         } // status = 1
         else{
             // เช็ควันที่ PREORER กับ วันที่ สั่งซื้อ
-            $sqlcheckMont = "SELECT P_Date ,DATE(now()) as DateOnPre  FROM product WHERE P_Number = '".$_POST['P_Number']."'";
+            $sqlcheckMont = "SELECT P_Date ,DATE(now()) as DateOnPre  FROM product WHERE P_Number = '$p_number'";
             $querydate= mysqli_query($conn, $sqlcheckMont);
             $resultdate = mysqli_fetch_array($querydate,MYSQLI_ASSOC);
             if($resultdate['P_Date'] >= $resultdate['DateOnPre']){
                 $queryinsert = "INSERT INTO orders(U_ID,O_Status) VALUES ('".$_SESSION['User']."','ยืนยันการสั่งซื้อ')";
                 $resuktinsert = mysqli_query($conn,$queryinsert);
                 $lest = $conn -> insert_id;
-                $sql3 = "INSERT INTO orderdetail(P_Number,O_ID,OD_Unit,P_Status) VALUE ('".$_POST['P_Number']."','$lest','".$_POST['quantity']."','".$_POST['P_Status']."') ";
+                $sql3 = "INSERT INTO orderdetail(P_Number,O_ID,OD_Unit,P_Status) VALUE ('$p_number','$lest','$quantity','$p_status') ";
                 $query3 = mysqli_query($conn, $sql3);
                 if($queryinsert&&$query3){
             echo "<script type='text/javascript'>alert('ทำการสั่งซื้อสำเร็จ');</script>";
@@ -56,11 +59,11 @@ if($result == 0){
 }
 
 else{
-    $sqlproduct = "SELECT P_Unit FROM product WHERE P_Number='".$_POST['P_Number']."'";
+    $sqlproduct = "SELECT P_Unit FROM product WHERE P_Number='$p_number'";
     $queryproduct= mysqli_query($conn, $sqlproduct);
     $resultproduct = mysqli_fetch_array($queryproduct,MYSQLI_ASSOC);
    
-    $num = $result['OD_Unit']+$_POST['quantity'];
+    $num = $result['OD_Unit']+$quantity;
     if ($num > $resultproduct['P_Unit']){
         echo "<script type='text/javascript'>alert('สินค้ามีไม่พอกรุณาตรวจสอบ');</script>";
         echo "<META HTTP-EQUIV='Refresh'CONTENT = '0;URL=../user/Market.php'>";

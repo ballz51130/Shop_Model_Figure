@@ -1,15 +1,19 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
-$sql = "SELECT * FROM group_tb WHERE G_ID='".$_GET['G_ID']."'";
+$g_id_get = (int)$_GET['G_ID'];
+$sql = "SELECT * FROM group_tb WHERE G_ID='$g_id_get'";
 $query= $conn->query($sql);
 $result = $query->fetch_array();
 
 if(isset($_POST['submit'])){
+    $g_name = mysqli_real_escape_string($conn, $_POST['G_Name']);
+    $g_status = mysqli_real_escape_string($conn, $_POST['G_Status']);
+    $g_id_post = (int)$_POST['G_ID'];
     if($image = $_FILES['image']['name'] != ""){
         $image = $_FILES['image']['name'];
         $target = "../../photo/model/".basename($image);
-        $sql = "UPDATE group_tb SET G_Name='".$_POST['G_Name']."',G_Photo='$image',G_Status= '".$_POST['G_Status']."' WHERE G_ID = '".$_POST['G_ID']."' ";
+        $sql = "UPDATE group_tb SET G_Name='$g_name',G_Photo='$image',G_Status= '$g_status' WHERE G_ID = '$g_id_post' ";
         $query= $conn->query($sql);
         $move = move_uploaded_file($_FILES['image']['tmp_name'], $target);
         if($query||$move){
@@ -22,7 +26,7 @@ if(isset($_POST['submit'])){
         }
     }
     else{
-        $sql = "UPDATE group_tb SET G_Name='".$_POST['G_Name']."',G_Status= '".$_POST['G_Status']."' WHERE G_ID = '".$_POST['G_ID']."' ";
+        $sql = "UPDATE group_tb SET G_Name='$g_name',G_Status= '$g_status' WHERE G_ID = '$g_id_post' ";
         $query= $conn->query($sql);
         if($query){
             echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';

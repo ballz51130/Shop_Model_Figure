@@ -1,6 +1,6 @@
 <?php 
 include '../../conn/conn.php';
-$ID = $_GET['ID'];
+$ID = (int)$_GET['ID'];
  $sql ="DELETE FROM product WHERE P_ID = ".$ID;
  $query = mysqli_query($conn,$sql);
  if($query){

@@ -1,6 +1,6 @@
 <?php 
 include '../conn/conn.php';
-$ID = $_GET['ID'];
+$ID = (int)$_GET['ID'];
 $sql = "DELETE FROM orders WHERE O_ID=".$ID;
 $query = mysqli_query($conn,$sql);
 $sql2 = "DELETE FROM orderdetail WHERE O_ID=".$ID;

@@ -3,7 +3,10 @@ include '../../conn/conn.php';
 session_start(); 
 
 if(isset($_POST['submit'])){
-        $sql = "INSERT INTO send_tb(Sn_Name, Sn_Price, Sn_Status) VALUES ('".$_POST['Sn_Name']."','".$_POST['Sn_Price']."','".$_POST['Sn_Status']."')";
+        $sn_name = mysqli_real_escape_string($conn, $_POST['Sn_Name']);
+        $sn_price = mysqli_real_escape_string($conn, $_POST['Sn_Price']);
+        $sn_status = mysqli_real_escape_string($conn, $_POST['Sn_Status']);
+        $sql = "INSERT INTO send_tb(Sn_Name, Sn_Price, Sn_Status) VALUES ('$sn_name','$sn_price','$sn_status')";
         $query= $conn->query($sql);
         if($query){
             echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';

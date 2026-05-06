@@ -1,10 +1,12 @@
 <?php 
 include '../conn/conn.php';
 session_start();
+$p_number = mysqli_real_escape_string($conn, $_GET['P_Number']);
+$o_id = (int)$_GET['O_ID'];
 $sql = "SELECT * FROM product
         INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
 		INNER JOIN productdetail ON productdetail.P_Number = product.P_Number
-        WHERE product.P_Number='".$_GET['P_Number']."'";
+        WHERE product.P_Number='$p_number'";
    	$query = mysqli_query($conn, $sql);
 	$result = mysqli_fetch_array($query);
 ?>
@@ -54,8 +56,8 @@ $sql = "SELECT * FROM product
 
 							</div>
                             <form action="./UpdateOrder.php" method="post">
-                            <input type="hidden" name="O_ID" value="<?php echo $_GET['O_ID']; ?>">
-                            <input type="hidden" name="P_Number" value="<?php echo $_GET['P_Number']; ?>">
+                            <input type="hidden" name="O_ID" value="<?php echo $o_id; ?>">
+                            <input type="hidden" name="P_Number" value="<?php echo htmlspecialchars($p_number); ?>">
 								<div class="col-md-7">
 									<div class="product-title">ชื่อสินค้า</div>
 									<div class="product-desc"><?php echo $result['P_Name'] ?></div>
