@@ -13,7 +13,8 @@ $sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNE
  $queryorder = $conn->query($sqlOrder);
  $resultorder = mysqli_num_rows($queryorder);
  if(isset($_POST['delete'])){
-    $sqldel="DELETE FROM orders WHERE C_ID =  '".$_POST['C_ID']."'";
+    $c_id = (int)$_POST['C_ID'];
+    $sqldel="DELETE FROM orders WHERE C_ID = '$c_id'";
     $query = $conn->query($sqldel);
     if($query){
         echo "<script type='text/javascript'>alert('สำเร็จ');</script>";

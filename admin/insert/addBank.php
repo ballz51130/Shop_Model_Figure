@@ -4,7 +4,11 @@ session_start();
 if(isset($_POST['submit'])){
         $image = $_FILES['image']['name'];
         $target = "../../photo/".basename($image);
-        $sql = "INSERT INTO bank_tb(Bk_Name, Bk_Number, U_Name, Bk_Type, Bk_img) VALUES ('".$_POST['Bk_Name']."','".$_POST['Bk_Number']."','".$_POST['U_Name']."','".$_POST['Bk_Type']."','$image')";
+        $bk_name = mysqli_real_escape_string($conn, $_POST['Bk_Name']);
+        $bk_number = mysqli_real_escape_string($conn, $_POST['Bk_Number']);
+        $u_name_bk = mysqli_real_escape_string($conn, $_POST['U_Name']);
+        $bk_type = mysqli_real_escape_string($conn, $_POST['Bk_Type']);
+        $sql = "INSERT INTO bank_tb(Bk_Name, Bk_Number, U_Name, Bk_Type, Bk_img) VALUES ('$bk_name','$bk_number','$u_name_bk','$bk_type','$image')";
         $query= $conn->query($sql);
         $move = move_uploaded_file($_FILES['image']['tmp_name'], $target);
         if($query||$move){

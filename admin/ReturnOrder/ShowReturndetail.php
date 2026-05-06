@@ -39,8 +39,11 @@ session_start();
     if(isset($_POST['submit'])){
         $image = $_FILES['image']['name'];
         $target = "../../photo/ReProduct/slip/".basename($image);
+        $re_status = mysqli_real_escape_string($conn, $_POST['Re_Status']);
+        $re_reply = mysqli_real_escape_string($conn, $_POST['Re_Reply']);
+        $re_id = (int)$_POST['Re_ID'];
         if($_FILES['image']['name']!=""){
-        $sqlReturnOrder = "UPDATE returnorder SET Re_Status='".$_POST['Re_Status']."',Re_Reply='".$_POST['Re_Reply']."',Re_Slip='$image' WHERE Re_ID='".$_POST['Re_ID']."'";
+        $sqlReturnOrder = "UPDATE returnorder SET Re_Status='$re_status',Re_Reply='$re_reply',Re_Slip='$image' WHERE Re_ID='$re_id'";
         $queryReturnOrder= $conn->query($sqlReturnOrder);
         $move = move_uploaded_file($_FILES['image']['tmp_name'], $target);
         if($queryReturnOrder){
@@ -61,7 +64,7 @@ session_start();
         }
     }
     else{
-        $sqlReturnOrder = "UPDATE returnorder SET Re_Status='".$_POST['Re_Status']."',Re_Reply='".$_POST['Re_Reply']."' WHERE Re_ID='".$_POST['Re_ID']."'";
+        $sqlReturnOrder = "UPDATE returnorder SET Re_Status='$re_status',Re_Reply='$re_reply' WHERE Re_ID='$re_id'";
         $queryReturnOrder= $conn->query($sqlReturnOrder);
         if($queryReturnOrder){  
             echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';

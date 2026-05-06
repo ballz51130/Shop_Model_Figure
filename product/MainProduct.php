@@ -116,7 +116,8 @@ $sqlN ="SELECT orders.O_ID,orders.P_Number,orders.U_ID,orders.O_Unit,product.P_N
 
 
             </div>
-            <?php $sql = "SELECT * FROM Product WHERE P_Group = '".$_GET['Group']."' ORDER BY P_ID ASC limit $start_from,$num_per_page ";  
+            <?php $group_filter = mysqli_real_escape_string($conn, $_GET['Group']);
+                    $sql = "SELECT * FROM Product WHERE P_Group = '$group_filter' ORDER BY P_ID ASC limit $start_from,$num_per_page ";  
                     $result = mysqli_query($conn, $sql);  
                     if(mysqli_num_rows($result) > 0)  // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
                     {  

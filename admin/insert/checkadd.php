@@ -1,6 +1,16 @@
 <?php 
 include '../../conn/conn.php';
-$sqlcheck = "SELECT P_Number From product WHERE P_Number ='".$_POST['P_Number']."'";
+$p_number = mysqli_real_escape_string($conn, $_POST['P_Number']);
+$p_id = mysqli_real_escape_string($conn, $_POST['P_ID']);
+$p_name = mysqli_real_escape_string($conn, $_POST['P_Name']);
+$p_price = mysqli_real_escape_string($conn, $_POST['P_Price']);
+$p_pricebye = mysqli_real_escape_string($conn, $_POST['P_Pricebye']);
+$p_weight = mysqli_real_escape_string($conn, $_POST['P_weight']);
+$p_unit = mysqli_real_escape_string($conn, $_POST['P_Unit']);
+$p_status = mysqli_real_escape_string($conn, $_POST['P_Status']);
+$p_group = mysqli_real_escape_string($conn, $_POST['P_Group']);
+$p_brand = mysqli_real_escape_string($conn, $_POST['P_Brand']);
+$sqlcheck = "SELECT P_Number From product WHERE P_Number ='$p_number'";
 $querycheck = mysqli_query($conn,$sqlcheck);
 $resultcheck = mysqli_fetch_array($querycheck);
 if($resultcheck){
@@ -18,13 +28,13 @@ $image_text = mysqli_real_escape_string($conn, $_POST['image_text']); //ฟั�
 // image file directory 
 $target = "../../photo/Order/".basename($image);
 $sql ="INSERT INTO product(P_ID,P_Number, P_Name, P_Price,P_Purchaseprice,P_Detel,P_weight,P_Photo, P_Unit, P_Status, P_Group,P_Brand) 
-VALUES ('".$_POST['P_ID']."','".$_POST['P_Number']."','".$_POST['P_Name']."','".$_POST['P_Price']."','".$_POST['P_Pricebye']."','$image_text','".$_POST['P_weight']."','$image','".$_POST['P_Unit']."','".$_POST['P_Status']."','".$_POST['P_Group']."','".$_POST['P_Brand']."')";
+VALUES ('$p_id','$p_number','$p_name','$p_price','$p_pricebye','$image_text','$p_weight','$image','$p_unit','$p_status','$p_group','$p_brand')";
 //execute query
 mysqli_query($conn, $sql);
 $target1 = "../../photo/Order/orderdetail/".basename($image1);
 $target2 = "../../photo/Order/orderdetail/".basename($image2);
 $target3 = "../../photo/Order/orderdetail/".basename($image3);
-$sql2 ="INSERT INTO productdetail(P_Number, Pd_image1, Pd_image2, Pd_image3) VALUES ('".$_POST['P_Number']."','$image1','$image2','$image3')";
+$sql2 ="INSERT INTO productdetail(P_Number, Pd_image1, Pd_image2, Pd_image3) VALUES ('$p_number','$image1','$image2','$image3')";
 move_uploaded_file($_FILES['image1']['tmp_name'], $target1);
 move_uploaded_file($_FILES['image2']['tmp_name'], $target2);
 move_uploaded_file($_FILES['image3']['tmp_name'], $target3);
@@ -46,10 +56,12 @@ $image2 = $_FILES['image2']['name'];
 $image3 = $_FILES['image3']['name'];
 // Get text
 $image_text = mysqli_real_escape_string($conn, $_POST['image_text']); //ฟังก์ชันสำหรับเลี่ยงการใช้ตัวอักขระพิเศษ
+$p_pre_month = mysqli_real_escape_string($conn, $_POST['Pre_Month']);
+$p_pre_comin = mysqli_real_escape_string($conn, $_POST['Pre_Comin']);
 // image file directory 
 $target = "../../photo/Order/".basename($image);
 $sql ="INSERT INTO product(P_ID,P_Number, P_Name, P_Price, P_Detel,P_weight,P_Photo, P_Status, P_Group,P_Brand,P_Date,P_Comin) 
-VALUES ('".$_POST['P_ID']."','".$_POST['P_Number']."','".$_POST['P_Name']."','".$_POST['P_Price']."','$image_text','".$_POST['P_weight']."','$image','".$_POST['P_Status']."','".$_POST['P_Group']."','".$_POST['P_Brand']."','".$_POST['Pre_Month']."','".$_POST['Pre_Comin']."')";
+VALUES ('$p_id','$p_number','$p_name','$p_price','$image_text','$p_weight','$image','$p_status','$p_group','$p_brand','$p_pre_month','$p_pre_comin')";
 //execute query
 
 mysqli_query($conn, $sql);
@@ -57,7 +69,7 @@ mysqli_query($conn, $sql);
 $target1 = "../../photo/Order/orderdetail/".basename($image1);
 $target2 = "../../photo/Order/orderdetail/".basename($image2);
 $target3 = "../../photo/Order/orderdetail/".basename($image3);
-$sql2 ="INSERT INTO productdetail(P_Number, Pd_image1, Pd_image2, Pd_image3) VALUES ('".$_POST['P_Number']."','$image1','$image2','$image3')";
+$sql2 ="INSERT INTO productdetail(P_Number, Pd_image1, Pd_image2, Pd_image3) VALUES ('$p_number','$image1','$image2','$image3')";
 move_uploaded_file($_FILES['image1']['tmp_name'], $target1);
 move_uploaded_file($_FILES['image2']['tmp_name'], $target2);
 move_uploaded_file($_FILES['image3']['tmp_name'], $target3);

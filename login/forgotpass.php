@@ -1,7 +1,10 @@
 <?php
 include '../conn/conn.php';
 if ( isset( $_POST['submit'] ) ) {
- $sqlquery="SELECT * FROM user WHERE U_UserName='".$_POST['UserName']."' AND U_Phone='".$_POST['Phone']."' AND U_Email='".$_POST['Email']."'";
+ $u_username = mysqli_real_escape_string($conn, $_POST['UserName']);
+ $u_phone = mysqli_real_escape_string($conn, $_POST['Phone']);
+ $u_email = mysqli_real_escape_string($conn, $_POST['Email']);
+ $sqlquery="SELECT * FROM user WHERE U_UserName='$u_username' AND U_Phone='$u_phone' AND U_Email='$u_email'";
  $query = mysqli_query($conn,$sqlquery);
  $result = mysqli_fetch_array($query);
   if($result){

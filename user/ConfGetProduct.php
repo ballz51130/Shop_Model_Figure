@@ -6,7 +6,8 @@ $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 
 if(isset($_POST['submit'])){
-    $sqlupdate= "UPDATE orders SET O_Status = 'รับของแล้ว' WHERE O_ID ='".$_POST['O_ID']."'";
+    $o_id_post = (int)$_POST['O_ID'];
+    $sqlupdate= "UPDATE orders SET O_Status = 'รับของแล้ว' WHERE O_ID ='$o_id_post'";
     $query = $conn->query($sqlupdate);
     if($query){
         echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
@@ -184,7 +185,7 @@ if(isset($_POST['submit'])){
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
                                 INNER JOIN product ON product.P_Number = orderdetail.P_Number
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_ID = '".$_GET['O_ID']."'";
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND orders.O_ID = '".(int)$_GET['O_ID']."'";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);

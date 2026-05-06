@@ -7,8 +7,10 @@ $sql = "SELECT * FROM orders ORDER BY C_ID DESC LIMIT 1";
     $result = mysqli_fetch_array($query);
     $lest = $result['C_ID']+1;
 for($i = 0; $i < count($_POST['check']); $i++){
-    $num = $_POST['check'][$i];
-$sqlsend = "UPDATE orders SET O_Status = 'รอการชำระ',Sn_id = '".$_POST['gender']."',Bk_id = '".$_POST['bank']."',C_ID='".$lest."' WHERE O_ID = '$num'";
+    $num = (int)$_POST['check'][$i];
+$gender = mysqli_real_escape_string($conn, $_POST['gender']);
+$bank = mysqli_real_escape_string($conn, $_POST['bank']);
+$sqlsend = "UPDATE orders SET O_Status = 'รอการชำระ',Sn_id = '$gender',Bk_id = '$bank',C_ID='".$lest."' WHERE O_ID = '$num'";
 $query = mysqli_query($conn,$sqlsend);
 }
 if($query){

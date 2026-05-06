@@ -1,11 +1,16 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
-$sql = "SELECT * FROM send_tb WHERE Sn_id='".$_GET['Sn_id']."'";
+$sn_id_get = (int)$_GET['Sn_id'];
+$sql = "SELECT * FROM send_tb WHERE Sn_id='$sn_id_get'";
 $query= $conn->query($sql);
 $result = $query->fetch_array();
 if(isset($_POST['submit'])){
-        $sql = "UPDATE send_tb SET Sn_Name='".$_POST['Sn_Name']."',Sn_Price='".$_POST['Sn_Price']."',Sn_Status='".$_POST['Sn_Status']."' WHERE Sn_id='".$_POST['Sn_id']."'";
+        $sn_name = mysqli_real_escape_string($conn, $_POST['Sn_Name']);
+        $sn_price = mysqli_real_escape_string($conn, $_POST['Sn_Price']);
+        $sn_status = mysqli_real_escape_string($conn, $_POST['Sn_Status']);
+        $sn_id_post = (int)$_POST['Sn_id'];
+        $sql = "UPDATE send_tb SET Sn_Name='$sn_name',Sn_Price='$sn_price',Sn_Status='$sn_status' WHERE Sn_id='$sn_id_post'";
        $query= $conn->query($sql);
         if($query){
             echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';

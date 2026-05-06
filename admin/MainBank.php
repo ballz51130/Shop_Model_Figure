@@ -2,7 +2,8 @@
 include '../conn/conn.php';
 session_start(); 
 if(isset($_GET['Bk_id']))  {   
-    $sql = "DELETE FROM bank_tb WHERE Bk_id = '".$_GET['Bk_id']."'";
+    $bk_id = (int)$_GET['Bk_id'];
+    $sql = "DELETE FROM bank_tb WHERE Bk_id = '$bk_id'";
     $query= $conn->query($sql);
     if($query){
         echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
