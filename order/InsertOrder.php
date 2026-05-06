@@ -13,7 +13,7 @@ if($result == 0){
         $sql2 = "INSERT INTO orders(U_ID,O_Status) VALUES ('".$_SESSION['User']."','ยืนยันการสั่งซื้อ')";
         $query2 = mysqli_query($conn, $sql2);
         $lest = $conn -> insert_id;
-        $sql3 = "INSERT INTO orderdetail(P_Number,O_ID,OD_Unit,P_Status) VALUE ('$p_number'','$lest','$quantity'','$p_status'') ";
+        $sql3 = "INSERT INTO orderdetail(P_Number,O_ID,OD_Unit,P_Status) VALUE ('$p_number','$lest','$quantity','$p_status') ";
         $query3 = mysqli_query($conn, $sql3);
         if($query2&&$query3)
         {
@@ -28,14 +28,14 @@ if($result == 0){
         } // status = 1
         else{
             // เช็ควันที่ PREORER กับ วันที่ สั่งซื้อ
-            $sqlcheckMont = "SELECT P_Date ,DATE(now()) as DateOnPre  FROM product WHERE P_Number = '$p_number''";
+            $sqlcheckMont = "SELECT P_Date ,DATE(now()) as DateOnPre  FROM product WHERE P_Number = '$p_number'";
             $querydate= mysqli_query($conn, $sqlcheckMont);
             $resultdate = mysqli_fetch_array($querydate,MYSQLI_ASSOC);
             if($resultdate['P_Date'] >= $resultdate['DateOnPre']){
                 $queryinsert = "INSERT INTO orders(U_ID,O_Status) VALUES ('".$_SESSION['User']."','ยืนยันการสั่งซื้อ')";
                 $resuktinsert = mysqli_query($conn,$queryinsert);
                 $lest = $conn -> insert_id;
-                $sql3 = "INSERT INTO orderdetail(P_Number,O_ID,OD_Unit,P_Status) VALUE ('$p_number'','$lest','$quantity'','$p_status'') ";
+                $sql3 = "INSERT INTO orderdetail(P_Number,O_ID,OD_Unit,P_Status) VALUE ('$p_number','$lest','$quantity','$p_status') ";
                 $query3 = mysqli_query($conn, $sql3);
                 if($queryinsert&&$query3){
             echo "<script type='text/javascript'>alert('ทำการสั่งซื้อสำเร็จ');</script>";

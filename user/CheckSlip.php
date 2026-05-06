@@ -17,7 +17,7 @@ for($i = 0; $i < count($_POST['check']); $i++){
   $unit = (int)$_POST['unit'][$i];
   $status = (int)$_POST['status'][$i];
 if($status==1){
-$sql2 = "SELECT P_Unit FROM product where P_Number = '".$product."'";
+$sql2 = "SELECT P_Unit FROM product where P_Number = '$product'";
 $query = $conn->query($sql2);
 $result2 = $query->fetch_assoc();
 // Update Stock 
@@ -54,7 +54,7 @@ move_uploaded_file($_FILES['image']['tmp_name'], $target);
 $sql2 = "UPDATE orders SET O_Status= 'รอตรวจสอบ' WHERE O_ID ='$num' ";
 //echo $sql2.'<br>';
 $query = $conn->query($sql2);
-$sqlnum = "SELECT P_Unit FROM product where P_Number = '".$product."'";
+$sqlnum = "SELECT P_Unit FROM product where P_Number = '$product'";
 //echo $sqlnum.'<br>';
 $querynum = $conn->query($sqlnum);
 $result2 = $querynum->fetch_assoc();

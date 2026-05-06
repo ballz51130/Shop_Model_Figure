@@ -15,7 +15,7 @@ if(isset($_POST['submit'])){
     if($image = $_FILES['image']['name'] != ""){
         $image = $_FILES['image']['name'];
         $target = "../../photo/".basename($image);
-        $sql = "UPDATE bank_tb SET Bk_Name='$bk_name',Bk_Number='$bk_number',U_Name='$u_name_bk',Bk_Type='$bk_type',Bk_img='$image' WHERE BK_id='$bk_id_post'";
+        $sql = "UPDATE bank_tb SET Bk_Name='$bk_name',Bk_Number='$bk_number',U_Name='$u_name_bk',Bk_Type='$bk_type',Bk_img='$image' WHERE Bk_id='$bk_id_post'";
         $query= $conn->query($sql);
         $move = move_uploaded_file($_FILES['image']['tmp_name'], $target);
         if($query||$move){
@@ -30,7 +30,7 @@ if(isset($_POST['submit'])){
     }
     else{
 
-        $sql = "UPDATE bank_tb SET Bk_Name='$bk_name',Bk_Number='$bk_number',U_Name='$u_name_bk',Bk_Type='$bk_type' WHERE BK_id='$bk_id_post'";
+        $sql = "UPDATE bank_tb SET Bk_Name='$bk_name',Bk_Number='$bk_number',U_Name='$u_name_bk',Bk_Type='$bk_type' WHERE Bk_id='$bk_id_post'";
        $query= $conn->query($sql);
      
         if($query){
