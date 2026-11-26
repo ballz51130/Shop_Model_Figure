@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_login();
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
@@ -181,7 +182,7 @@ $sqlOrder="SELECT * FROM orders INNER JOIN product ON product.P_Number = orders.
                                 INNER JOIN product ON product.P_Number = orders.P_Number
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND  orders.O_ID = '".$_GET['O_ID']."'";
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND  orders.O_ID = '".(int)$_GET['O_ID']."'";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);

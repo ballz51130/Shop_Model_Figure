@@ -1,5 +1,6 @@
 <?php 
 include '../../conn/conn.php';
+require_admin();
 $p_number = mysqli_real_escape_string($conn, $_POST['P_Number']);
 $p_id = mysqli_real_escape_string($conn, $_POST['P_ID']);
 $p_name = mysqli_real_escape_string($conn, $_POST['P_Name']);
@@ -26,21 +27,18 @@ $image3 = $_FILES['image3']['name'];
 // Get text
 $image_text = mysqli_real_escape_string($conn, $_POST['image_text']); //ฟังก์ชันสำหรับเลี่ยงการใช้ตัวอักขระพิเศษ
 // image file directory 
-$target = "../../photo/Order/".basename($image);
+$image = store_uploaded_image('image', '../../photo/Order'); if ($image === false) { upload_rejected(); }
 $sql ="INSERT INTO product(P_ID,P_Number, P_Name, P_Price,P_Purchaseprice,P_Detel,P_weight,P_Photo, P_Unit, P_Status, P_Group,P_Brand) 
 VALUES ('$p_id','$p_number','$p_name','$p_price','$p_pricebye','$image_text','$p_weight','$image','$p_unit','$p_status','$p_group','$p_brand')";
 //execute query
 mysqli_query($conn, $sql);
-$target1 = "../../photo/Order/orderdetail/".basename($image1);
-$target2 = "../../photo/Order/orderdetail/".basename($image2);
-$target3 = "../../photo/Order/orderdetail/".basename($image3);
+$image1 = store_uploaded_image('image1', '../../photo/Order/orderdetail'); if ($image1 === false) { upload_rejected(); }
+$image2 = store_uploaded_image('image2', '../../photo/Order/orderdetail'); if ($image2 === false) { upload_rejected(); }
+$image3 = store_uploaded_image('image3', '../../photo/Order/orderdetail'); if ($image3 === false) { upload_rejected(); }
 $sql2 ="INSERT INTO productdetail(P_Number, Pd_image1, Pd_image2, Pd_image3) VALUES ('$p_number','$image1','$image2','$image3')";
-move_uploaded_file($_FILES['image1']['tmp_name'], $target1);
-move_uploaded_file($_FILES['image2']['tmp_name'], $target2);
-move_uploaded_file($_FILES['image3']['tmp_name'], $target3);
 mysqli_query($conn, $sql2);
 
-if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
+if (($image !== '')) {
   echo "<script type='text/javascript'>alert('อัพโหลดสำเร็จ');</script>";
   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL= ./addProduct.php'>";
     
@@ -59,22 +57,19 @@ $image_text = mysqli_real_escape_string($conn, $_POST['image_text']); //ฟั�
 $p_pre_month = mysqli_real_escape_string($conn, $_POST['Pre_Month']);
 $p_pre_comin = mysqli_real_escape_string($conn, $_POST['Pre_Comin']);
 // image file directory 
-$target = "../../photo/Order/".basename($image);
+$image = store_uploaded_image('image', '../../photo/Order'); if ($image === false) { upload_rejected(); }
 $sql ="INSERT INTO product(P_ID,P_Number, P_Name, P_Price, P_Detel,P_weight,P_Photo, P_Status, P_Group,P_Brand,P_Date,P_Comin) 
 VALUES ('$p_id','$p_number','$p_name','$p_price','$image_text','$p_weight','$image','$p_status','$p_group','$p_brand','$p_pre_month','$p_pre_comin')";
 //execute query
 
 mysqli_query($conn, $sql);
 // Insert Photo detail Product
-$target1 = "../../photo/Order/orderdetail/".basename($image1);
-$target2 = "../../photo/Order/orderdetail/".basename($image2);
-$target3 = "../../photo/Order/orderdetail/".basename($image3);
+$image1 = store_uploaded_image('image1', '../../photo/Order/orderdetail'); if ($image1 === false) { upload_rejected(); }
+$image2 = store_uploaded_image('image2', '../../photo/Order/orderdetail'); if ($image2 === false) { upload_rejected(); }
+$image3 = store_uploaded_image('image3', '../../photo/Order/orderdetail'); if ($image3 === false) { upload_rejected(); }
 $sql2 ="INSERT INTO productdetail(P_Number, Pd_image1, Pd_image2, Pd_image3) VALUES ('$p_number','$image1','$image2','$image3')";
-move_uploaded_file($_FILES['image1']['tmp_name'], $target1);
-move_uploaded_file($_FILES['image2']['tmp_name'], $target2);
-move_uploaded_file($_FILES['image3']['tmp_name'], $target3);
 mysqli_query($conn, $sql2);
-if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
+if (($image !== '')) {
   echo "<script type='text/javascript'>alert('อัพโหลดสำเร็จ');</script>";
   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL= ./addPreProduct.php'>";
 

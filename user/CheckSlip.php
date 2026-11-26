@@ -1,75 +1,71 @@
-<?php 
+<?php
 include '../conn/conn.php';
-session_start(); // คำสั่ง เปิดใช้งาน session
-$image = $_FILES['image']['name'];
-// Get text
-$image_text = mysqli_real_escape_string($conn, $_POST['image_text']);
-$form_bank = mysqli_real_escape_string($conn, $_POST['FormBank']);
-$pay_lastnum = mysqli_real_escape_string($conn, $_POST['Pay_LastNum']);
-$pay_price = mysqli_real_escape_string($conn, $_POST['Pay_Price']);
-$pay_time = mysqli_real_escape_string($conn, $_POST['time']);
-$pay_date = mysqli_real_escape_string($conn, $_POST['date']);
-// image file directory
-$target = "../photo/Slip/".basename($image);
-for($i = 0; $i < count($_POST['check']); $i++){
-  $num = (int)$_POST['check'][$i];
-  $product = mysqli_real_escape_string($conn, $_POST['product'][$i]);
-  $unit = (int)$_POST['unit'][$i];
-  $status = (int)$_POST['status'][$i];
-if($status==1){
-$sql2 = "SELECT P_Unit FROM product where P_Number = '$product'";
-$query = $conn->query($sql2);
-$result2 = $query->fetch_assoc();
-// Update Stock 
-if($result2['P_Unit'] >= $unit){
-$unit = $result2['P_Unit'] - $unit;
-$sql3 = "UPDATE product SET P_Unit = $unit WHERE P_Number='$product'";
-$result3 = $conn->query($sql3);
-$sql="INSERT INTO payment_tb(O_ID, Pay_Frombank,Pay_LastNum,Pay_Price, Pay_Time, Pay_Date, Pay_Img) VALUES ('$num','$form_bank','$pay_lastnum','$pay_price','$pay_time','$pay_date','$image')";
-mysqli_query($conn, $sql);
-$sql2 = "UPDATE orders SET O_Status= 'รอตรวจสอบ' WHERE O_ID ='$num' ";
-mysqli_query($conn, $sql2);
-if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
-  echo "<script type='text/javascript'>alert('สำเร็จ');</script>";
-  echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ./Market.php'>";
-}else{
-  echo "<script type='text/javascript'>alert('ไม่สำเร็จ');</script>";
-    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ./Market.php'>";
+$uid = require_login();
+
+function slip_finish($message)
+{
+    echo "<script type='text/javascript'>alert('" . $message . "');</script>";
+    echo "<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ./Market.php'>";
+    exit;
 }
 
+$orderIds = isset($_POST['check']) && is_array($_POST['check']) ? $_POST['check'] : [];
+if (count($orderIds) === 0) {
+    slip_finish('ไม่สำเร็จ');
 }
 
-else{
-echo "<script type='text/javascript'>alert('ขออภัยสินค้าหมดแล้ว');</script>";
-echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ./Market.php'>";
+$image = store_uploaded_image('image', '../photo/Slip');
+if ($image === false || $image === '') {
+    slip_finish('ไฟล์สลิปไม่ถูกต้อง (jpg, png, gif, webp ไม่เกิน 5MB)');
 }
 
-} // status = 1 
+$form_bank = mysqli_real_escape_string($conn, $_POST['FormBank'] ?? '');
+$pay_lastnum = mysqli_real_escape_string($conn, $_POST['Pay_LastNum'] ?? '');
+$pay_price = mysqli_real_escape_string($conn, $_POST['Pay_Price'] ?? '');
+$pay_time = mysqli_real_escape_string($conn, $_POST['time'] ?? '');
+$pay_date = mysqli_real_escape_string($conn, $_POST['date'] ?? '');
+$imageSql = mysqli_real_escape_string($conn, $image);
 
-if($status==2){
-$sql="INSERT INTO payment_tb(O_ID, Pay_Frombank,Pay_LastNum,Pay_Price, Pay_Time, Pay_Date, Pay_Img) VALUES ('$num','$form_bank','$pay_lastnum','$pay_price','$pay_time','$pay_date','$image')";
-$queryinsertpre= mysqli_query($conn, $sql);
-move_uploaded_file($_FILES['image']['tmp_name'], $target);
-//echo $sql.'<br>';
-$sql2 = "UPDATE orders SET O_Status= 'รอตรวจสอบ' WHERE O_ID ='$num' ";
-//echo $sql2.'<br>';
-$query = $conn->query($sql2);
-$sqlnum = "SELECT P_Unit FROM product where P_Number = '$product'";
-//echo $sqlnum.'<br>';
-$querynum = $conn->query($sqlnum);
-$result2 = $querynum->fetch_assoc();
- //Update Stock 
-$unit = $result2['P_Unit'] + $unit;
-$sql3 = "UPDATE product SET P_Unit = $unit WHERE P_Number='$product'";
-mysqli_query($conn, $sql3);
-//echo $sql3.'<br>';
+$paid = 0;
+$outOfStock = false;
+foreach ($orderIds as $rawId) {
+    $num = (int)$rawId;
+    // Product, quantity and type come from the database, never from the form,
+    // and only for the user's own orders that are still awaiting payment.
+    $detailSql = "SELECT orderdetail.P_Number, orderdetail.OD_Unit, orderdetail.P_Status FROM orders
+        INNER JOIN orderdetail ON orderdetail.O_ID = orders.O_ID
+        WHERE orders.O_ID = $num AND orders.U_ID = $uid AND orders.O_Status = 'รอการชำระ' LIMIT 1";
+    $detailQuery = mysqli_query($conn, $detailSql);
+    $detail = $detailQuery ? mysqli_fetch_assoc($detailQuery) : null;
+    if (!$detail) {
+        continue;
+    }
+    $product = mysqli_real_escape_string($conn, $detail['P_Number']);
+    $unit = (int)$detail['OD_Unit'];
+    $status = (int)$detail['P_Status'];
 
-if ($queryinsertpre) {
-  echo "<script type='text/javascript'>alert('สำเร็จ');</script>";
-  echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ./Market.php'>";
-}else{
-  echo "<script type='text/javascript'>alert('ไม่สำเร็จ');</script>";
-    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ./Market.php'>";
+    if ($status === 1) {
+        // Atomic decrement: fails when stock is insufficient.
+        mysqli_query($conn, "UPDATE product SET P_Unit = P_Unit - $unit WHERE P_Number = '$product' AND P_Unit >= $unit");
+        if (mysqli_affected_rows($conn) < 1) {
+            $outOfStock = true;
+            continue;
+        }
+    } elseif ($status === 2) {
+        mysqli_query($conn, "UPDATE product SET P_Unit = P_Unit + $unit WHERE P_Number = '$product'");
+    } else {
+        continue;
+    }
+
+    $sql = "INSERT INTO payment_tb(O_ID, Pay_Frombank, Pay_LastNum, Pay_Price, Pay_Time, Pay_Date, Pay_Img)
+        VALUES ('$num','$form_bank','$pay_lastnum','$pay_price','$pay_time','$pay_date','$imageSql')";
+    if (mysqli_query($conn, $sql)) {
+        mysqli_query($conn, "UPDATE orders SET O_Status = 'รอตรวจสอบ' WHERE O_ID = $num AND U_ID = $uid");
+        $paid++;
+    }
 }
+
+if ($outOfStock && $paid === 0) {
+    slip_finish('ขออภัยสินค้าหมดแล้ว');
 }
-}
+slip_finish($paid > 0 ? 'สำเร็จ' : 'ไม่สำเร็จ');

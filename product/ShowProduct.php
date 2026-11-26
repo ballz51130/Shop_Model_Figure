@@ -4,7 +4,7 @@ session_start();
 $sql = "SELECT * FROM product
         INNER JOIN status_tb ON status_tb.St_Number = product.P_Status
 		INNER JOIN productdetail ON productdetail.P_Number = product.P_Number
-        WHERE product.P_Number='".$_GET['P_Number']."'";
+        WHERE product.P_Number='".mysqli_real_escape_string($conn, $_GET['P_Number'])."'";
    	$query = mysqli_query($conn, $sql);
 	$result = mysqli_fetch_array($query);
 	if (isset($_SESSION['login']))

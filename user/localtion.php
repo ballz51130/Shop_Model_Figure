@@ -14,13 +14,13 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
     header ("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
     header ("Cache-Control: no-cache, must-revalidate");
     header ("Pragma: no-cache");
-    $data = $_GET['data'];
-    $val = $_GET['val'];
+    $data = isset($_GET['data']) ? (string)$_GET['data'] : '';
+    $val = isset($_GET['val']) ? (int)$_GET['val'] : 0;
 
 
          if ($data=='province') { 
               echo "<select class='form-control' name='Province' onChange=\"dochange('amphur', this.value)\">";
-              if(!$_SESSION['User']){
+              if(empty($_SESSION['User'])){
                echo "<option value='1'>- เลือกจังหวัด -</option>\n";
               }
 

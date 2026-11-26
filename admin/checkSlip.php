@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start();
+require_admin();
 $cars = mysqli_real_escape_string($conn, $_POST['cars']);
 $note = mysqli_real_escape_string($conn, $_POST['Note']);
 if ($_POST['cars'] == 'ยืนยันการชำระเงิน'){

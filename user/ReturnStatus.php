@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_login();
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);

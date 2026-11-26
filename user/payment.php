@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_login();
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
@@ -14,7 +15,7 @@ $sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNE
  $resultorder = mysqli_num_rows($queryorder);
  if(isset($_POST['delete'])){
     $c_id = (int)$_POST['C_ID'];
-    $sqldel="DELETE FROM orders WHERE C_ID = '$c_id'";
+    $sqldel="DELETE FROM orders WHERE C_ID = '$c_id' AND U_ID = '".current_user_id()."' AND O_Status = 'รอการชำระ'";
     $query = $conn->query($sqldel);
     if($query){
         echo "<script type='text/javascript'>alert('สำเร็จ');</script>";

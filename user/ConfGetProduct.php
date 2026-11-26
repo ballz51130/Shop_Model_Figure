@@ -1,15 +1,16 @@
 <?php 
 include '../conn/conn.php';
-session_start(); 
-$sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
+session_start();
+$uid = require_login();
+$sqluser="SELECT * FROM user WHERE U_ID='".$uid."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 
 if(isset($_POST['submit'])){
     $o_id_post = (int)$_POST['O_ID'];
-    $sqlupdate= "UPDATE orders SET O_Status = 'รับของแล้ว' WHERE O_ID ='$o_id_post'";
+    $sqlupdate= "UPDATE orders SET O_Status = 'รับของแล้ว' WHERE O_ID ='$o_id_post' AND U_ID = '$uid'";
     $query = $conn->query($sqlupdate);
-    if($query){
+    if($query && $conn->affected_rows > 0){
         echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
         echo"<META HTTP-EQUIV ='Refresh' CONTENT = '2;URL= ./status.php'>";
         
@@ -248,7 +249,7 @@ if(isset($_POST['submit'])){
                            <button type="submit" name="submit" style="margin-left:150px ;position: absolute;" class="btn btn-primary" >ยืนยันการรับของ</button>
                            </form> 
                            <form action="./FormRetuen.php" method="post">
-                           <input type="hidden" name="O_ID" value="<?php echo $_GET['O_ID'] ?>">
+                           <input type="hidden" name="O_ID" value="<?php echo (int)$_GET['O_ID'] ?>">
                            <button type="submit" style="margin-left:30px ;position: absolute;" class="btn btn-primary" >แจ้งคืน/สินค้า</button>
                            </form>
                            </div>

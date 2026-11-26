@@ -1,14 +1,15 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
+require_admin();
 if(isset($_POST['submit'])){
         $image = $_FILES['image']['name'];
-        $target = "../../photo/model/".basename($image);
+        $image = store_uploaded_image('image', '../../photo/model'); if ($image === false) { upload_rejected(); }
         $g_name = mysqli_real_escape_string($conn, $_POST['G_Name']);
         $g_status = mysqli_real_escape_string($conn, $_POST['G_Status']);
         $sql = "INSERT INTO group_tb(G_Name, G_Photo, G_Status) VALUES ('$g_name','$image','$g_status')";
         $query= $conn->query($sql);
-        $move = move_uploaded_file($_FILES['image']['tmp_name'], $target);
+        $move = ($image !== '');
         if($query||$move){
             echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
             echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=../MainProductGrop.php '>";

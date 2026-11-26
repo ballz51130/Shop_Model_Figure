@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_admin();
 if(isset($_GET['Sn_id']))  {   
     $sn_id = (int)$_GET['Sn_id'];
     $sql = "DELETE FROM send_tb WHERE Sn_id = '$sn_id'";

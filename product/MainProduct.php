@@ -15,10 +15,10 @@ else{
     $_SESSION['User']= 0;
 }
 if(isset($_GET['page'])){
-    $page = $_GET['page'];
+    $page = max(1, (int)$_GET['page']);
 }
 if(isset($_GET['page'])){
-    $page = $_GET['page'];
+    $page = max(1, (int)$_GET['page']);
 }
 else{
     $rowN = 0;

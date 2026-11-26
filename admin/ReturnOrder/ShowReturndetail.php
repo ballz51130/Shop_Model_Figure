@@ -1,6 +1,7 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
+require_admin();
     // แสดงข้อมูล ADMIN
     $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
     $queryUser = mysqli_query($conn,$sqlUser);
@@ -38,14 +39,14 @@ session_start();
     // กดบันทึก ข้อมูล
     if(isset($_POST['submit'])){
         $image = $_FILES['image']['name'];
-        $target = "../../photo/ReProduct/slip/".basename($image);
+        $image = store_uploaded_image('image', '../../photo/ReProduct/slip'); if ($image === false) { upload_rejected(); }
         $re_status = mysqli_real_escape_string($conn, $_POST['Re_Status']);
         $re_reply = mysqli_real_escape_string($conn, $_POST['Re_Reply']);
         $re_id = (int)$_POST['Re_ID'];
         if($_FILES['image']['name']!=""){
         $sqlReturnOrder = "UPDATE returnorder SET Re_Status='$re_status',Re_Reply='$re_reply',Re_Slip='$image' WHERE Re_ID='$re_id'";
         $queryReturnOrder= $conn->query($sqlReturnOrder);
-        $move = move_uploaded_file($_FILES['image']['tmp_name'], $target);
+        $move = ($image !== '');
         if($queryReturnOrder){
             if($move){
             echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';

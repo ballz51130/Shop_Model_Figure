@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start();
+require_login();
 $p_number = mysqli_real_escape_string($conn, $_GET['P_Number']);
 $o_id = (int)$_GET['O_ID'];
 $sql = "SELECT * FROM product

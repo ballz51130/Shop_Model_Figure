@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_login();
 $sqluser="SELECT * FROM user WHERE U_ID='".$_SESSION['User']."'";
 $queryuser = mysqli_query($conn,$sqluser);
 $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
@@ -182,7 +183,7 @@ $sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNE
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
                                 INNER JOIN product ON product.P_Number = orderdetail.P_Number
-                                WHERE user.U_ID = '".$_SESSION['User']."' AND  orders.O_ID = '".$_POST['O_ID']."'";
+                                WHERE user.U_ID = '".$_SESSION['User']."' AND  orders.O_ID = '".(int)$_POST['O_ID']."'";
                                 $query = mysqli_query($conn,$sql);
                                 $query2 = mysqli_query($conn,$sql);
                                 $resultcheck = mysqli_fetch_array($query,MYSQLI_ASSOC);
@@ -210,7 +211,7 @@ $sqlOrder="SELECT * FROM orders  INNER JOIN user ON user.U_ID = orders.U_ID INNE
                     $sumproduct = $sumproduct+($result['P_Price']*$result['OD_Unit']);
               ?>
                       <td>
-                          <input type="hidden" name="O_ID" value="<?php echo $_POST['O_ID'] ?>">
+                          <input type="hidden" name="O_ID" value="<?php echo (int)$_POST['O_ID'] ?>">
                        <div class="col-md-3">
                        <a href="../product/ShowProduct.php?P_Number=<?php echo $result['P_Number'] ;?>" target="_blank"> <img src="<?php echo '../photo/Order/'.$result['P_Photo'] ;?>"width="80px" height="80px"> </a>
                          </div>

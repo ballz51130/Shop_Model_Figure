@@ -1,8 +1,9 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_admin();
 
-if ($_SESSION['User'] == 1){
+if (is_admin()){
     // แสดงข้อมูล ADMIN
     $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
     $queryUser = mysqli_query($conn,$sqlUser);

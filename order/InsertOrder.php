@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start();
+require_login();
 $p_number = mysqli_real_escape_string($conn, $_POST['P_Number']);
 $quantity = (int)$_POST['quantity'];
 $p_status = (int)$_POST['P_Status'];

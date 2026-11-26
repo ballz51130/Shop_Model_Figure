@@ -1,12 +1,13 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_admin();
 $sqladd ="SELECT * FROM orders 
 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
 INNER JOIN product ON product.P_Number = orderdetail.P_Number
 INNER JOIN send_tb ON orders.Sn_id = send_tb.Sn_id
 INNER JOIN user ON orders.U_ID = user.U_ID
- WHERE orders.U_ID= '".$_GET['U_ID']."' AND orders.O_ID = '".$_GET['O_ID']."'";
+ WHERE orders.U_ID= '".(int)$_GET['U_ID']."' AND orders.O_ID = '".(int)$_GET['O_ID']."'";
 $queryadd = mysqli_query($conn,$sqladd);
     // แสดงข้อมูล ADMIN
     $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";

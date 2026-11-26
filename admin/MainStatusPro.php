@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_admin();
 
     // แสดงข้อมูล ADMIN
     $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
@@ -264,15 +265,15 @@ session_start();
                                 <H2> สรุปยอดขายสินค้า </H2>
                             </center>
                             <form action="" method="get">
-<input type="hidden" name="P_Number" value="<?php echo $_GET['P_Number'];?>">
+<input type="hidden" name="P_Number" value="<?php echo e($_GET['P_Number']);?>">
 <label for="cars"> ปี :</label>
 <select name="y" >
-<option value="<?php echo isset ($_GET['y']) ? $_GET['y'] : '' ?>"><?php echo isset ($_GET['y']) ? $_GET['y'] : 'เลือกปี' ?></option>
+<option value="<?php echo isset ($_GET['y']) ? (int)$_GET['y'] : '' ?>"><?php echo isset ($_GET['y']) ? (int)$_GET['y'] : 'เลือกปี' ?></option>
 <?php
  $sql ="SELECT P_Number, DATE_FORMAT(O_Date, '%Y') AS Years
  FROM orders 
  INNER JOIN orderdetail ON orderdetail.O_ID = orders.O_ID
- WHERE P_Number = '".$_GET['P_Number']."'
+ WHERE P_Number = '".mysqli_real_escape_string($conn, $_GET['P_Number'])."'
  GROUP BY Years
  ";
  $resultss = mysqli_query($conn, $sql);
@@ -281,12 +282,12 @@ session_start();
   <option value="<?php echo $resulty['Years'] ?>"><?php echo $resulty['Years'] ?></option>
  <?php } ?>
 </select>
- <button type="submit" class="btn btn-success" >ค้นหา</button>&nbsp;<a  class="btn btn-primary" href="./MainStatusPro.php?P_Number=<?php echo $_GET['P_Number'];?>">ล้างค่า</a>
+ <button type="submit" class="btn btn-success" >ค้นหา</button>&nbsp;<a  class="btn btn-primary" href="./MainStatusPro.php?P_Number=<?php echo e($_GET['P_Number']);?>">ล้างค่า</a>
 </form>
                             <?php
 if (isset($_GET['y']))
 {
-    $y = $_GET['y'];
+    $y = (int)$_GET['y'];
 }
 else
 {
@@ -298,7 +299,7 @@ else
     FROM orders
     inner join orderdetail on orders.O_ID = orderdetail.O_ID
     INNER JOIN product ON orderdetail.P_Number = product.P_Number
-    WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') AND orderdetail.P_Number='".$_GET['P_Number']."'
+    WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') AND orderdetail.P_Number='".mysqli_real_escape_string($conn, $_GET['P_Number'])."'
     GROUP BY orderdetail.P_Number ,datesave ";
     $resulttable = mysqli_query($conn, $query);
     $resultchart = mysqli_query($conn, $query); 
@@ -311,7 +312,7 @@ else
         FROM orders
         inner join orderdetail on orders.O_ID = orderdetail.O_ID
         INNER JOIN product ON orderdetail.P_Number = product.P_Number
-        WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') AND orderdetail.P_Number='".$_GET['P_Number']."' AND YEAR(O_Date) = '".$_GET['y']."'
+        WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') AND orderdetail.P_Number='".mysqli_real_escape_string($conn, $_GET['P_Number'])."' AND YEAR(O_Date) = '".(int)$_GET['y']."'
         GROUP BY orderdetail.P_Number ,datesave ";
         $resulttable = mysqli_query($conn, $query);
         $resultchart = mysqli_query($conn, $query); 
