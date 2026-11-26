@@ -1,6 +1,7 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
+require_admin();
 $bk_id_get = (int)$_GET['Bk_id'];
 $sql = "SELECT * FROM bank_tb WHERE Bk_id='$bk_id_get'";
 $query= $conn->query($sql);
@@ -14,10 +15,10 @@ if(isset($_POST['submit'])){
     $bk_id_post = (int)$_POST['Bk_id'];
     if($image = $_FILES['image']['name'] != ""){
         $image = $_FILES['image']['name'];
-        $target = "../../photo/".basename($image);
+        $image = store_uploaded_image('image', '../../photo'); if ($image === false) { upload_rejected(); }
         $sql = "UPDATE bank_tb SET Bk_Name='$bk_name',Bk_Number='$bk_number',U_Name='$u_name_bk',Bk_Type='$bk_type',Bk_img='$image' WHERE Bk_id='$bk_id_post'";
         $query= $conn->query($sql);
-        $move = move_uploaded_file($_FILES['image']['tmp_name'], $target);
+        $move = ($image !== '');
         if($query||$move){
             echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
             echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=../MainBank.php'>";

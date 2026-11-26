@@ -1,275 +1,49 @@
 <?php
 include '../conn/conn.php';
-session_start();
-$image = $_FILES['image']['name'];
-$pass = md5($_POST['U_Password']."harumyx");
-$target = "../photo/User/".basename($image);
+$sessionUserId = require_login();
 
-$u_username = mysqli_real_escape_string($conn, $_POST['U_UserName']);
-$u_name = mysqli_real_escape_string($conn, $_POST['U_Name']);
-$u_home = mysqli_real_escape_string($conn, $_POST['Home']);
-$u_tdistrict = mysqli_real_escape_string($conn, $_POST['T_District']);
-$u_adistrict = mysqli_real_escape_string($conn, $_POST['A_District']);
-$u_province = mysqli_real_escape_string($conn, $_POST['Province']);
-$u_zip = mysqli_real_escape_string($conn, $_POST['zip']);
-$u_phone = mysqli_real_escape_string($conn, $_POST['U_Phone']);
-$u_email = mysqli_real_escape_string($conn, $_POST['Email']);
-$u_id = mysqli_real_escape_string($conn, $_POST['U_ID']);
+// Users may only edit their own profile; admins may edit any user.
+$u_id = is_admin() && isset($_POST['U_ID']) ? (int)$_POST['U_ID'] : $sessionUserId;
+$redirect = is_admin() ? '../admin/ManageUser.php' : './EditUser.php';
 
-if($_FILES['image']['name']!=""){
-if($_POST['U_Password']==""){ // pass no change 
-    if ($_POST['Province'] == 0 ){
-        $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";   
-        $query = mysqli_query($conn,$sqledit);
-        move_uploaded_file($_FILES['image']['tmp_name'], $target);
-        if($_SESSION['User'] == '1'){
-        if($query){
-            echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-            echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-           } 
-           else{
-               echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-               echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-           }
-        }
-        else{
-            if($query){
-                echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                
-               } 
-               else{
-                   echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-               }  
-        }
-
-    }
-    else {
-        // แปลงตัวเลข ตำบล อำเภอ จังหวัด ให้เป็น ชื่อ ค่าที่ POST มาเป็นตัวเลข
-    // $sqlHome = "SELECT * FROM district 
-    // INNER JOIN amphur ON amphur.AMPHUR_ID = district.AMPHUR_ID
-    // INNER JOIN province ON province.PROVINCE_ID = district.PROVINCE_ID
-    // WHERE district.AMPHUR_ID='".$_POST['A_District']."' AND district.DISTRICT_ID = '".$_POST['T_District']."' AND district.PROVINCE_ID = '".$_POST['Province']."',zip='".$_POST['zip']."'";
-    // $queryHone = mysqli_query($conn,$sqlHome);
-    // $row = mysqli_fetch_array($queryHone);
-    $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',T_District='$u_tdistrict',A_District='$u_adistrict',Province='$u_province',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";
-     $query = mysqli_query($conn,$sqledit);
-     move_uploaded_file($_FILES['image']['tmp_name'], $target);
-     if($_SESSION['User'] == '1'){
-        if($query){
-            echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-            echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-           } 
-           else{
-               echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-               echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-           }
-        }
-        else{
-            if($query){
-                echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                
-               } 
-               else{
-                   echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-               }  
-        }
-     
-    }
-
-}
-else{ //pass change
-
-    if ($_POST['Province' ]== 0 ){
-        $sqledit = "UPDATE user SET U_UserName='$u_username',U_Password='$pass',U_Name='$u_name',Home='$u_home',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";   
-        $query = mysqli_query($conn,$sqledit);
-        move_uploaded_file($_FILES['image']['tmp_name'], $target);
-        if($_SESSION['User'] == '1'){
-            if($query){
-                echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-               } 
-               else{
-                   echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-               }
-            }
-            else{
-                if($query){
-                    echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                    
-                   } 
-                   else{
-                       echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                       echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                   }  
-            }
-    
-    }
-    else {
-    // $sqlHome = "SELECT * FROM district 
-    // INNER JOIN amphur ON amphur.AMPHUR_ID = district.AMPHUR_ID
-    // INNER JOIN province ON province.PROVINCE_ID = district.PROVINCE_ID
-    // WHERE district.AMPHUR_ID='".$_POST['A_District']."' AND district.DISTRICT_ID = '".$_POST['T_District']."' AND district.PROVINCE_ID = '".$_POST['Province']."',zip='".$_POST['zip']."'";
-    // $queryHone = mysqli_query($conn,$sqlHome);
-    // $row = mysqli_fetch_array($queryHone);
-    $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',T_District='$u_tdistrict',A_District='$u_adistrict',Province='$u_province',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";
-    $query = mysqli_query($conn,$sqledit);
-     move_uploaded_file($_FILES['image']['tmp_name'], $target);
-     $query = mysqli_query($conn,$sqledit);
-     if($_SESSION['User'] == '1'){
-        if($query){
-            echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-            echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-           } 
-           else{
-               echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-               echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-           }
-        }
-        else{
-            if($query){
-                echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-               } 
-               else{
-                   echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-               }  
-        }
-     
-    }
-
-}
-} // end if image != ""
-
-else{ // image = ""
-    if($_POST['U_Password']==""){ // pass no change 
-        
-        if ($_POST['Province']== 0 ){
-            $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',zip='$u_zip',U_Phone='$u_phone',U_Email='$u_email' WHERE U_ID='$u_id'";   
-            $query = mysqli_query($conn,$sqledit);
-            if($_SESSION['User'] == '1'){
-            if($query){
-                echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-               } 
-               else{
-                   echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-               }
-            }
-            else{
-                if($query){
-                    echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                    
-                   } 
-                   else{
-                       echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                       echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                   }  
-            }
-    
-        }
-        else {
-            // แปลงตัวเลข ตำบล อำเภอ จังหวัด ให้เป็น ชื่อ ค่าที่ POST มาเป็นตัวเลข
-        // $sqlHome = "SELECT * FROM district 
-        // INNER JOIN amphur ON amphur.AMPHUR_ID = district.AMPHUR_ID
-        // INNER JOIN province ON province.PROVINCE_ID = district.PROVINCE_ID
-        // WHERE district.AMPHUR_ID='".$_POST['A_District']."' AND district.DISTRICT_ID = '".$_POST['T_District']."' AND district.PROVINCE_ID = '".$_POST['Province']."',zip='".$_POST['zip']."'";
-        // $queryHone = mysqli_query($conn,$sqlHome);
-        // $row = mysqli_fetch_array($queryHone);
-        $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',T_District='$u_tdistrict',A_District='$u_adistrict',Province='$u_province',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";
-         $query = mysqli_query($conn,$sqledit);
-         if($_SESSION['User'] == '1'){
-            if($query){
-                echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-               } 
-               else{
-                   echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-               }
-            }
-            else{
-                if($query){
-                    echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                    
-                   } 
-                   else{
-                       echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                       echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                   }  
-            }
-         
-        }
-    
-    }
-    else{ //pass change
-        if ($_POST['Province']== 0 ){
-            $sqledit = "UPDATE user SET U_UserName='$u_username',U_Password='$pass',U_Name='$u_name',Home='$u_home',zip='$u_zip',U_Phone='$u_phone',U_Email='$u_email' WHERE U_ID='$u_id'";
-            $query = mysqli_query($conn,$sqledit);
-            if($_SESSION['User'] == '1'){
-                if($query){
-                    echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-                   } 
-                   else{
-                       echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                       echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-                   }
-                }
-                else{
-                    if($query){
-                        echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                        echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                        
-                       } 
-                       else{
-                           echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                           echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                       }  
-                }
-        
-        }
-        else {
-        // $sqlHome = "SELECT * FROM district 
-        // INNER JOIN amphur ON amphur.AMPHUR_ID = district.AMPHUR_ID
-        // INNER JOIN province ON province.PROVINCE_ID = district.PROVINCE_ID
-        // WHERE district.AMPHUR_ID='".$_POST['A_District']."' AND district.DISTRICT_ID = '".$_POST['T_District']."' AND district.PROVINCE_ID = '".$_POST['Province']."',zip='".$_POST['zip']."'";
-        // $queryHone = mysqli_query($conn,$sqlHome);
-        // $row = mysqli_fetch_array($queryHone);
-        $sqledit = "UPDATE user SET U_UserName='$u_username',U_Name='$u_name',Home='$u_home',T_District='$u_tdistrict',A_District='$u_adistrict',Province='$u_province',zip='$u_zip',U_Phone='$u_phone',U_Photo='$image',U_Email='$u_email' WHERE U_ID='$u_id'";
-         $query = mysqli_query($conn,$sqledit);
-         if($_SESSION['User'] == '1'){
-            if($query){
-                echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-               } 
-               else{
-                   echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                   echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=../admin/ManageUser.php'>";
-               }
-            }
-            else{
-                if($query){
-                    echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
-                    echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                   } 
-                   else{
-                       echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
-                       echo"<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=./EditUser.php'>";
-                   }  
-            }
-         
-        }
-}
+$image = store_uploaded_image('image', '../photo/User');
+if ($image === false) {
+    echo '<script type="text/javascript">alert("ไฟล์รูปภาพไม่ถูกต้อง (jpg, png, gif, webp ไม่เกิน 5MB)");</script>';
+    echo "<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=" . $redirect . "'>";
+    exit;
 }
 
-?>
+$fields = [
+    'U_UserName' => $_POST['U_UserName'] ?? '',
+    'U_Name'     => $_POST['U_Name'] ?? '',
+    'Home'       => $_POST['Home'] ?? '',
+    'zip'        => $_POST['zip'] ?? '',
+    'U_Phone'    => $_POST['U_Phone'] ?? '',
+    'U_Email'    => $_POST['Email'] ?? '',
+];
+// Province == 0 means "unchanged" in the edit form.
+if (($_POST['Province'] ?? '0') != 0) {
+    $fields['T_District'] = $_POST['T_District'] ?? '';
+    $fields['A_District'] = $_POST['A_District'] ?? '';
+    $fields['Province']   = $_POST['Province'];
+}
+if ($image !== '') {
+    $fields['U_Photo'] = $image;
+}
+if (($_POST['U_Password'] ?? '') !== '') {
+    $fields['U_Password'] = md5($_POST['U_Password'] . 'harumyx');
+}
+
+$set = [];
+foreach ($fields as $column => $value) {
+    $set[] = $column . "='" . mysqli_real_escape_string($conn, (string)$value) . "'";
+}
+$sqledit = 'UPDATE user SET ' . implode(',', $set) . ' WHERE U_ID=' . $u_id;
+$query = mysqli_query($conn, $sqledit);
+
+if ($query) {
+    echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
+} else {
+    echo '<script type="text/javascript">alert("เกิดข้อผิดพลาดขึ้น");</script>';
+}
+echo "<META HTTP-EQUIV ='Refresh' CONTENT = '1;URL=" . $redirect . "'>";

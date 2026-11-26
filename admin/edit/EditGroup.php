@@ -1,6 +1,7 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
+require_admin();
 $g_id_get = (int)$_GET['G_ID'];
 $sql = "SELECT * FROM group_tb WHERE G_ID='$g_id_get'";
 $query= $conn->query($sql);
@@ -12,10 +13,10 @@ if(isset($_POST['submit'])){
     $g_id_post = (int)$_POST['G_ID'];
     if($image = $_FILES['image']['name'] != ""){
         $image = $_FILES['image']['name'];
-        $target = "../../photo/model/".basename($image);
+        $image = store_uploaded_image('image', '../../photo/model'); if ($image === false) { upload_rejected(); }
         $sql = "UPDATE group_tb SET G_Name='$g_name',G_Photo='$image',G_Status= '$g_status' WHERE G_ID = '$g_id_post' ";
         $query= $conn->query($sql);
-        $move = move_uploaded_file($_FILES['image']['tmp_name'], $target);
+        $move = ($image !== '');
         if($query||$move){
             echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';
             echo"<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL=../MainProductGrop.php '>";

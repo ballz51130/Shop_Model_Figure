@@ -1,6 +1,5 @@
 <?php 
 include '../conn/conn.php';
-$image = $_FILES['image']['name'];
 $pass = md5($_POST['U_Password']."harumyx");
 $u_username = mysqli_real_escape_string($conn, $_POST['U_UserName']);
 $u_name = mysqli_real_escape_string($conn, $_POST['U_Name']);
@@ -30,10 +29,14 @@ else{
 // Get text
 $image_text = mysqli_real_escape_string($conn, $_POST['image_text']);
 // image file directory
-$target = "../photo/User/".basename($image);
+$image = store_uploaded_image('image', '../photo/User');
+if ($image === false) {
+    echo "<script type='text/javascript'>alert('ไฟล์รูปภาพไม่ถูกต้อง (jpg, png, gif, webp ไม่เกิน 5MB)');</script>";
+    echo "<META HTTP-EQUIV ='Refresh' CONTENT = '0;URL= ./addUser.php'>";
+    exit;
+}
 $sql ="INSERT INTO  user( U_UserName, U_Password, U_Name,Home, T_District, A_District, Province,zip,U_Phone, U_Photo, U_Status, U_Email) VALUES 
         ('$u_username','$pass','$u_name','$u_home','$u_tdistrict','$u_adistrict','$u_province','$u_zip','$u_phone','$image','user','$u_email') ";
-move_uploaded_file($_FILES['image']['tmp_name'], $target);
 $query = mysqli_query($conn,$sql);
 if ($query){
   echo "<script type='text/javascript'>alert('สมัครสมาชิกสำเร็จ');</script>";

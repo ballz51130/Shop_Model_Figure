@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start();
+require_login();
   ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -99,11 +100,11 @@ session_start();
                             <?php
               $price = 0;
                for($i = 0; $i < count($_POST['check']); $i++){
-                $num = $_POST['check'][$i];
+                $num = (int)$_POST['check'][$i];
                 $sql = "SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
                 INNER JOIN product ON product.P_Number = orderdetail.P_Number
-                WHERE orders.O_ID='$num'";
+                WHERE orders.O_ID='$num' AND orders.U_ID='" . current_user_id() . "'";
                 $query = mysqli_query($conn,$sql);
                 $result = mysqli_fetch_array($query);
               ?>

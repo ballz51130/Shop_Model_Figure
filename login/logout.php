@@ -1,7 +1,11 @@
-
 <?php
-echo "<script type='text/javascript'>alert('ขอบคุณที่ใช้บริการ');</script>";
-session_start();
+require_once '../conn/security.php';
+sec_session_start();
+$_SESSION = [];
+if (ini_get('session.use_cookies')) {
+    $params = session_get_cookie_params();
+    setcookie(session_name(), '', time() - 42000, $params['path'], $params['domain'], $params['secure'], $params['httponly']);
+}
 session_destroy();
+echo "<script type='text/javascript'>alert('ขอบคุณที่ใช้บริการ');</script>";
 echo "<META HTTP-EQUIV='Refresh' CONTENT ='1;URL=../index.php'>";
-?>

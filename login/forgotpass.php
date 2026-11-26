@@ -4,7 +4,8 @@ if ( isset( $_POST['submit'] ) ) {
  $u_username = mysqli_real_escape_string($conn, $_POST['UserName']);
  $u_phone = mysqli_real_escape_string($conn, $_POST['Phone']);
  $u_email = mysqli_real_escape_string($conn, $_POST['Email']);
- $sqlquery="SELECT * FROM user WHERE U_UserName='$u_username' AND U_Phone='$u_phone' AND U_Email='$u_email'";
+ // Admin passwords cannot be reset from this public form.
+ $sqlquery="SELECT * FROM user WHERE U_UserName='$u_username' AND U_Phone='$u_phone' AND U_Email='$u_email' AND U_Status <> 'Admin'";
  $query = mysqli_query($conn,$sqlquery);
  $result = mysqli_fetch_array($query);
   if($result){

@@ -1,6 +1,7 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
+require_admin();
 $sn_id_get = (int)$_GET['Sn_id'];
 $sql = "SELECT * FROM send_tb WHERE Sn_id='$sn_id_get'";
 $query= $conn->query($sql);

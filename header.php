@@ -20,11 +20,11 @@ else
 }
 if (isset($_GET['page']))
 {
-    $page = $_GET['page'];
+    $page = max(1, (int)$_GET['page']);
 }
 if (isset($_GET['page']))
 {
-    $page = $_GET['page'];
+    $page = max(1, (int)$_GET['page']);
 }
 else
 {
@@ -33,7 +33,7 @@ else
 }
 if (isset($_GET['list']))
 {
-    $list = $_GET['list'];
+    $list = (string)$_GET['list'];
 }
 else
 {
@@ -232,7 +232,7 @@ if ($list == "")
 <?php
 if ($list <> "")
 {
-    $sql = "SELECT * FROM product INNER JOIN status_tb ON status_tb.St_Number = product.P_Status WHERE P_Group ='$list' ORDER BY P_ID ASC limit $start_from,$num_per_page ";
+    $sql = "SELECT * FROM product INNER JOIN status_tb ON status_tb.St_Number = product.P_Status WHERE P_Group = '" . mysqli_real_escape_string($conn, $list) . "' ORDER BY P_ID ASC limit $start_from,$num_per_page ";
     $result = mysqli_query($conn, $sql);
     if ($numrow = mysqli_num_rows($result) > 0) // เป็น function ที่ บอก ว่า ผลของการ query ของ คำสั่ง sql ของเรา มีกี่แถวข้อมูล
   
@@ -313,14 +313,14 @@ if ($list == "")
 }
 if ($list <> "")
 {
-    $pr_query = "select * from Product where P_Group = '$list' ";
+    $pr_query = "select * from Product where P_Group = '" . mysqli_real_escape_string($conn, $list) . "' ";
     $pr_reqult = mysqli_query($conn, $pr_query);
     $total = mysqli_num_rows($pr_reqult);
     $total_page = ceil($total / $num_per_page) + 1;
 
     for ($i = 1;$i < $total_page;$i++)
     {
-        echo "<a href='index.php?page=" . $i . "&list=" . $list . "' class='btn btn-primary'>$i</a>";
+        echo "<a href='index.php?page=" . $i . "&list=" . urlencode($list) . "' class='btn btn-primary'>$i</a>";
     }
 } ?>
     </div>         

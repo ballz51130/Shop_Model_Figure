@@ -1,5 +1,6 @@
 <?php 
 include '../../conn/conn.php';
+require_admin();
 $p_unit = (int)$_POST['P_Unit'];
 $p_id = (int)$_POST['P_ID'];
 $sql = "UPDATE `product` SET `P_Unit`='$p_unit' WHERE P_ID='$p_id'";

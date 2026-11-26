@@ -1,7 +1,7 @@
-
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_admin();
 $sqlre = "SELECT orders.O_ID,user.U_Name,product.P_Name,P_ID,orderdetail.O_ID,orderdetail.OD_Unit,product.P_Price,product.P_Photo,send_tb.Sn_Price,bank_tb.Bk_Name,Bk_Number,orders.C_ID,
  payment_tb.Pay_Price,payment_tb.Pay_Frombank,Pay_LastNum,payment_tb.Pay_Time,payment_tb.Pay_Date,payment_tb.Pay_Img,send_tb.Sn_id
  FROM orders
@@ -11,7 +11,7 @@ $sqlre = "SELECT orders.O_ID,user.U_Name,product.P_Name,P_ID,orderdetail.O_ID,or
  INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
  INNER JOIN bank_tb ON bank_tb.Bk_id = orders.Bk_id 
  INNER JOIN payment_tb ON payment_tb.O_ID = orders.O_ID
- WHERE orders.O_ID = ".$_GET['O_ID'];
+ WHERE orders.O_ID = ".(int)$_GET['O_ID'];
  $query = mysqli_query($conn,$sqlre);
  $queryproduct = mysqli_query($conn,$sqlre); 
  $result = mysqli_fetch_array($query,MYSQLI_ASSOC);

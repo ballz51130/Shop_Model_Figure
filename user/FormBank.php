@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); // คำสั่ง เปิดใช้งาน session 
+require_login();
 ?>
     <!DOCTYPE html>
     <html lang="en">
@@ -61,11 +62,11 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                 $sunmend = 0;
                 $numsend = 0;
                 for($i = 0; $i < count($_POST['check']); $i++){
-                $num = $_POST['check'][$i];
+                $num = (int)$_POST['check'][$i];
                 $sql = "SELECT orders.O_ID,orderdetail.OD_Unit,product.P_Number,product.P_Name,product.P_Price,product.P_Photo FROM orders 
                 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
                 INNER JOIN product ON product.P_Number = orderdetail.P_Number
-                WHERE orders.O_ID='$num'";
+                WHERE orders.O_ID='$num' AND orders.U_ID='" . current_user_id() . "'";
                 $query = mysqli_query($conn,$sql);
                 $result = mysqli_fetch_array($query);
                 $sql2 = "SELECT sum(OD_Unit) as sumsend from orderdetail WHERE O_ID='$num'";
@@ -99,7 +100,7 @@ session_start(); // คำสั่ง เปิดใช้งาน session
                      $resultsn = mysqli_fetch_array($querysn);
                     ?>
                         <div class="detailsum">
-                            <input type="hidden" name="gender" value="<?php echo $_POST['gender'] ?>">
+                            <input type="hidden" name="gender" value="<?php echo (int)$_POST['gender'] ?>">
                             <h4>จำนวน(ชิ้น) :<span> &emsp;
                                     <?php echo $numsend; ?> </span></h4>
                             <h4>ค่าส่ง(ชิ้น) :<span>&emsp;&nbsp;&nbsp;&nbsp;<?php  echo $resultsn['Sn_Price'] ?> </span>

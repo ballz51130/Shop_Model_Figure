@@ -1,13 +1,13 @@
-
 <?php
 require '../vendor/autoload.php';
 include '../conn/conn.php';
+require_admin();
 // QUERY ADD USER
 $sqladd ="SELECT * FROM user 
 INNER JOIN district ON district.DISTRICT_ID = user.T_District
 INNER JOIN amphur ON amphur.AMPHUR_ID = user.A_District
 INNER JOIN province ON province.PROVINCE_ID = user.Province
-WHERE U_ID= '".$_GET['U_ID']."'";
+WHERE U_ID= '".(int)$_GET['U_ID']."'";
 $queryadd = mysqli_query($conn,$sqladd);
 $resultadd = mysqli_fetch_array($queryadd);
 // QUERY ADDRESS SHOP

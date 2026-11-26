@@ -1,12 +1,13 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
+require_admin();
 
     $sqluser="SELECT * FROM user
     INNER JOIN district ON district.DISTRICT_ID = user.T_District
     INNER JOIN amphur ON amphur.AMPHUR_ID = user.A_District
     INNER JOIN province ON province.PROVINCE_ID = user.Province
-     WHERE U_ID='".$_GET['U_ID']."'";
+     WHERE U_ID='".(int)$_GET['U_ID']."'";
     $queryuser = mysqli_query($conn,$sqluser);
     $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 

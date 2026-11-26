@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_login();
 $sqluser="SELECT * FROM user
 INNER JOIN district ON district.DISTRICT_ID = user.T_District
 INNER JOIN amphur ON amphur.AMPHUR_ID = user.A_District

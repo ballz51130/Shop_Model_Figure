@@ -1,9 +1,14 @@
 <?php 
 include '../conn/conn.php';
 session_start();
+require_login();
 $p_number = mysqli_real_escape_string($conn, $_POST['P_Number']);
 $quantity = (int)$_POST['quantity'];
 $p_status = (int)$_POST['P_Status'];
+if ($quantity < 1) {
+    echo "<script type='text/javascript'>alert('จำนวนสินค้าไม่ถูกต้อง');history.back();</script>";
+    exit;
+}
 $sql = "SELECT P_Number,U_ID,OD_Unit,orderdetail.O_ID  FROM orders INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID 
  WHERE U_ID='".$_SESSION['User']."' AND P_Number = '$p_number' AND O_Status='ยืนยันการสั่งซื้อ'";
 $query = mysqli_query($conn, $sql);

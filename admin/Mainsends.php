@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_admin();
 
 
     // แสดงข้อมูล ADMIN

@@ -1,12 +1,13 @@
 <?php
 include '../conn/conn.php';
+$uid = require_login();
 $c_id = (int)$_GET['C_ID'];
 $sqlproduct="SELECT *  FROM orders 
 INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
 INNER JOIN product ON product.P_Number = orderdetail.P_Number
 INNER JOIN send_tb ON send_tb.Sn_id = orders.Sn_id
 INNER JOIN bank_tb ON bank_tb.Bk_id = orders.Bk_id
-WHERE orders.C_ID='$c_id'";
+WHERE orders.C_ID='$c_id' AND orders.U_ID='$uid'";
 $queryproduct = mysqli_query($conn,$sqlproduct);
 $queryproduct2 = mysqli_query($conn,$sqlproduct);
 $resultbk = mysqli_fetch_array($queryproduct2);

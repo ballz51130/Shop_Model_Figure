@@ -1,7 +1,8 @@
 <?php 
 include '../../conn/conn.php';
 session_start();
-$b = $_GET['ID'];
+require_admin();
+$b = (int)$_GET['ID'];
 $sql = "SELECT * FROM product INNER JOIN status_tb ON status_tb.St_Number = product.P_Status WHERE P_ID=".$b;
 $query = mysqli_query($conn,$sql);
 $result = mysqli_fetch_array($query);

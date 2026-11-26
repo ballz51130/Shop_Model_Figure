@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_admin();
 if(isset($_GET['Bk_id']))  {   
     $bk_id = (int)$_GET['Bk_id'];
     $sql = "DELETE FROM bank_tb WHERE Bk_id = '$bk_id'";

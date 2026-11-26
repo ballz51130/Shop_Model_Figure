@@ -1,6 +1,7 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
+require_admin();
 
 if(isset($_POST['submit'])){
         $sn_name = mysqli_real_escape_string($conn, $_POST['Sn_Name']);

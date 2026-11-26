@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_admin();
 if(isset($_GET['G_ID']))  {   
     $g_id = (int)$_GET['G_ID'];
     $sql = "DELETE FROM group_tb WHERE G_ID = '$g_id'";

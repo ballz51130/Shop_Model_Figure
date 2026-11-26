@@ -1,6 +1,7 @@
 <?php 
 include '../../conn/conn.php';
 session_start(); 
+require_admin();
     // แสดงข้อมูล ADMIN
     $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
     $queryUser = mysqli_query($conn,$sqlUser);
@@ -258,7 +259,7 @@ session_start();
                                  INNER JOIN user ON orders.U_ID = user.U_ID
                                  INNER JOIN orderdetail ON orders.O_ID = orderdetail.O_ID
                                  INNER JOIN preorder ON preorder.P_Number = orders.P_Number
-                                  WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' AND MONTH(Pre_Month) = '".$_GET['PreMonth']."'   GROUP BY  product.P_Number  ";
+                                  WHERE  orders.O_Status ='ยืนยันการชำระเงิน' AND product.P_Status='2' AND MONTH(Pre_Month) = '".(int)$_GET['PreMonth']."'   GROUP BY  product.P_Number  ";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);
                                 $check = mysqli_query($conn,$sqlOrder);
                                 $resultcheck = mysqli_fetch_array($check,MYSQLI_ASSOC);

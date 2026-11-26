@@ -1,6 +1,7 @@
 <?php 
 include '../conn/conn.php';
 session_start(); 
+require_admin();
 
     // แสดงข้อมูล ADMIN
     $sqlUser = "SELECT * FROM user WHERE U_ID= '".$_SESSION['User']."'";
@@ -283,7 +284,7 @@ session_start();
 </select>
 <label for="cars"> ปี :</label>
 <select name="y" >
-<option value="<?php echo isset ($_GET['y']) ? $_GET['y'] : '' ?>"><?php echo isset ($_GET['y']) ? $_GET['y'] : 'เลือกปี' ?></option>
+<option value="<?php echo (isset($_GET['y']) && $_GET['y'] !== '') ? (int)$_GET['y'] : '' ?>"><?php echo (isset($_GET['y']) && $_GET['y'] !== '') ? (int)$_GET['y'] : 'เลือกปี' ?></option>
 <?php
  $sql ="SELECT  DATE_FORMAT(O_Date, '%Y') AS Years
  FROM orders 
@@ -309,7 +310,7 @@ session_start();
   }
   if (isset($_GET['y']))
   {
-      $y = $_GET['y'];
+      $y = ($_GET['y'] !== '') ? (int)$_GET['y'] : '';
   }
   else
   {
@@ -386,7 +387,7 @@ else{
         FROM orders
         inner join orderdetail on orders.O_ID = orderdetail.O_ID
         INNER JOIN product ON orderdetail.P_Number = product.P_Number
-        WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') AND MONTH(O_Date) = $q AND YEAR(O_Date) = '".$_GET['y']."'
+        WHERE O_Status in('รับของแล้ว','จัดส่งแล้ว') AND MONTH(O_Date) = ".(int)$q." AND YEAR(O_Date) = '".(int)$_GET['y']."'
         GROUP BY orderdetail.P_Number ,datesave ";
         $resulttable = mysqli_query($conn, $query);
         $resultchart = mysqli_query($conn, $query); 
