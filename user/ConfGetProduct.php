@@ -8,7 +8,7 @@ $resultuser = mysqli_fetch_array($queryuser,MYSQLI_ASSOC);
 
 if(isset($_POST['submit'])){
     $o_id_post = (int)$_POST['O_ID'];
-    $sqlupdate= "UPDATE orders SET O_Status = 'รับของแล้ว' WHERE O_ID ='$o_id_post' AND U_ID = '$uid'";
+    $sqlupdate= "UPDATE orders SET O_Status = 'รับของแล้ว' WHERE O_ID ='$o_id_post' AND U_ID = '$uid' AND O_Status = 'จัดส่งแล้ว'";
     $query = $conn->query($sqlupdate);
     if($query && $conn->affected_rows > 0){
         echo '<script type="text/javascript">alert("บันทึกสำเร็จ");</script>';

@@ -10,7 +10,10 @@ function return_finish($message)
 }
 
 $o_id = (int)($_POST['O_ID'] ?? 0);
-if (!user_owns_order($conn, $o_id, $uid)) {
+// Returns are only allowed on the user's own delivered orders.
+$check = mysqli_query($conn, "SELECT 1 FROM orders WHERE O_ID = $o_id AND U_ID = $uid
+    AND O_Status IN ('จัดส่งแล้ว', 'รับของแล้ว') LIMIT 1");
+if (!$check || mysqli_num_rows($check) === 0) {
     return_finish('บันทึกไม่สำเร็จ');
 }
 

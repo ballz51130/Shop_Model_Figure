@@ -306,7 +306,7 @@ require_admin();
                                 INNER JOIN user ON user.U_ID = orders.U_ID
                                 INNER JOIN orderdetail ON orderdetail.O_ID = orders.O_ID
                                 INNER JOIN product ON orderdetail.P_Number = product.P_Number
-                                where Re_ID= '".$_GET['Re_ID']."'
+                                where Re_ID= '".(int)$_GET['Re_ID']."'
                                 ";
                                 $queryOrder = mysqli_query($conn,$sqlOrder);
                                 $result= mysqli_fetch_array($queryOrder);

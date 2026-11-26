@@ -15,7 +15,7 @@ $updated = 0;
 foreach ($orderIds as $rawId) {
     $num = (int)$rawId;
     $sqlsend = "UPDATE orders SET O_Status = 'รอการชำระ', Sn_id = $gender, Bk_id = $bank, C_ID = $lest
-        WHERE O_ID = $num AND U_ID = $uid";
+        WHERE O_ID = $num AND U_ID = $uid AND O_Status = 'ยืนยันการสั่งซื้อ'";
     if (mysqli_query($conn, $sqlsend)) {
         $updated += mysqli_affected_rows($conn);
     }

@@ -284,7 +284,7 @@ require_admin();
 </select>
 <label for="cars"> ปี :</label>
 <select name="y" >
-<option value="<?php echo isset ($_GET['y']) ? (int)$_GET['y'] : '' ?>"><?php echo isset ($_GET['y']) ? (int)$_GET['y'] : 'เลือกปี' ?></option>
+<option value="<?php echo (isset($_GET['y']) && $_GET['y'] !== '') ? (int)$_GET['y'] : '' ?>"><?php echo (isset($_GET['y']) && $_GET['y'] !== '') ? (int)$_GET['y'] : 'เลือกปี' ?></option>
 <?php
  $sql ="SELECT  DATE_FORMAT(O_Date, '%Y') AS Years
  FROM orders 
@@ -310,7 +310,7 @@ require_admin();
   }
   if (isset($_GET['y']))
   {
-      $y = (int)$_GET['y'];
+      $y = ($_GET['y'] !== '') ? (int)$_GET['y'] : '';
   }
   else
   {

@@ -1,4 +1,3 @@
-
 <?php
 require '../vendor/autoload.php';
 include '../conn/conn.php';
