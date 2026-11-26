@@ -51,15 +51,6 @@ The user interface is in Thai.
 
 In production, set them in the Apache config (`SetEnv DB_PASS ...`) or the server environment. Do not use `root` with an empty password.
 
-### Creating an administrator
-
-Register a normal account through the site, then promote it in the database:
-
-```sql
-UPDATE user SET U_Status = 'Admin' WHERE U_UserName = 'your-username';
-```
-
-Log out and log in again. The role is read when you log in.
 
 ## Project structure
 
